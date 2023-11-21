@@ -49,7 +49,7 @@ jobs:
             git commit -m "Update version badge [skip ci]"
             git push
 
-# if: steps.git-check.outputs.changes_detected == 'true'
+## if: steps.git-check.outputs.changes_detected == 'true'
   
 
 
