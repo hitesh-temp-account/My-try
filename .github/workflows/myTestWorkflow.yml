@@ -36,6 +36,11 @@ jobs:
             sed -i "s/\(badge\/version-v[0-9]\.[0-9]-blue\.svg\)/badge\/version-v$version-blue.svg/" README.md
             cat README.md
 
+     - name: Check Repository Status
+       run: |
+            git status
+
+
 
 
 
