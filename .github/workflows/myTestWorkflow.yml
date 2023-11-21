@@ -36,9 +36,21 @@ jobs:
             sed -i "s/\(badge\/version-v[0-9]\.[0-9]-blue\.svg\)/badge\/version-v$version-blue.svg/" README.md
             cat README.md
 
-     - name: Check Repository Status
+     - name: Stash changes
        run: |
-            git status
+            git add .
+
+     - name: Commit and Push Changes
+       if: steps.git-check.outputs.changes_detected == 'true'
+       run: |
+            git config user.name "${{ github.actor }}"
+            git config user.email "${{ github.actor }}@users.noreply.github.com"
+            git remote set-url origin "https://${{ secrets.ACTOR_TOKEN }}@github.com/${{ github.repository }}"
+            git add README.md
+            git commit -m "Update version badge [skip ci]"
+            git push
+
+  
 
 
 
