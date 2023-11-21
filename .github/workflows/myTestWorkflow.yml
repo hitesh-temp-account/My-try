@@ -2,8 +2,8 @@ name: My test workflow
 
 on:
   push:
-#    paths:
-#      - 'gradle.properties'
+    paths:
+      - 'gradle.properties'
 
 jobs:
   update-badge:
