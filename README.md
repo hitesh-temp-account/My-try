@@ -1,3 +1,3 @@
-![Badge](https://img.shields.io/badge/version-v0.8-blue.svg)
+![Badge](https://img.shields.io/badge/version-v0.9-blue.svg)
 
 # Breach
