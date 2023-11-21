@@ -43,9 +43,10 @@ jobs:
 
      - name: Commit and Push Changes
        run: |
-            git config user.name "${{ github.actor }}"
-            git config user.email "${{ github.actor }}@users.noreply.github.com"
-            git remote set-url origin "https://${{ secrets.ACTOR_TOKEN2 }}@github.com/${{ github.repository }}"
+
+            git config user.name github-actions
+            git config user.email github-actions@github.com
+            # git remote set-url origin "https://${{ secrets.ACTOR_TOKEN2 }}@github.com/${{ github.repository }}"
             git add README.md
             git commit -m "Update version badge [skip ci]"
             git push
