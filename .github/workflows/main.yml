@@ -2,8 +2,8 @@ name: My test workflow
 
 on:
   push:
-    paths:
-      - 'gradle.properties'
+#    paths:
+ #     - 'gradle.properties'
 
 jobs:
   update-badge:
@@ -45,7 +45,7 @@ jobs:
        run: |
             git config user.name "${{ github.actor }}"
             git config user.email "${{ github.actor }}@users.noreply.github.com"
-            git remote set-url origin "https://${{ secrets.ACTOR_TOKEN }}@github.com/${{ github.repository }}"
+ #           git remote set-url origin "https://${{ secrets.ACTOR_TOKEN }}@github.com/${{ github.repository }}"
             git add README.md
             git commit -m "Update version badge [skip ci]"
             git push
