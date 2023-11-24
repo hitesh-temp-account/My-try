@@ -20,7 +20,7 @@ jobs:
     permissions:
       #      issues: write
       contents: write
-    #      pull-requests: write
+      pull-requests: write
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
