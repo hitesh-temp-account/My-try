@@ -20,7 +20,7 @@ jobs:
     permissions:
       #      issues: write
       contents: write
-    #      pull-requests: write
+      pull-requests: write
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
@@ -47,7 +47,7 @@ jobs:
 
       - name: Create PR
         id: create-pr
-        uses: linkedin-actions/create-pull-request@v5
+        uses: peter-evans/create-pull-request@v5
         with:
           base: master
           branch: github-actions/readme-update
