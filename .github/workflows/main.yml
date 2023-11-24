@@ -47,7 +47,7 @@ jobs:
 
       - name: Create PR
         id: create-pr
-        uses: linkedin-actions/create-pull-request@v5
+        uses: peter-evans/create-pull-request@v5
         with:
           base: master
           branch: github-actions/readme-update
