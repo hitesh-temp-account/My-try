@@ -5,48 +5,63 @@ on:
     paths:
       - 'gradle.properties'
 
+env:
+  COMMIT_MESSAGE: |
+    Update Baseline Profile
+
+    Created by GitHub Action [${{ github.workflow }} #${{ github.run_number }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+
+    ACLOVERRIDE CODEOWNEROVERRIDE CUSTOMVALIDATIONSOVERRIDE
+
 jobs:
   update-badge:
     runs-on: ubuntu-latest
 
     permissions:
-#      issues: write
+      #      issues: write
       contents: write
-#      pull-requests: write
+    #      pull-requests: write
     steps:
-     - name: Checkout Repository
-       uses: actions/checkout@v2
+      - name: Checkout Repository
+        uses: actions/checkout@v2
 
-#     - name: Set up Java
-#       uses: actions/setup-java@v2
-#       with:
-#          distribution: 'adopt'
-#          java-version: '11'
+      #     - name: Set up Java
+      #       uses: actions/setup-java@v2
+      #       with:
+      #          distribution: 'adopt'
+      #          java-version: '11'
 
-#     - name: Read Version Number
-#       id: version
-#       run: |
-#            version=$(grep '^version' gradle.properties | cut -d= -f2 | tr -d '[:space:]')
-#            echo "VERSION: $version"
+      #     - name: Read Version Number
+      #       id: version
+      #       run: |
+      #            version=$(grep '^version' gradle.properties | cut -d= -f2 | tr -d '[:space:]')
+      #            echo "VERSION: $version"
 
-     - name: Update README Badge
-       run: |           
-            version=$(grep '^version' gradle.properties | cut -d= -f2 | tr -d '[:space:]')
-            # echo "VERSION: $version"
-            # echo "badge\/version-v$version-blue.svg"
-            sed -i "s/\(badge\/version-v[0-9]\.[0-9]-blue\.svg\)/badge\/version-v$version-blue.svg/" README.md
-            cat README.md
+      - name: Update README Badge
+        run: |
+          version=$(grep '^version' gradle.properties | cut -d= -f2 | tr -d '[:space:]')
+          # echo "VERSION: $version"
+          # echo "badge\/version-v$version-blue.svg"
+          sed -i "s/\(badge\/version-v[0-9]\.[0-9]-blue\.svg\)/badge\/version-v$version-blue.svg/" README.md
+          cat README.md
 
-     - name: Commit and Push Changes
-       run: |
-            git config user.name github-actions
-            git config user.email github-actions@github.com
-            git add README.md
-            git commit -m "Update version badge"
-            git push
-  
+      - name: Create PR
+        id: create-pr
+        uses: linkedin-actions/create-pull-request@v5
+        with:
+          base: master
+          branch: github-actions/readme-update
+          delete-branch: true
+          author: ${{ github.actor }} <${{ github.actor }}@linkedin.com>
+          title: 'Update readme'
+          body: ${{ env.COMMIT_MESSAGE }}
+          commit-message: ${{ env.COMMIT_MESSAGE }}
+          token: ${{ secrets.SVC_VA_GHA_TOKEN }}
 
-
-
-
-
+      - name: Turn On PR Auto-Merge
+        run: >
+          gh pr merge --squash --auto
+          --repo ${{ github.repository }}
+          ${{ steps.create-pr.outputs.pull-request-number }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.SVC_VA_GHA_TOKEN }}
