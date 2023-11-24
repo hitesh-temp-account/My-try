@@ -56,7 +56,7 @@ jobs:
           title: 'Update readme'
           body: ${{ env.COMMIT_MESSAGE }}
           commit-message: ${{ env.COMMIT_MESSAGE }}
-          token: ${{ secrets.SVC_VA_GHA_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Turn On PR Auto-Merge
         run: >
