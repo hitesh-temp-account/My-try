@@ -49,14 +49,14 @@ jobs:
         id: create-pr
         uses: peter-evans/create-pull-request@v5
         with:
-          base: master
+          base: main
           branch: github-actions/readme-update
           delete-branch: true
           author: ${{ github.actor }} <${{ github.actor }}@linkedin.com>
           title: 'Update readme'
           body: ${{ env.COMMIT_MESSAGE }}
           commit-message: ${{ env.COMMIT_MESSAGE }}
-          token: ${{ secrets.SVC_VA_GHA_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Turn On PR Auto-Merge
         run: >
