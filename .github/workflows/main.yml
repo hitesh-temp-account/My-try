@@ -41,6 +41,8 @@ jobs:
 
       - name: Update README Badge
         run: |
+          echo "base ref: ${{github.base_ref}}"
+          echo "sha: ${{github.sha}}"
           if git diff ${{  github.base_ref }}..${{ github.sha }} | grep '^version ='; then
             echo "pass"
             version=$(grep '^version' gradle.properties | cut -d= -f2 | tr -d '[:space:]')
