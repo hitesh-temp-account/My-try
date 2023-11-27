@@ -50,7 +50,7 @@ jobs:
             cat README.md
           else
             echo "fail"
-            echo git diff ${{  github.base_ref }}..${{ github.sha }
+            echo git diff ${{  github.base_ref }}..${{ github.sha }}
           fi
 
       - name: Create PR
