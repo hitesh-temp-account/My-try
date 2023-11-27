@@ -41,7 +41,7 @@ jobs:
 
       - name: Update README Badge
         run: |
-          if git diff ${{  github.base_ref }}..${{ github.sha }} | grep 'version='; then
+          if git diff ${{  github.base_ref }}..${{ github.sha }} | !grep 'version='; then
             echo "pass"
             version=$(grep '^version' gradle.properties | cut -d= -f2 | tr -d '[:space:]')
             # echo "VERSION: $version"
@@ -50,7 +50,6 @@ jobs:
             cat README.md
           else
             echo "fail"
-            echo git diff ${{  github.base_ref }}..${{ github.sha }} | grep 'version='
           fi
 
       - name: Create PR
