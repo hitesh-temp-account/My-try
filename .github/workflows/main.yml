@@ -29,11 +29,12 @@ jobs:
       - name: Get previous version
         id: get-previous-version
         run: |
-          commit_hashes=$(git log -n 2 --pretty=format:"%H" -- gradle.properties)
-          echo "Commit hashes: $commit_hashes"
-          previous_version=$(echo "$commit_hashes" | head -n 1 | xargs git show | grep '^version' | cut -d= -f2 | tr -d '[:space:]')
+          second_last_commit_hash=$(git rev-list -n 2 HEAD -- gradle.properties | tail -n 1)
+          echo "Second-to-last commit hash: $second_last_commit_hash"
+          previous_version=$(git show $second_last_commit_hash:gradle.properties | grep '^version' | cut -d= -f2 | tr -d '[:space:]')
           echo "Previous version: $previous_version"
           echo "::set-output name=prev_version::$previous_version"
+
 
       - name: Get current version
         id: get-current-version
