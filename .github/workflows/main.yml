@@ -41,8 +41,7 @@ jobs:
 
       - name: Update README Badge
         run: |
-          git fetch origin main
-          diff_output=$(git diff origin/main..HEAD)
+          diff_output=git diff ${{github.event.before}} ${{github.sha}}
           echo "diff output: $diff_output"
           if $diff_output | grep '^version ='; then
             echo "pass"
