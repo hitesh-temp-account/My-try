@@ -32,7 +32,7 @@ jobs:
           commit_hashes=$(git rev-list -n 5 HEAD)
           echo "Commit hashes: $commit_hashes"
     
-          second_last_commit_hash=$(echo "$commit_hashes" | tail -n 1)
+          second_last_commit_hash=$(echo "$commit_hashes" | tail -n 3)
           echo "Second-to-last commit hash: $second_last_commit_hash"
     
           previous_version=$(git show $second_last_commit_hash:gradle.properties | grep '^version' | cut -d= -f2 | tr -d '[:space:]')
