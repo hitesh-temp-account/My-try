@@ -18,6 +18,7 @@ env:
 jobs:
   update-badge:
     runs-on: ubuntu-latest
+    if: "grep '^version=' gradle.properties
 
     permissions:
       #      issues: write
