@@ -3,7 +3,7 @@ name: My test workflow
 on:
   push:
     branches:
-      - master
+      - main
     paths:
       - 'gradle.properties'
 
