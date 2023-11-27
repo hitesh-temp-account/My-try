@@ -29,9 +29,9 @@ jobs:
       - name: Get previous version
         id: get-previous-version
         run: |
-          list = $(git rev-list -n 2 HEAD -- gradle.properties)
-          echo "list: $list"
-          second_last_commit_hash=$(list | tail -n 1)
+          hash_list = $(git rev-list -n 2 HEAD -- gradle.properties)
+          echo "list: $hash_list"
+          second_last_commit_hash=$(hash_list | tail -n 1)
           echo "Second-to-last commit hash: $second_last_commit_hash"
     
           previous_version=$(git show $second_last_commit_hash:gradle.properties | grep '^version' | cut -d= -f2 | tr -d '[:space:]')
