@@ -67,3 +67,7 @@ jobs:
           ${{ steps.create-pr.outputs.pull-request-number }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Delete branch
+        run: |
+          git push origin --delete github-actions/readme-update
