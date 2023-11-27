@@ -29,11 +29,10 @@ jobs:
       - name: Get previous version
         id: get-previous-version
         run: |
-          log_result=$(git log --format="%h" -n 2 -- gradle.properties)
-          echo "Git log result: $log_result"
-          
-          previous_version=$(echo "$log_result" | tail -n 1 | xargs git show | grep '^version' | cut -d= -f2 | tr -d '[:space:]')
+          previous_version=$(git show HEAD^:gradle.properties | grep '^version' | cut -d= -f2 | tr -d '[:space:]')
+          echo "Previous version: $previous_version"
           echo "::set-output name=prev_version::$previous_version"
+
 
       - name: Get current version
         id: get-current-version
