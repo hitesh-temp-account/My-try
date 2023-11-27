@@ -41,9 +41,7 @@ jobs:
 
       - name: Update README Badge
         run: |
-          git fetch origin ${{ github.event.before }}:refs/remotes/origin/before
-          diff_output=git diff origin/before ${{ github.sha }}
-          echo "diff output: $diff_output"
+          echo "diff output: ${{git status}}"
           if $diff_output | grep '^version ='; then
             echo "pass"
             version=$(grep '^version' gradle.properties | cut -d= -f2 | tr -d '[:space:]')
