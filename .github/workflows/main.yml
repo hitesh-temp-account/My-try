@@ -41,16 +41,16 @@ jobs:
 
       - name: Update README Badge
         run: |
-          if git diff ${{  github.base_ref }}..${{ github.sha }} | grep 'version=';
-          then
-          echo "pass"
-          version=$(grep '^version' gradle.properties | cut -d= -f2 | tr -d '[:space:]')
-          # echo "VERSION: $version"
-          # echo "badge\/version-v$version-blue.svg"
-          sed -i "s/\(badge\/version-v[0-9]\.[0-9]-blue\.svg\)/badge\/version-v$version-blue.svg/" README.md
-          cat README.md
+          if [ git diff ${{  github.base_ref }}..${{ github.sha }} | grep 'version=']; then
+            echo "pass"
+            version=$(grep '^version' gradle.properties | cut -d= -f2 | tr -d '[:space:]')
+            # echo "VERSION: $version"
+            # echo "badge\/version-v$version-blue.svg"
+            sed -i "s/\(badge\/version-v[0-9]\.[0-9]-blue\.svg\)/badge\/version-v$version-blue.svg/" README.md
+            cat README.md
           else
-          echo "fail"
+            echo "fail"
+          fi
 
       - name: Create PR
         id: create-pr
