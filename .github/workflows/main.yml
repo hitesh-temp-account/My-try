@@ -42,7 +42,7 @@ jobs:
       - name: Get previous version
         id: get-previous-version
         run: |
-          echo "::set-output name=prev_version::$(git log --format="%h" -n 2 -- gradle.properties | tail -n 1 | xargs git show | grep '^version' | cut -d= -f2 | tr -d '[:space:]')"
+          echo "::set-output name=prev_version::$(git diff HEAD^..HEAD -- gradle.properties | grep '^[-+]' | grep '^-' | grep '^version' | cut -d= -f2 | tr -d '[:space:]')"
       - name: Get current version
         id: get-current-version
         run: |
