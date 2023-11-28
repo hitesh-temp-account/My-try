@@ -30,6 +30,7 @@ jobs:
 
       - name: Jojo version
         run: |
+          git rev-list -n 5 origin/main -- gradle.properties
           commit_hashes=$(git rev-list -n 5 origin/main -- gradle.properties)
           echo "Commit hashes: $commit_hashes"
  
