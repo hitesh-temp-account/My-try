@@ -34,8 +34,14 @@ jobs:
 
       - name: Gojo version
         run: |
-          git log
-          diff_po=$(git log)
+          git log -3
+          diff_po=$(git log -3)
+          echo "diff $diff_jo"
+
+      - name: Bojo version
+        run: |
+          git log -3
+          diff_po=$(git log -3)
           echo "diff $diff_jo"
 
       - name: Optimus
