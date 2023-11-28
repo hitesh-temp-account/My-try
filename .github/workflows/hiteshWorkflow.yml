@@ -25,8 +25,19 @@ jobs:
     
     steps:
 
+      - name: Checkout Repository1
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.sha }}
+
+      - name: DODO
+        run: |
+          git show
+          git diff
+
       - name: Checkout Repository
         uses: actions/checkout@v2
+          
 
       - name: Jojo version
         run: |
