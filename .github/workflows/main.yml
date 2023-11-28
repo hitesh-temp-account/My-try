@@ -2,6 +2,10 @@ name: My test workflow
 
 on:
   push:
+    branches:
+      - main
+    paths:
+      - 'gradle.properties'
 
 env:
   COMMIT_MESSAGE: |
