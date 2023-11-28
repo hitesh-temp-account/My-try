@@ -26,9 +26,7 @@ jobs:
     steps:
 
       - name: Checkout Repository1
-        uses: actions/checkout@v2
-        with:
-          ref: ${{ github.sha }}
+        uses: actions/checkout@v4
           
 
       - name: Pojo version
