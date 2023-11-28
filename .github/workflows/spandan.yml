@@ -54,10 +54,11 @@ jobs:
           echo "Current version: ${{ steps.get-current-version.outputs.current_version }}"
           if [ "${{ steps.get-previous-version.outputs.prev_version }}" = "${{ steps.get-current-version.outputs.current_version }}" ]; then
             echo "No version change. Exiting workflow."
-            exit 0
+            echo "::set-env name=SKIP_NEXT_STEPS::true"
           fi
 
       - name: Update README Badge
+        if: env.SKIP_NEXT_STEPS != 'true'
         run: |
           version=$(grep '^version' gradle.properties | cut -d= -f2 | tr -d '[:space:]')
           version=$(echo "$version" | sed 's/-/%E2%80%90/g')
@@ -66,6 +67,7 @@ jobs:
           cat README.md
 
       - name: Create PR
+        if: env.SKIP_NEXT_STEPS != 'true'
         id: create-pr
         uses: peter-evans/create-pull-request@v5
         with:
@@ -79,6 +81,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Turn On PR Auto-Merge
+        if: env.SKIP_NEXT_STEPS != 'true'
         run: >
           gh pr merge --squash --auto
           --repo ${{ github.repository }}
@@ -87,5 +90,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Delete branch
+        if: env.SKIP_NEXT_STEPS != 'true'
         run: |
           git push origin --delete github-actions/readme-update
