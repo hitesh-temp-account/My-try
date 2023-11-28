@@ -56,14 +56,18 @@ jobs:
 
       - name: Update README Badge
         run: |
+          # Extract version from gradle.properties
           version=$(grep '^version' gradle.properties | cut -d= -f2 | tr -d '[:space:]')
           echo "old version: $version"
+    
+          # Encode hyphen if it exists in the version
           version_safe=$(echo "$version" | sed 's/-/&#8208;/g')
           echo "safe version: $version_safe"
-          sed -i "s/\(badge\/version-v[0-9]\.[0-9]-blue\.svg\)/badge\/version-v$version_safe-blue.svg/" README.md
+
+          # Replace the badge URL in README.md
+          sed -i "s/\(badge\/version-v[0-9]\.[0-9]-blue\.svg\)/badge\/version-v$version_safe-blue.svg/g" README.md
+    
           cat README.md
-
-
 
       - name: Create PR
         id: create-pr
