@@ -75,7 +75,9 @@ jobs:
 
       - name: Turn On PR Auto-Merge
         run: >
-          gh pr merge ${{ steps.create-pr.outputs.pull-request-number }} --squash --auto
+          gh pr merge --squash --auto
+          --repo ${{ github.repository }}
+          ${{ steps.create-pr.outputs.pull-request-number }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
