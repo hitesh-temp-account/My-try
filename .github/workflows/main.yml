@@ -15,7 +15,7 @@ env:
 
     ACLOVERRIDE CODEOWNEROVERRIDE CUSTOMVALIDATIONSOVERRIDE
 
-jobs:&#
+jobs:
   update-badge:
     runs-on: ubuntu-latest
 
