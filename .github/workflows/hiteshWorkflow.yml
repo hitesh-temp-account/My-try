@@ -29,6 +29,14 @@ jobs:
         uses: actions/checkout@v2
         with:
           ref: ${{ github.sha }}
+          
+
+      - name: Pojo version
+        run: |
+          git rev-list HEAD --count
+          git rev-list -n 5 origin/main -- gradle.properties
+          commit_hashes=$(git rev-list -n 5 origin/main -- gradle.properties)
+          echo "Commit hashes: $commit_hashes"
 
       - name: DODO
         run: |
