@@ -24,32 +24,12 @@ jobs:
       pull-requests: write
     
     steps:
-    
-
-      - name: Pojo version
-        run: |
-          git show
-          diff_po=$(git show)
-          echo "diff $diff_jo"
 
       - name: Checkout Repository
         uses: actions/checkout@v2
 
       - name: Jojo version
         run: |
-          git show
-          diff_po=$(git show)
-          echo "diff $diff_jo"
-
-      - name: Gojo version
-        run: |
-          git log -3
-          diff_po=$(git log -3)
-          echo "diff $diff_jo"
-
-      - name: Optimus
-        run: |
-          git diff
-          diff_po=$(git diff)
-          echo "diff $diff_jo"
+          commit_hashes=$(git rev-list -n 5 origin/main -- gradle.properties)
+          echo "Commit hashes: $commit_hashes"
  
