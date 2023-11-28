@@ -26,21 +26,6 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: Get previous version
-        id: get-previous-version
-        run: |
-          commit_hashes=$(git rev-list -n 5 origin/main -- gradle.properties)
-          echo "Commit hashes: $commit_hashes"
-    
-          second_last_commit_hash=$(echo "$commit_hashes" | tail -n 3)
-          echo "Second-to-last commit hash: $second_last_commit_hash"
-    
-          previous_version=$(git show $second_last_commit_hash:gradle.properties | grep '^version' | cut -d= -f2 | tr -d '[:space:]')
-          echo "data: $(git show $second_last_commit_hash:gradle.properties)"
-          echo "Previous version: $previous_version"
-          echo "::set-output name=prev_version::$previous_version"
-
-
       - name: Jojo version
         run: |
           git show
