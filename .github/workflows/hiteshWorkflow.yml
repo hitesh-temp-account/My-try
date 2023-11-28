@@ -31,17 +31,11 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
 
-      - name: Pojo version
-        run: |
-          git rev-list HEAD --count
-          git rev-list -n 5 origin/main -- gradle.properties
-          commit_hashes=$(git rev-list -n 5 origin/main -- gradle.properties)
-          echo "Commit hashes: $commit_hashes"
-
       - name: DODO
-        run: |
-          git show
-          git diff
+        run: git diff
+
+      - name: SOSO
+        run: git show
 
       - name: Checkout Repository
         uses: actions/checkout@v2
