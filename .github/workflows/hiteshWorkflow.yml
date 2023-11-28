@@ -22,7 +22,16 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
+    
     steps:
+    
+
+      - name: Pojo version
+        run: |
+          git show
+          diff_po=$(git show)
+          echo "diff $diff_jo"
+
       - name: Checkout Repository
         uses: actions/checkout@v2
 
@@ -37,10 +46,6 @@ jobs:
           git log -3
           diff_po=$(git log -3)
           echo "diff $diff_jo"
-
-      - name: Bojo version
-        run: |
-          echo "bojo ${{github.event.pull_request.head.sha}}"
 
       - name: Optimus
         run: |
