@@ -1,4 +1,4 @@
-![Badge](https://img.shields.io/badge/version-v1.6-#8209;beta-blue.svg)
+![Badge](https://img.shields.io/badge/version-v1.7-#8209;beta-blue.svg)
 [![example workflow](https://github.com/github/docs/actions/workflows/test.yml/badge.svg)](https://github.com/hitesh-temp-account/Breach/actions/workflows/main.yml)
 
 # Breach
