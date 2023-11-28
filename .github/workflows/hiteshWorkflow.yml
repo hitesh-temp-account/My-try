@@ -40,7 +40,7 @@ jobs:
 
       - name: Bojo version
         run: |
-          echo "bojo {{github.event.pull_request.head.sha}}"
+          echo "bojo ${{github.event.pull_request.head.sha}}"
 
       - name: Optimus
         run: |
