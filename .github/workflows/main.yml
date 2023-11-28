@@ -36,6 +36,7 @@ jobs:
           echo "Second-to-last commit hash: $second_last_commit_hash"
     
           previous_version=$(git show $second_last_commit_hash:gradle.properties | grep '^version' | cut -d= -f2 | tr -d '[:space:]')
+          echo "data: $(git show $second_last_commit_hash:gradle.properties)"
           echo "Previous version: $previous_version"
           echo "::set-output name=prev_version::$previous_version"
 
