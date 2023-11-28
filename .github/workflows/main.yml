@@ -57,7 +57,7 @@ jobs:
       - name: Update README Badge
         run: |
           version=$(grep '^version' gradle.properties | cut -d= -f2 | tr -d '[:space:]')
-          version=$(echo "$version" | tr '-' "&#8209;")
+          version=$(echo "$version" | sed 's/-/%E2%80%90'g)
           echo "$version"
           sed -i "s/\(badge\/version-v.*-blue\.svg\)/badge\/version-v$version-blue.svg/" README.md
           cat README.md
