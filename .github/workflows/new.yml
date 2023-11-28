@@ -1,0 +1,18 @@
+name: Show Last 5 Commits
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  show-commits:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Show Last 5 Commits
+      run: |
+        git log -n 5 --pretty=format:"%h - %an, %ar : %s"
