@@ -32,6 +32,12 @@ jobs:
           diff_po=$(git show)
           echo "diff $diff_jo"
 
+      - name: Gojo version
+        run: |
+          git show @~
+          diff_po=$(git show @~)
+          echo "diff $diff_jo"
+
       - name: Optimus
         run: |
           git diff
