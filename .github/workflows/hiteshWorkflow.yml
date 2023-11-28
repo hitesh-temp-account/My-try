@@ -43,6 +43,13 @@ jobs:
 
       - name: Jojo version
         run: |
-          git diff
+          git show
           diff_po=$(git show)
           echo "diff $diff_jo"
+
+      - name: Optimus
+        run: |
+          git diff
+          diff_po=$(git diff)
+          echo "diff $diff_jo"
+ 
