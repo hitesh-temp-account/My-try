@@ -40,11 +40,6 @@ jobs:
           echo "Previous version: $previous_version"
           echo "::set-output name=prev_version::$previous_version"
 
-      - name: Jojo version
-        run: |
-          diff_po = $(git show)
-          echo "diff $diff_jo"
-
       - name: Get current version
         id: get-current-version
         run: |
