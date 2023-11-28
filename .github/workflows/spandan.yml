@@ -54,7 +54,7 @@ jobs:
           echo "Current version: ${{ steps.get-current-version.outputs.current_version }}"
           if [ "${{ steps.get-previous-version.outputs.prev_version }}" = "${{ steps.get-current-version.outputs.current_version }}" ]; then
             echo "No version change. Exiting workflow."
-            ::exit::
+            exit 1
           fi
 
       - name: Update README Badge
