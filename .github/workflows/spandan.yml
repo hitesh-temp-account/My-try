@@ -80,6 +80,11 @@ jobs:
           commit-message: ${{ env.COMMIT_MESSAGE }}
           token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Disable Auto-Close on Merge
+        run: gh config set prompt true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Turn On PR Auto-Merge
         if: env.SKIP_NEXT_STEPS != 'true'
         run: >
