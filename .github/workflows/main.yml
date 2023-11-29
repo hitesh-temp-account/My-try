@@ -32,7 +32,11 @@ jobs:
           echo "1: $version"
           version=$(echo "$version" | sed 's/-/%E2%80%90/g')
           echo "2: $version"
+          version_line_num=$(grep -n '^version' gradle.properties | cut -d ":" -f1)
+          
+
           sed -i "s/\(badge\/version-v.*-blue\.svg\)/badge\/version-v$version-blue.svg/" README.md
+          sed -u "s/\(properties#L.*)properties#L$version_line_num" README.md
 
       - name: Create PR
         id: create-pr
