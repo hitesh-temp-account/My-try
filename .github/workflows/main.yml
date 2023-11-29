@@ -36,7 +36,7 @@ jobs:
           
           echo "3: $version_line_num"
           sed -i "s/\(badge\/version-v.*-blue\.svg\)/badge\/version-v$version-blue.svg/" README.md
-          sed -i "s/\(properties\#L.*)properties\#L$version_line_num" README.md
+          #sed -i "s/\(properties\#L.*)properties\#L$version_line_num" README.md
 
       - name: Create PR
         id: create-pr
