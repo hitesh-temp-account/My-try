@@ -33,14 +33,8 @@ jobs:
         id: get-previous-version
         run: |
           commit_hashes=$(git rev-list -n 2 origin/main -- gradle.properties)
-          echo "Commit hashes: $commit_hashes"
-    
           second_last_commit_hash=$(echo "$commit_hashes" | tail -n 1)
-          echo "Second-to-last commit hash: $second_last_commit_hash"
-    
           previous_version=$(git show $second_last_commit_hash:gradle.properties | grep '^version' | cut -d= -f2 | tr -d '[:space:]')
-          echo "data: $(git show $second_last_commit_hash:gradle.properties)"
-          echo "Previous version: $previous_version"
           echo "::set-output name=prev_version::$previous_version"
 
       - name: Get current version
@@ -50,12 +44,9 @@ jobs:
 
       - name: Check for version change
         run: |
-          echo "Previous version: ${{ steps.get-previous-version.outputs.prev_version }}"
-          echo "Current version: ${{ steps.get-current-version.outputs.current_version }}"
           if [ "${{ steps.get-previous-version.outputs.prev_version }}" = "${{ steps.get-current-version.outputs.current_version }}" ]; then
             echo "No version change. Exiting workflow."
             echo "SKIP_NEXT_STEPS=true" >> $GITHUB_ENV
-            # echo "::set-env name=SKIP_NEXT_STEPS::true"
           fi
 
       - name: Update README Badge
