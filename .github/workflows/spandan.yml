@@ -38,26 +38,26 @@ jobs:
           previous_version=$(echo "$commit_info" | grep '^version' | cut -d= -f2 | tr -d '[:space:]')
           previous_line=$(echo "$commit_info" | grep -n '^version' | cut -d ":" -f1)
           echo "prev-version=$previous_version" >> $GITHUB_ENV
-          echo "prev-line=$previous_line" >> $GITHUB_ENV
+          echo "prev-version_line=$previous_line" >> $GITHUB_ENV
 
       - name: Get current version
         id: get-current-version
         run: |
           echo "current_version=$(grep '^version' gradle.properties | cut -d= -f2 | tr -d '[:space:]')" >> $GITHUB_ENV
-          echo "current_line=$(grep -n '^version' gradle.properties | cut -d ":" -f1)" >> $GITHUB_ENV
+          echo "current_version_line=$(grep -n '^version' gradle.properties | cut -d ":" -f1)" >> $GITHUB_ENV
 
       - name: Check for version change
         run: |
           if [ "${{ env.prev_version }}" = "${{ env.current_version }}" ]; then
-            echo "No version change. Exiting workflow."
+            echo "No change in version."
             echo "VERSION_NOT_CHANGED=true" >> $GITHUB_ENV
           fi
-          if [ "${{ env.prev_line }}" = "${{ env.current_line }}" ]; then
-            echo "No line change."
-            echo "LINE_NOT_CHANGED=true" >> $GITHUB_ENV
+          if [ "${{ env.prev_version_line }}" = "${{ env.current_version_line }}" ]; then
+            echo "No change in version line."
+            echo "VERSION_LINE_NOT_CHANGED=true" >> $GITHUB_ENV
           fi
 
-      - name: Update version README Badge
+      - name: Update version in README Badge
         if: env.VERSION_NOT_CHANGED != 'true'
         run: |
           version=$(grep '^version' gradle.properties | cut -d= -f2 | tr -d '[:space:]')
@@ -67,7 +67,7 @@ jobs:
           cat README.md
 
       - name: Update line number in README Badge
-        if: env.LINE_NOT_CHANGED != 'true'
+        if: env.VERSION_LINE_NOT_CHANGED != 'true'
         run: |
           current_line=$(grep -n '^version' gradle.properties | cut -d ":" -f1)
           echo "$current_line"
@@ -77,7 +77,7 @@ jobs:
       - name: Create PR
         if: |
           env.VERSION_NOT_CHANGED != 'true' ||
-          env.LINE_NOT_CHANGED != 'true'
+          env.VERSION_LINE_NOT_CHANGED != 'true'
         id: create-pr
         uses: peter-evans/create-pull-request@v5
         with:
@@ -93,7 +93,7 @@ jobs:
       - name: Turn On PR Auto-Merge
         if: |
           env.VERSION_NOT_CHANGED != 'true' ||
-          env.LINE_NOT_CHANGED != 'true'
+          env.VERSION_LINE_NOT_CHANGED != 'true'
         run: >
           gh pr merge --squash --auto
           --repo ${{ github.repository }}
@@ -104,6 +104,6 @@ jobs:
       - name: Delete branch
         if: |
           env.VERSION_NOT_CHANGED != 'true' ||
-          env.LINE_NOT_CHANGED != 'true'
+          env.VERSION_LINE_NOT_CHANGED != 'true'
         run: |
           git push origin --delete github-actions/readme-update
