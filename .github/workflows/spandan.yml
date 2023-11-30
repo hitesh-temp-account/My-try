@@ -58,7 +58,6 @@ jobs:
           fi
 
       - name: Update README Badge
-        if: env.SKIP_NEXT_STEPS != 'true'
         run: |
           version=$(grep '^version' gradle.properties | cut -d= -f2 | tr -d '[:space:]')
           current_line = $(grep -n '^version' gradle.properties | cut -d ":" -f1)
