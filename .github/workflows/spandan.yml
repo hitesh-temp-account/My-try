@@ -66,8 +66,10 @@ jobs:
           echo "$current_line"
           if [env.SKIP_NEXT_STEPS != 'true']; then
             sed -i "s/\(badge\/version-v.*-blue\.svg\)/badge\/version-v$version-blue.svg/" README.md
+          fi
           if [env.LINE_NOT_CHANGED != 'true']; then
             sed -i "s/\(badge\/version-v[^-]*-blue\.svg[^#]*#L\)[0-9]\+/\1${current_line}/" README.md
+          fi
           cat README.md
 
       - name: Create PR
