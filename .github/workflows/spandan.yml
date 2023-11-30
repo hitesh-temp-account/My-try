@@ -35,16 +35,16 @@ jobs:
           commit_hashes=$(git rev-list -n 2 origin/main -- gradle.properties)
           second_last_commit_hash=$(echo "$commit_hashes" | tail -n 1)
           commit_info=$(git show $second_last_commit_hash:gradle.properties)
-          previous_version=$(echo "$commit_info" | grep '^VERSION_NAME' | cut -d "=" -f2 | tr -d '[:space:]')
-          previous_line=$(echo "$commit_info" | grep -n '^VERSION_NAME' | cut -d ":" -f1)
+          previous_version=$(echo "$commit_info" | grep 'VERSION_NAME' | cut -d "=" -f2 | tr -d '[:space:]')
+          previous_line=$(echo "$commit_info" | grep -n 'VERSION_NAME' | cut -d ":" -f1)
           echo "prev-version=$previous_version" >> $GITHUB_ENV
           echo "prev-version_line=$previous_line" >> $GITHUB_ENV
 
       - name: Get current version
         id: get-current-version
         run: |
-          echo "current_version=$(grep '^VERSION_NAME' gradle.properties | cut -d "=" -f2 | tr -d '[:space:]')" >> $GITHUB_ENV
-          echo "current_version_line=$(grep -n '^VERSION_NAME' gradle.properties | cut -d ":" -f1)" >> $GITHUB_ENV
+          echo "current_version=$(grep 'VERSION_NAME' gradle.properties | cut -d "=" -f2 | tr -d '[:space:]')" >> $GITHUB_ENV
+          echo "current_version_line=$(grep -n 'VERSION_NAME' gradle.properties | cut -d ":" -f1)" >> $GITHUB_ENV
 
       - name: Check for version change
         run: |
@@ -60,7 +60,7 @@ jobs:
       - name: Update version in README Badge
         if: env.VERSION_NOT_CHANGED != 'true'
         run: |
-          version=$(grep '^VERSION_NAME' gradle.properties | cut -d "=" -f2 | tr -d '[:space:]')
+          version=$(grep 'VERSION_NAME' gradle.properties | cut -d "=" -f2 | tr -d '[:space:]')
           version=$(echo "$version" | sed 's/-/%E2%80%90/g')
           echo "$version"
           sed -i "s/\(badge\/version-v.*-blue\.svg\)/badge\/version-v$version-blue.svg/" README.md
@@ -69,7 +69,7 @@ jobs:
       - name: Update line number in README Badge
         if: env.VERSION_LINE_NOT_CHANGED != 'true'
         run: |
-          current_line=$(grep -n '^VERSION_NAME' gradle.properties | cut -d ":" -f1)
+          current_line=$(grep -n 'VERSION_NAME' gradle.properties | cut -d ":" -f1)
           echo "$current_line"
           sed -i "s/properties#L.*/properties#L$current_line\)/" README.md
           cat README.md
