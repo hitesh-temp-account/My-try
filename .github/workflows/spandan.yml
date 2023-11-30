@@ -53,7 +53,7 @@ jobs:
           fi
 
           if [ "${{ steps.get-previous-version.outputs.prev_line }}" = "${{ steps.get-current-version.outputs.current_line }}" ]; then
-            echo "No line change.
+            echo "No line change."
             echo "LINE_NOT_CHANGED=true" >> $GITHUB_ENV
           fi
 
