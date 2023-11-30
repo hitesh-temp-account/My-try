@@ -34,33 +34,33 @@ jobs:
         run: |
           commit_hashes=$(git rev-list -n 2 origin/main -- gradle.properties)
           second_last_commit_hash=$(echo "$commit_hashes" | tail -n 1)
-          previous_version=$(git show $second_last_commit_hash:gradle.properties | grep -n '^version' | cut -d= -f2 | tr -d '[:space:]')
-          previous_line=$(git show $second_last_commit_hash:gradle.properties | grep -n '^version' | cut -d ":" -f1 | tr -d '[:space:]')
-          echo "::set-output name=prev_version::$previous_version"
-          echo "::set-output name=prev_line::$previous_line"
+          commit_info=$(git show $second_last_commit_hash:gradle.properties)
+          previous_version=$(echo "$commit_info" | grep '^version' | cut -d= -f2 | tr -d '[:space:]')
+          previous_line=$(echo "$commit_info" | grep -n '^version' | cut -d ":" -f1)
+          echo "prev-version=$previous_version" >> $GITHUB_ENV
+          echo "prev-line=$previous_line" >> $GITHUB_ENV
 
       - name: Get current version
         id: get-current-version
         run: |
-          echo "::set-output name=current_version::$(grep -n '^version' gradle.properties | cut -d= -f2 | tr -d '[:space:]')"
-          echo "::set-output name=current_line::$(grep -n '^version' gradle.properties | cut -d ":" -f1 | tr -d '[:space:]')"
+          echo "current_version=$(grep '^version' gradle.properties | cut -d= -f2 | tr -d '[:space:]')" >> $GITHUB_ENV
+          echo "current_line=$(grep -n '^version' gradle.properties | cut -d ":" -f1)" >> $GITHUB_ENV
 
       - name: Check for version change
         run: |
-          if [ "${{ steps.get-previous-version.outputs.prev_version }}" = "${{ steps.get-current-version.outputs.current_version }}" ]; then
+          if [ "${{ env.prev_version }}" = "${{ env.current_version }}" ]; then
             echo "No version change. Exiting workflow."
-            echo "SKIP_NEXT_STEPS=true" >> $GITHUB_ENV
+            echo "VERSION_NOT_CHANGED=true" >> $GITHUB_ENV
           fi
-
-          if [ "${{ steps.get-previous-version.outputs.prev_line }}" = "${{ steps.get-current-version.outputs.current_line }}" ]; then
+          if [ "${{ env.prev_line }}" = "${{ env.current_line }}" ]; then
             echo "No line change."
             echo "LINE_NOT_CHANGED=true" >> $GITHUB_ENV
           fi
 
       - name: Update version README Badge
-        if: env.SKIP_NEXT_STEPS != 'true'
+        if: env.VERSION_NOT_CHANGED != 'true'
         run: |
-          version=$(grep -n '^version' gradle.properties | cut -d= -f2 | tr -d '[:space:]')
+          version=$(grep '^version' gradle.properties | cut -d= -f2 | tr -d '[:space:]')
           version=$(echo "$version" | sed 's/-/%E2%80%90/g')
           echo "$version"
           sed -i "s/\(badge\/version-v.*-blue\.svg\)/badge\/version-v$version-blue.svg/" README.md
@@ -69,15 +69,14 @@ jobs:
       - name: Update line number in README Badge
         if: env.LINE_NOT_CHANGED != 'true'
         run: |
-          current_line=$(grep -n '^version' gradle.properties | cut -d ":" -f1 | tr -d '[:space:]')
+          current_line=$(grep -n '^version' gradle.properties | cut -d ":" -f1)
           echo "$current_line"
-          # sed -i "s/\(#L.*)[0-9]\+/\1${current_line}/" README.md
           sed -i "s/properties#L.*/properties#L$current_line\)/" README.md
           cat README.md
 
       - name: Create PR
         if: |
-          env.SKIP_NEXT_STEPS != 'true' ||
+          env.VERSION_NOT_CHANGED != 'true' ||
           env.LINE_NOT_CHANGED != 'true'
         id: create-pr
         uses: peter-evans/create-pull-request@v5
@@ -93,7 +92,7 @@ jobs:
 
       - name: Turn On PR Auto-Merge
         if: |
-          env.SKIP_NEXT_STEPS != 'true' ||
+          env.VERSION_NOT_CHANGED != 'true' ||
           env.LINE_NOT_CHANGED != 'true'
         run: >
           gh pr merge --squash --auto
@@ -104,7 +103,7 @@ jobs:
 
       - name: Delete branch
         if: |
-          env.SKIP_NEXT_STEPS != 'true' ||
+          env.VERSION_NOT_CHANGED != 'true' ||
           env.LINE_NOT_CHANGED != 'true'
         run: |
           git push origin --delete github-actions/readme-update
