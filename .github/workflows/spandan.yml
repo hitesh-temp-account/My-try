@@ -57,19 +57,21 @@ jobs:
             echo "LINE_NOT_CHANGED=true" >> $GITHUB_ENV
           fi
 
-      - name: Update README Badge
+      - name: Update version README Badge
+        if: env.SKIP_NEXT_STEPS != 'true'
         run: |
           version=$(grep '^version' gradle.properties | cut -d= -f2 | tr -d '[:space:]')
-          current_line=$(grep -n '^version' gradle.properties | cut -d ":" -f1)
           version=$(echo "$version" | sed 's/-/%E2%80%90/g')
           echo "$version"
+          sed -i "s/\(badge\/version-v.*-blue\.svg\)/badge\/version-v$version-blue.svg/" README.md
+          cat README.md
+
+      - name: Update line number in README Badge
+        if: env.LINE_NOT_CHANGED != 'true'
+        run: |
+          current_line=$(grep -n '^version' gradle.properties | cut -d ":" -f1)
           echo "$current_line"
-          if [env.SKIP_NEXT_STEPS != 'true']; then
-            sed -i "s/\(badge\/version-v.*-blue\.svg\)/badge\/version-v$version-blue.svg/" README.md
-          fi
-          if [env.LINE_NOT_CHANGED != 'true']; then
-            sed -i "s/\(badge\/version-v[^-]*-blue\.svg[^#]*#L\)[0-9]\+/\1${current_line}/" README.md
-          fi
+          sed -i "s/\(badge\/version-v[^-]*-blue\.svg[^#]*#L\)[0-9]\+/\1${current_line}/" README.md
           cat README.md
 
       - name: Create PR
