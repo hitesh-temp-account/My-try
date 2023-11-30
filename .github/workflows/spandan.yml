@@ -72,11 +72,13 @@ jobs:
           current_line=$(grep -n '^version' gradle.properties | cut -d ":" -f1)
           echo "$current_line"
           # sed -i "s/\(#L.*)[0-9]\+/\1${current_line}/" README.md
-          sed -i "s/#L.*/#L$current_line/" README.md
+          sed -i "s/#L.*/#L$current_line\)/" README.md
           cat README.md
 
       - name: Create PR
-        if: env.SKIP_NEXT_STEPS != 'true'
+        if: |
+          env.SKIP_NEXT_STEPS != 'true' ||
+          env.LINE_NOT_CHANGED != 'true'
         id: create-pr
         uses: peter-evans/create-pull-request@v5
         with:
@@ -90,7 +92,9 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Turn On PR Auto-Merge
-        if: env.SKIP_NEXT_STEPS != 'true'
+        if: |
+          env.SKIP_NEXT_STEPS != 'true' ||
+          env.LINE_NOT_CHANGED != 'true'
         run: >
           gh pr merge --squash --auto
           --repo ${{ github.repository }}
@@ -99,6 +103,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Delete branch
-        if: env.SKIP_NEXT_STEPS != 'true'
+        if: |
+          env.SKIP_NEXT_STEPS != 'true' ||
+          env.LINE_NOT_CHANGED != 'true'
         run: |
           git push origin --delete github-actions/readme-update
