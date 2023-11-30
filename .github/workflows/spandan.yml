@@ -60,7 +60,7 @@ jobs:
       - name: Update README Badge
         run: |
           version=$(grep '^version' gradle.properties | cut -d= -f2 | tr -d '[:space:]')
-          current_line = $(grep -n '^version' gradle.properties | cut -d ":" -f1)
+          current_line=$(grep -n '^version' gradle.properties | cut -d ":" -f1)
           version=$(echo "$version" | sed 's/-/%E2%80%90/g')
           echo "$version"
           echo "$current_line"
