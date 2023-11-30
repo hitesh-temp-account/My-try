@@ -72,7 +72,7 @@ jobs:
           current_line=$(grep -n '^version' gradle.properties | cut -d ":" -f1)
           echo "$current_line"
           # sed -i "s/\(#L.*)[0-9]\+/\1${current_line}/" README.md
-          sed -i "s/#L.*/#L$current_line\)/" README.md
+          sed -i "s/properties#L.*/properties#L$current_line\)/" README.md
           cat README.md
 
       - name: Create PR
