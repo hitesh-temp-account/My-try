@@ -38,6 +38,8 @@ jobs:
           echo "$commit_info"
           previous_version=$(echo "$commit_info" | grep 'VERSION_NAME' | cut -d "=" -f2 | tr -d '[:space:]')
           previous_line=$(echo "$commit_info" | grep -n 'VERSION_NAME' | cut -d ":" -f1)
+          echo "$previous_version"
+          echo "$previous_line"
           echo "prev-version=$previous_version" >> $GITHUB_ENV
           echo "prev-version_line=$previous_line" >> $GITHUB_ENV
 
