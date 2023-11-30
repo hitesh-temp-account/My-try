@@ -35,7 +35,7 @@ jobs:
           commit_hashes=$(git rev-list -n 2 origin/main -- gradle.properties)
           second_last_commit_hash=$(echo "$commit_hashes" | tail -n 1)
           commit_info=$(git show $second_last_commit_hash:gradle.properties)
-          previous_version=$(echo "$commit_info" | grep '^version' | cut -d= -f2 | tr -d '[:space:]')
+          previous_version=$(echo "$commit_info" | grep '^version' | cut -d "=" -f2 | tr -d '[:space:]')
           previous_line=$(echo "$commit_info" | grep -n '^version' | cut -d ":" -f1)
           echo "prev-version=$previous_version" >> $GITHUB_ENV
           echo "prev-version_line=$previous_line" >> $GITHUB_ENV
@@ -43,7 +43,7 @@ jobs:
       - name: Get current version
         id: get-current-version
         run: |
-          echo "current_version=$(grep '^version' gradle.properties | cut -d= -f2 | tr -d '[:space:]')" >> $GITHUB_ENV
+          echo "current_version=$(grep '^version' gradle.properties | cut -d "=" -f2 | tr -d '[:space:]')" >> $GITHUB_ENV
           echo "current_version_line=$(grep -n '^version' gradle.properties | cut -d ":" -f1)" >> $GITHUB_ENV
 
       - name: Check for version change
@@ -60,7 +60,7 @@ jobs:
       - name: Update version in README Badge
         if: env.VERSION_NOT_CHANGED != 'true'
         run: |
-          version=$(grep '^version' gradle.properties | cut -d= -f2 | tr -d '[:space:]')
+          version=$(grep '^version' gradle.properties | cut -d "=" -f2 | tr -d '[:space:]')
           version=$(echo "$version" | sed 's/-/%E2%80%90/g')
           echo "$version"
           sed -i "s/\(badge\/version-v.*-blue\.svg\)/badge\/version-v$version-blue.svg/" README.md
