@@ -35,7 +35,7 @@ jobs:
           commit_hashes=$(git rev-list -n 2 origin/main -- gradle.properties)
           second_last_commit_hash=$(echo "$commit_hashes" | tail -n 1)
           previous_version=$(git show $second_last_commit_hash:gradle.properties | grep -n '^version' | cut -d= -f2 | tr -d '[:space:]')
-          previous_line=$(git show $second_last_commit_hash:gradle.properties | grep -n '^version' | cut -d ":" -f1)
+          previous_line=$(git show $second_last_commit_hash:gradle.properties | grep -n '^version' | cut -d ":" -f1 | tr -d '[:space:]')
           echo "::set-output name=prev_version::$previous_version"
           echo "::set-output name=prev_line::$previous_line"
 
@@ -43,7 +43,7 @@ jobs:
         id: get-current-version
         run: |
           echo "::set-output name=current_version::$(grep -n '^version' gradle.properties | cut -d= -f2 | tr -d '[:space:]')"
-          echo "::set-output name=current_line::$(grep -n '^version' gradle.properties | cut -d ":" -f1)"
+          echo "::set-output name=current_line::$(grep -n '^version' gradle.properties | cut -d ":" -f1 | tr -d '[:space:]')"
 
       - name: Check for version change
         run: |
@@ -69,7 +69,7 @@ jobs:
       - name: Update line number in README Badge
         if: env.LINE_NOT_CHANGED != 'true'
         run: |
-          current_line=$(grep -n '^version' gradle.properties | cut -d ":" -f1)
+          current_line=$(grep -n '^version' gradle.properties | cut -d ":" -f1 | tr -d '[:space:]')
           echo "$current_line"
           # sed -i "s/\(#L.*)[0-9]\+/\1${current_line}/" README.md
           sed -i "s/properties#L.*/properties#L$current_line\)/" README.md
