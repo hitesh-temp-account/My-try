@@ -79,8 +79,8 @@ jobs:
 
       - name: Create PR
         if: |
-          env.VERSION_CHANGED = 'true' ||
-          env.VERSION_LINE_CHANGED = 'true'
+          env.VERSION_CHANGED != 'true' &&
+          env.VERSION_LINE_CHANGED != 'true'
         id: create-pr
         uses: peter-evans/create-pull-request@v5
         with:
@@ -95,8 +95,8 @@ jobs:
 
       - name: Turn On PR Auto-Merge
         if: |
-          env.VERSION_CHANGED = 'true' ||
-          env.VERSION_LINE_CHANGED = 'true'
+          env.VERSION_CHANGED != 'true' &&
+          env.VERSION_LINE_CHANGED != 'true'
         run: >
           gh pr merge --squash --auto
           --repo ${{ github.repository }}
@@ -106,7 +106,7 @@ jobs:
 
       - name: Delete branch
         if: |
-          env.VERSION_NOT_CHANGED != 'true' ||
+          env.VERSION_NOT_CHANGED != 'true' &&
           env.VERSION_LINE_NOT_CHANGED != 'true'
         run: |
           git push origin --delete github-actions/readme-update
