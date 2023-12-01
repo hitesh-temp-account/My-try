@@ -61,7 +61,7 @@ jobs:
           fi
 
       - name: Update version in README Badge
-        if: env.VERSION_CHANGED = 'true'
+        if: env.VERSION_CHANGED != 'true'
         run: |
           version=$(grep '^VERSION_NAME=' gradle.properties | cut -d "=" -f2 | tr -d '[:space:]')
           version=$(echo "$version" | sed 's/-/%E2%80%90/g')
@@ -70,7 +70,7 @@ jobs:
           cat README.md
 
       - name: Update line number in README Badge
-        if: env.VERSION_LINE_CHANGED = 'true'
+        if: env.VERSION_LINE_CHANGED != 'true'
         run: |
           current_line=$(grep -n '^VERSION_NAME=' gradle.properties | cut -d ":" -f1)
           echo "$current_line"
