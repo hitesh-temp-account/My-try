@@ -19,11 +19,7 @@ jobs:
           distribution: 'zulu'
 
       - name: setup gradle
-        run: |
-          git update-index --chmod=+x gradlew
-          git config --global user.email "salway.hrishikesh@gmail.com"
-          git config --global user.name "Hrishikesh Salway"
-          git commit -m "Make gradlew executable"
+        run: chmod +x gradlew
 
       - name: Build
         run: ./gradlew build
