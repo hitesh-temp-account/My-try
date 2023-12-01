@@ -46,11 +46,15 @@ jobs:
       - name: Get current version
         id: get-current-version
         run: |
+          echo "prev-version: $previous_version"
+          echo "prev-line: $previous_line"
           echo "current_version=$(grep '^VERSION_NAME=' gradle.properties | cut -d "=" -f2 | tr -d '[:space:]')" >> $GITHUB_ENV
           echo "current_version_line=$(grep -n '^VERSION_NAME=' gradle.properties | cut -d ":" -f1)" >> $GITHUB_ENV
 
       - name: Check for version change
         run: |
+          echo "prev-version: $previous_version"
+          echo "prev-line: $previous_line"
           if [ "${{ env.prev_version }}" = "${{ env.current_version }}" ]; then
             echo "No change in version."
             echo "VERSION_NOT_CHANGED=true" >> $GITHUB_ENV
