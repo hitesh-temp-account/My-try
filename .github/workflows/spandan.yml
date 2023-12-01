@@ -40,8 +40,8 @@ jobs:
           previous_line=$(echo "$commit_info" | grep -n '^VERSION_NAME=' | cut -d ":" -f1)
           echo "prev-version: $previous_version"
           echo "prev-line: $previous_line"
-          echo "prev-version=$previous_version" >> $GITHUB_ENV
-          echo "prev-version_line=$previous_line" >> $GITHUB_ENV
+          echo "prev_version=$previous_version" >> $GITHUB_ENV
+          echo "prev_version_line=$previous_line" >> $GITHUB_ENV
 
       - name: Get current version
         id: get-current-version
@@ -53,8 +53,6 @@ jobs:
 
       - name: Check for version change
         run: |
-          echo "prev-version: $previous_version"
-          echo "prev-line: $previous_line"
           if [ "${{ env.prev_version }}" = "${{ env.current_version }}" ]; then
             echo "No change in version."
             echo "VERSION_NOT_CHANGED=true" >> $GITHUB_ENV
