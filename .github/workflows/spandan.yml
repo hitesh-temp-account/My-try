@@ -51,18 +51,18 @@ jobs:
 
       - name: Check for version change
         run: |
-          echo "${{ env.prev_version }}"
-          echo "${{ env.current_version }}"
-          if [ "${{ env.prev_version }}" != "${{ env.current_version }}" ]; then
+
+          echo "VERSION_CHANGED=true" >> $GITHUB_ENV
+          if [ "${{ env.prev_version }}" = "${{ env.current_version }}" ]; then
             echo "No change in version."
-            echo "VERSION_CHANGED=true" >> $GITHUB_ENV
+            echo "VERSION_CHANGED=false" >> $GITHUB_ENV
           fi
+        
           
-          echo "${{ env.prev_version_line }}"
-          echo "${{ env.current_version_line }}"
-          if [ "${{ env.prev_version_line }} != ${{ env.current_version_line }}" ]; then
+          echo "VERSION_LINE_CHANGED=true" >> $GITHUB_ENV
+          if [ "${{ env.prev_version_line }}" = "${{ env.current_version_line }}" ]; then
             echo "No change in version line."
-            echo "VERSION_LINE_CHANGED=true" >> $GITHUB_ENV
+            echo "VERSION_LINE_CHANGED=false" >> $GITHUB_ENV
           fi
 
       - name: Update version in README Badge
