@@ -20,6 +20,8 @@ jobs:
 
       - name: setup gradle
         run: |
+          git config --global user.email "salway.hrishikesh@gmail.com"
+          git config --global user.name "Hrishikesh Salway"
           git update-index --chmod=+x gradlew
           git commit -m "Make gradlew executable"
 
