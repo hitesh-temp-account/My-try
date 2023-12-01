@@ -51,22 +51,17 @@ jobs:
 
       - name: Check for version change
         run: |
-
-          echo "VERSION_CHANGED=true" >> $GITHUB_ENV
           if [ "${{ env.prev_version }}" = "${{ env.current_version }}" ]; then
             echo "No change in version."
-            echo "VERSION_CHANGED=false" >> $GITHUB_ENV
+            echo "VERSION_NOT_CHANGED=true" >> $GITHUB_ENV
           fi
-        
-          
-          echo "VERSION_LINE_CHANGED=true" >> $GITHUB_ENV
           if [ "${{ env.prev_version_line }}" = "${{ env.current_version_line }}" ]; then
             echo "No change in version line."
-            echo "VERSION_LINE_CHANGED=false" >> $GITHUB_ENV
+            echo "VERSION_LINE_NOT_CHANGED=true" >> $GITHUB_ENV
           fi
 
       - name: Update version in README Badge
-        if: ${{ env.VERSION_CHANGED }}
+        if: env.VERSION_NOT_CHANGED != 'true'
         run: |
           version=$(grep '^VERSION_NAME=' gradle.properties | cut -d "=" -f2 | tr -d '[:space:]')
           version=$(echo "$version" | sed 's/-/%E2%80%90/g')
@@ -75,7 +70,7 @@ jobs:
           cat README.md
 
       - name: Update line number in README Badge
-        if: ${{ env.VERSION_LINE_CHANGED }}
+        if: env.VERSION_LINE_NOT_CHANGED != 'true'
         run: |
           current_line=$(grep -n '^VERSION_NAME=' gradle.properties | cut -d ":" -f1)
           echo "$current_line"
@@ -84,8 +79,8 @@ jobs:
 
       - name: Create PR
         if: |
-          ${{ env.VERSION_CHANGED }} ||
-          ${{ env.VERSION_LINE_NOT_CHANGED }}
+          env.VERSION_NOT_CHANGED != 'true' ||
+          env.VERSION_LINE_NOT_CHANGED != 'true'
         id: create-pr
         uses: peter-evans/create-pull-request@v5
         with:
@@ -100,8 +95,8 @@ jobs:
 
       - name: Turn On PR Auto-Merge
         if: |
-          ${{ env.VERSION_CHANGED }} ||
-          ${{ env.VERSION_LINE_NOT_CHANGED }}
+          env.VERSION_NOT_CHANGED != 'true' ||
+          env.VERSION_LINE_NOT_CHANGED != 'true'
         run: >
           gh pr merge --squash --auto
           --repo ${{ github.repository }}
@@ -111,7 +106,7 @@ jobs:
 
       - name: Delete branch
         if: |
-          ${{ env.VERSION_CHANGED }} ||
-          ${{ env.VERSION_LINE_NOT_CHANGED }}
+          env.VERSION_NOT_CHANGED != 'true' ||
+          env.VERSION_LINE_NOT_CHANGED != 'true'
         run: |
           git push origin --delete github-actions/readme-update
