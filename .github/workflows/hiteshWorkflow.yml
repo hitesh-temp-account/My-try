@@ -66,7 +66,7 @@ jobs:
           fi
 
       - name: Update version in README Badge
-        if: ${{ env.version_change }}
+        if: env.version_change == 'true'
         run: |
           version=$(grep '^VERSION_NAME=' gradle.properties | cut -d "=" -f2 | tr -d '[:space:]')
           version=$(echo "$version" | sed 's/-/%E2%80%90/g')
@@ -75,7 +75,7 @@ jobs:
           cat README.md
 
       - name: Update line number in README Badge
-        if: ${{ env.VERSION_LINE_CHANGED }}
+        if: env.VERSION_LINE_CHANGED == 'true'
         run: |
           current_line=$(grep -n '^VERSION_NAME=' gradle.properties | cut -d ":" -f1)
           echo "$current_line"
@@ -84,7 +84,7 @@ jobs:
 
       - name: Create PR
         if: |
-          env.VERSION_CHANGED == 'true' ||
+          env.version_change == 'true' ||
           env.VERSION_LINE_CHANGED == 'true'
         id: create-pr
         uses: peter-evans/create-pull-request@v5
@@ -100,7 +100,7 @@ jobs:
 
       - name: Turn On PR Auto-Merge
         if: |
-          env.VERSION_CHANGED == 'true' ||
+          env.version_change == 'true' ||
           env.VERSION_LINE_CHANGED == 'true'
         run: >
           gh pr merge --squash --auto
@@ -111,7 +111,7 @@ jobs:
 
       - name: Delete branch
         if: |
-          env.VERSION_NOT_CHANGED == 'true' ||
-          env.VERSION_LINE_NOT_CHANGED == 'true'
+          env.version_change == 'true' ||
+          env.VERSION_LINE_CHANGED == 'true'
         run: |
           git push origin --delete github-actions/readme-update
