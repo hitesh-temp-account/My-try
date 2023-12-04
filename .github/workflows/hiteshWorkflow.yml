@@ -1,26 +1,114 @@
-name: build-status
+name: Hitesh workflow
 
 on:
   push:
     branches:
       - main
+    paths:
+      - 'gradle.properties'
+
+env:
+  COMMIT_MESSAGE: |
+    Update Baseline Profile
+
+    Created by GitHub Action [${{ github.workflow }} #${{ github.run_number }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+
+    ACLOVERRIDE CODEOWNEROVERRIDE CUSTOMVALIDATIONSOVERRIDE
 
 jobs:
-  build:
+  update-badge:
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
-      - uses: actions/checkout@v3
-
-      - name: Set up Java
-        uses: actions/setup-java@v3
+      - name: Checkout Repository
+        uses: actions/checkout@v3
         with:
-          java-version: '17'
-          distribution: 'temurin'
-          cache: gradle
+          ref: ${{  github.head_ref }}
+          fetch-depth: 0
 
-      - name: setup gradle
-        run: chmod +x gradlew
+      - name: Get previous version
+        id: get-previous-version
+        run: |
+          commit_hashes=$(git rev-list -n 2 origin/main -- gradle.properties)
+          second_last_commit_hash=$(echo "$commit_hashes" | tail -n 1)
+          commit_info=$(git show $second_last_commit_hash:gradle.properties)
+          echo "$commit_info"
+          previous_version=$(echo "$commit_info" | grep '^VERSION_NAME=' | cut -d "=" -f2 | tr -d '[:space:]')
+          previous_line=$(echo "$commit_info" | grep -n '^VERSION_NAME=' | cut -d ":" -f1)
+          echo "prev-version: $previous_version"
+          echo "prev-line: $previous_line"
+          echo "prev_version=$previous_version" >> $GITHUB_ENV
+          echo "prev_version_line=$previous_line" >> $GITHUB_ENV
 
-      - name: Build
-        run: ./gradlew build
+      - name: Get current version
+        id: get-current-version
+        run: |
+          echo "prev-version: $previous_version"
+          echo "prev-line: $previous_line"
+          echo "current_version=$(grep '^VERSION_NAME=' gradle.properties | cut -d "=" -f2 | tr -d '[:space:]')" >> $GITHUB_ENV
+          echo "current_version_line=$(grep -n '^VERSION_NAME=' gradle.properties | cut -d ":" -f1)" >> $GITHUB_ENV
+
+      - name: Check for version change
+        run: |
+          if [ "${{ env.prev_version }}" != "${{ env.current_version }}" ]; then
+            echo "VERSION_CHANGED=true" >> $GITHUB_ENV
+          fi
+          if [ "${{ env.prev_version_line }}" != "${{ env.current_version_line }}" ]; then
+            echo "VERSION_LINE_CHANGED=true" >> $GITHUB_ENV
+          fi
+          echo "111: ${{ env.VERSION_CHANGED }}"
+          echo "222: ${{ env.VERSION_LINE_CHANGED }}"
+
+      - name: Update version in README Badge
+        if: env.VERSION_CHANGED != 'true'
+        run: |
+          version=$(grep '^VERSION_NAME=' gradle.properties | cut -d "=" -f2 | tr -d '[:space:]')
+          version=$(echo "$version" | sed 's/-/%E2%80%90/g')
+          echo "$version"
+          sed -i "s/\(badge\/version-v.*-blue\.svg\)/badge\/version-v$version-blue.svg/" README.md
+          cat README.md
+
+      - name: Update line number in README Badge
+        if: env.VERSION_LINE_CHANGED != 'true'
+        run: |
+          current_line=$(grep -n '^VERSION_NAME=' gradle.properties | cut -d ":" -f1)
+          echo "$current_line"
+          sed -i "s/properties#L.*/properties#L$current_line\)/" README.md
+          cat README.md
+
+      - name: Create PR
+        if: |
+          env.VERSION_CHANGED != 'true' &&
+          env.VERSION_LINE_CHANGED != 'true'
+        id: create-pr
+        uses: peter-evans/create-pull-request@v5
+        with:
+          base: main
+          branch: github-actions/readme-update
+          delete-branch: true
+          author: ${{ github.actor }} <${{ github.actor }}@linkedin.com>
+          title: 'Update readme'
+          body: ${{ env.COMMIT_MESSAGE }}
+          commit-message: ${{ env.COMMIT_MESSAGE }}2.1
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Turn On PR Auto-Merge
+        if: |
+          env.VERSION_CHANGED != 'true' &&
+          env.VERSION_LINE_CHANGED != 'true'
+        run: >
+          gh pr merge --squash --auto
+          --repo ${{ github.repository }}
+          ${{ steps.create-pr.outputs.pull-request-number }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Delete branch
+        if: |
+          env.VERSION_NOT_CHANGED != 'true' &&
+          env.VERSION_LINE_NOT_CHANGED != 'true'
+        run: |
+          git push origin --delete github-actions/readme-update
