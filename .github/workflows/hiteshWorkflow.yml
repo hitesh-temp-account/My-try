@@ -97,8 +97,8 @@ jobs:
 
       - name: Turn On PR Auto-Merge
         if: |
-          env.VERSION_CHANGED != 'true' &&
-          env.VERSION_LINE_CHANGED != 'true'
+          env.VERSION_CHANGED == 'true' ||
+          env.VERSION_LINE_CHANGED == 'true'
         run: >
           gh pr merge --squash --auto
           --repo ${{ github.repository }}
