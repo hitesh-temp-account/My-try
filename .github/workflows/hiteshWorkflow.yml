@@ -65,8 +65,8 @@ jobs:
             echo "VERSION_LINE_CHANGED=false" >> $GITHUB_ENV
           fi
 
-          echo "${{ env.VERSION_CHANGED }}"
-          echo "${{ env.VERSION_LINE_CHANGED }}"
+          echo "$VERSION_CHANGED"
+          echo "$VERSION_LINE_CHANGED"
 
       - name: Update version in README Badge
         if: env.VERSION_CHANGED
