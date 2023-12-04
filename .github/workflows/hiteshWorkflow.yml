@@ -59,8 +59,8 @@ jobs:
           if [ "${{ env.prev_version_line  !=  env.current_version_line }}" ]; then
             echo "VERSION_LINE_CHANGED=true" >> $GITHUB_ENV
           fi
-          echo env.VERSION_CHANGED
-          echo env.VERSION_LINE_CHANGED
+          echo ${{ env.VERSION_CHANGED }}
+          echo ${{ env.VERSION_LINE_CHANGED }}
 
       - name: Update version in README Badge
         if: env.VERSION_CHANGED
