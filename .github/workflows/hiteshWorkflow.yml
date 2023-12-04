@@ -59,7 +59,7 @@ jobs:
             echo "version_change=false" >> $GITHUB_ENV
           fi
       
-          if [ "${{ env.prev_version_line" }}" !=  "${{ env.current_version_line }}" ]; then
+          if [ "${{ env.prev_version_line }}" !=  "${{ env.current_version_line }}" ]; then
             echo "VERSION_LINE_CHANGED=true" >> $GITHUB_ENV
           else
             echo "VERSION_LINE_CHANGED=false" >> $GITHUB_ENV
