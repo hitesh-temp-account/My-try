@@ -102,6 +102,7 @@ jobs:
         if: |
           env.version_change == 'true' ||
           env.VERSION_LINE_CHANGED == 'true'
+        id: auto-merge
         run: >
           gh pr merge --squash --auto
           --repo ${{ github.repository }}
@@ -109,13 +110,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: merge_false
-        if: github.event.pull_request.merged == false
-        run: echo "merge-false"
-
-      - name: merge_true
-        if: github.event.pull_request.merged == true
-        run: echo "merge-true"
+      - name: Auto merge results
+        run: echo "${{ steps.auto-merge.outputs.pull-request-number }}"
 
       - name: Delete branch
         if: |
