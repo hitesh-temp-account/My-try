@@ -81,8 +81,8 @@ jobs:
 
       - name: Create PR
         if: |
-          env.VERSION_CHANGED != 'true' &&
-          env.VERSION_LINE_CHANGED != 'true'
+          env.VERSION_CHANGED == 'true' ||
+          env.VERSION_LINE_CHANGED == 'true'
         id: create-pr
         uses: peter-evans/create-pull-request@v5
         with:
