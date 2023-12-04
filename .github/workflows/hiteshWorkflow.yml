@@ -102,7 +102,6 @@ jobs:
         if: |
           env.version_change == 'true' ||
           env.VERSION_LINE_CHANGED == 'true'
-        id: auto-merge
         run: >
           gh pr merge --squash --auto
           --repo ${{ github.repository }}
@@ -110,8 +109,22 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Auto merge results
-        run: echo "${{ steps.auto-merge.outputs.pull-request-number }}"
+      - name: caghsfasfj
+        id: auto-merge
+        if: |
+          env.version_change == 'true' ||
+          env.VERSION_LINE_CHANGED == 'true'
+        run: >
+          gh pr status
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+          
+      - name: Dele22222
+        if: |
+          env.version_change == 'true' ||
+          env.VERSION_LINE_CHANGED == 'true'
+        run: echo "${{ steps.auto-merge.outputs }}"
 
       - name: Delete branch
         if: |
