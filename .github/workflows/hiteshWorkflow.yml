@@ -54,9 +54,9 @@ jobs:
       - name: Check for version change
         run: |
           if [ ${{ env.prev_version  != env.current_version }} ]; then
-            echo "VERSION_CHANGED=true" >> $GITHUB_ENV
+            echo "version_change=true" >> $GITHUB_ENV
           else
-            echo "VERSION_CHANGED=false" >> $GITHUB_ENV
+            echo "version_change=false" >> $GITHUB_ENV
           fi
       
           if [ ${{ env.prev_version_line  !=  env.current_version_line }} ]; then
@@ -65,7 +65,7 @@ jobs:
             echo "VERSION_LINE_CHANGED=false" >> $GITHUB_ENV
           fi
 
-          echo "$VERSION_CHANGED"
+          echo "$version_change"
           echo "$VERSION_LINE_CHANGED"
 
       - name: Update version in README Badge
