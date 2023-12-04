@@ -109,6 +109,14 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: merge_false
+        if: github.event.pull_request.merged == false
+        run: echo "merge-false"
+
+      - name: merge_true
+        if: github.event.pull_request.merged == true
+        run: echo "merge-true"
+
       - name: Delete branch
         if: |
           env.version_change == 'true' ||
