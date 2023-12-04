@@ -11,7 +11,7 @@ env:
   COMMIT_MESSAGE: |
     Update Baseline Profile
 
-    Created by GitHub Action [${{ giHiteshthub.workflow }} #${{ github.run_number }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+    Created by GitHub Action [${{ github.workflow }} #${{ github.run_number }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
 
     ACLOVERRIDE CODEOWNEROVERRIDE CUSTOMVALIDATIONSOVERRIDE
 
@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
 
     permissions:
-      contents: write
+      # contents: write
       pull-requests: write
     steps:
       - name: Checkout Repository
@@ -67,42 +67,6 @@ jobs:
 
       - name: Update version in README Badge
         if: env.version_change == 'true'
-name: Mvgergvbryebreb
-
-on:
-  push:
-    branches:
-      - main
-    paths:
-      - 'gradle.properties'
-
-env:
-  COMMIT_MESSAGE: |
-    Update Baseline Profile
-
-    Created by GitHub Action [${{ github.workflow }} #${{ github.run_number }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
-
-    ACLOVERRIDE CODEOWNEROVERRIDE CUSTOMVALIDATIONSOVERRIDE
-
-jobs:
-  update-badge:
-    runs-on: ubuntu-latest
-
-    permissions:
-      contents: write
-      pull-requests: write
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
-        with:
-          ref: ${{  github.head_ref }}
-          fetch-depth: 0
-
-      - name: Get previous version
-        id: get-previous-version
-        run: |
-          commit_hashes=$(git rev-list -n 2 origin/main -- gradle.properties)
-          second_last_commit_hash=$(echo "$commit_hashes" | tail -n 1)
         run: |
           version=$(grep '^VERSION_NAME=' gradle.properties | cut -d "=" -f2 | tr -d '[:space:]')
           version=$(echo "$version" | sed 's/-/%E2%80%90/g')
