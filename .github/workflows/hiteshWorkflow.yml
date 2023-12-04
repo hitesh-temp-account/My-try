@@ -46,8 +46,8 @@ jobs:
       - name: Get current version
         id: get-current-version
         run: |
-          echo "prev-version: $previous_version"
-          echo "prev-line: $previous_line"
+          echo "prev-version: ${{ env.previous_version }}"
+          echo "prev-line: ${{ env.previous_line }}"
           echo "current_version=$(grep '^VERSION_NAME=' gradle.properties | cut -d "=" -f2 | tr -d '[:space:]')" >> $GITHUB_ENV
           echo "current_version_line=$(grep -n '^VERSION_NAME=' gradle.properties | cut -d ":" -f1)" >> $GITHUB_ENV
 
@@ -63,7 +63,7 @@ jobs:
           echo "222: ${{ env.VERSION_LINE_CHANGED }}"
 
       - name: Update version in README Badge
-        if: env.VERSION_CHANGED != 'true'
+        if: ${{ env.VERSION_CHANGED }} != 'true'
         run: |
           version=$(grep '^VERSION_NAME=' gradle.properties | cut -d "=" -f2 | tr -d '[:space:]')
           version=$(echo "$version" | sed 's/-/%E2%80%90/g')
