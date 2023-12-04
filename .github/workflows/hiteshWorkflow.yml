@@ -53,10 +53,10 @@ jobs:
 
       - name: Check for version change
         run: |
-          if [ "${{ env.prev_version }}" != "${{ env.current_version }}" ]; then
+          if [ "${{ env.prev_version  != env.current_version }}" ]; then
             echo "VERSION_CHANGED=true" >> $GITHUB_ENV
           fi
-          if [ "${{ env.prev_version_line }}" != "${{ env.current_version_line }}" ]; then
+          if [ "${{ env.prev_version_line  !=  env.current_version_line }}" ]; then
             echo "VERSION_LINE_CHANGED=true" >> $GITHUB_ENV
           fi
           echo "111: ${{ env.VERSION_CHANGED }}"
