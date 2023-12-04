@@ -103,7 +103,7 @@ jobs:
           env.version_change == 'true' ||
           env.VERSION_LINE_CHANGED == 'true'
         run: >
-          gh pr merge --auto
+          gh pr --merge --auto
           --repo ${{ github.repository }}
           ${{ steps.create-pr.outputs.pull-request-number }}
         env:
