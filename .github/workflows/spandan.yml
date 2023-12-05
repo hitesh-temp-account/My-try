@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
 
     permissions:
-      # contents: write
+      contents: write
       pull-requests: write
     steps:
       - name: Checkout Repository
@@ -102,9 +102,9 @@ jobs:
         if: |
           env.version_change == 'true' ||
           env.VERSION_LINE_CHANGED == 'true'
-        run: >
-          gh pr merge --squash --auto --merge --delete-branch
-          --repo ${{ github.repository }}
-          ${{ steps.create-pr.outputs.pull-request-number }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: peter-evans/enable-pull-request-automerge@v3
+        id: automerge
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          pull-request-number: ${{ steps.create-pr.outputs.pull-request-number }}
+          merge-method: merge
