@@ -100,6 +100,9 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Approve PR
+        if: |
+          env.version_change == 'true' ||
+          env.VERSION_LINE_CHANGED == 'true'
         run: |
           gh pr review ${{ steps.create-pr.outputs.pull-request-number }} --approve
          # curl --request POST \
