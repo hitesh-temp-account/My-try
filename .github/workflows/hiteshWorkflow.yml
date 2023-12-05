@@ -100,7 +100,7 @@ jobs:
           token: ${{ secrets.ACCESS_TOKEN }}
 
       - name: Approve PR
-      - run: |
+        run: |
          curl --request POST \
          --url https://api.github.com/repos/${{github.repository}}/pulls/${{steps.create-pr.outputs.pull-request-number}}/reviews \
          --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
