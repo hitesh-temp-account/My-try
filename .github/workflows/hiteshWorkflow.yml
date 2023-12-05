@@ -116,8 +116,8 @@ jobs:
           env.version_change == 'true' ||
           env.VERSION_LINE_CHANGED == 'true'
         run: >
-          gh pr merge --squash --auto
-          --repo ${{ github.repository }}
+          gh pr merge --squash --auto 
+          --repo ${{ github.repository }} --delete-branch
           ${{ steps.create-pr.outputs.pull-request-number }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -126,9 +126,9 @@ jobs:
         run: |
           echo "output: ${{ steps.auto-merge.outputs.success }}"
 
-      - name: Delete branch
-        if: |
-          env.version_change == 'true' ||
-          env.VERSION_LINE_CHANGED == 'true'
-        run: |
-          git push origin --delete github-actions/readme-update
+      # - name: Delete branch
+      #   if: |
+      #     env.version_change == 'true' ||
+      #     env.VERSION_LINE_CHANGED == 'true'
+      #   run: |
+      #     git push origin --delete github-actions/readme-update
