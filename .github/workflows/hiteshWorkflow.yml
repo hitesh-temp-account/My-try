@@ -121,9 +121,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # - name: Delete branch
-      #   if: |
-      #     env.version_change == 'true' ||
-      #     env.VERSION_LINE_CHANGED == 'true'
-      #   run: |
-      #     git push origin --delete github-actions/readme-update
+      - name: Delete branch
+        if: |
+          env.version_change == 'true' ||
+          env.VERSION_LINE_CHANGED == 'true'
+        run: |
+          git push origin --delete github-actions/readme-update
