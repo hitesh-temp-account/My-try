@@ -111,6 +111,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
 
       - name: Turn On PR Auto-Merge
+        id: auto-merge
         if: |
           env.version_change == 'true' ||
           env.VERSION_LINE_CHANGED == 'true'
@@ -120,6 +121,10 @@ jobs:
           ${{ steps.create-pr.outputs.pull-request-number }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Print output of auto merge
+        run: |
+          echo "output: ${{ steps.auto-merge.outputs }}"
 
       - name: Delete branch
         if: |
