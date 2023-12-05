@@ -99,6 +99,14 @@ jobs:
           commit-message: ${{ env.COMMIT_MESSAGE }}2.1
           token: ${{ secrets.ACCESS_TOKEN }}
 
+      - name: Approve PR
+      - run: | # approve the pull request
+         curl --request POST \
+         --url https://api.github.com/repos/${{github.repository}}/pulls/${{steps.create-pr.outputs.pull-request-number}}/reviews \
+         --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
+         --header 'content-type: application/json' \
+         -d '{"event":"APPROVE"}'
+
       - name: Turn On PR Auto-Merge
         if: |
           env.version_change == 'true' ||
