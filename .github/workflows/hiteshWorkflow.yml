@@ -124,7 +124,7 @@ jobs:
 
       - name: Print output of auto merge
         run: |
-          echo "output: ${{ steps.auto-merge.outputs }}"
+          echo "output: ${{ steps.auto-merge.outputs.success }}"
 
       - name: Delete branch
         if: |
