@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
 
     permissions:
-      # contents: write
+      contents: write
       pull-requests: write
     steps:
       - name: Checkout Repository
@@ -65,6 +65,16 @@ jobs:
           else
             echo "VERSION_LINE_CHANGED=false" >> $GITHUB_ENV
           fi
+      - name: my-app-install token
+        id: my-app
+        uses: getsentry/action-github-app-token@v2
+        with:
+          app_id: ${{ secrets.APP_ID }}
+          private_key: ${{ secrets.APP_PRIVATE_KEY }}
+
+      - name: print app token
+        run: |
+          echo "APP_TOKEN=${{ steps.my-app.outputs.token }}" >> $GITHUB_ENV
 
       - name: Update version in README Badge
         if: env.version_change == 'true'
@@ -99,14 +109,14 @@ jobs:
           commit-message: ${{ env.COMMIT_MESSAGE }}2.1
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      # - name: Approve PR
-      #   if: |
-      #      env.version_change == 'true' ||
-      #      env.VERSION_LINE_CHANGED == 'true'
-      #   run: |
-      #      gh pr review ${{ steps.create-pr.outputs.pull-request-number }} --approve
-      #   env:
-      #      GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+      - name: Approve PR
+        if: |
+           env.version_change == 'true' ||
+           env.VERSION_LINE_CHANGED == 'true'
+        run: |
+           gh pr review ${{ steps.create-pr.outputs.pull-request-number }} --approve
+        env:
+           GITHUB_TOKEN: ${{ env.APP_TOKEN }}
 
       - name: Turn On PR Auto-Merge
         id: auto-merge
