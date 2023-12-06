@@ -20,13 +20,14 @@ jobs:
     runs-on: ubuntu-latest
 
     permissions:
-      # contents: write
+      contents: write
       pull-requests: write
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
         with:
           ref: ${{  github.head_ref }}
+          token: ${{ secrets.ACCESS_TOKEN }}
           fetch-depth: 0
 
       - name: Get previous version
@@ -64,6 +65,16 @@ jobs:
           else
             echo "VERSION_LINE_CHANGED=false" >> $GITHUB_ENV
           fi
+      - name: my-app-install token
+        id: my-app
+        uses: getsentry/action-github-app-token@v2
+        with:
+          app_id: 674111
+          private_key: SHA256:olbhVVGnRmCSDOINWBEe9cuW+V5TETE7zWX3ugtwUPg=
+
+      - name: print app token
+        run: |
+          echo "app token: ${{ steps.my-app.outputs.token }}"
 
       - name: Update version in README Badge
         if: env.version_change == 'true'
@@ -98,13 +109,34 @@ jobs:
           commit-message: ${{ env.COMMIT_MESSAGE }}2.1
           token: ${{ secrets.GITHUB_TOKEN }}
 
+      # - name: Approve PR
+      #   if: |
+      #      env.version_change == 'true' ||
+      #      env.VERSION_LINE_CHANGED == 'true'
+      #   run: |
+      #      gh pr review ${{ steps.create-pr.outputs.pull-request-number }} --approve
+      #   env:
+      #      GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+
       - name: Turn On PR Auto-Merge
+        id: auto-merge
         if: |
           env.version_change == 'true' ||
           env.VERSION_LINE_CHANGED == 'true'
-        uses: peter-evans/enable-pull-request-automerge@v3
-        id: automerge
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          pull-request-number: ${{ steps.create-pr.outputs.pull-request-number }}
-          merge-method: merge
+        run: >
+          gh pr merge --squash --auto 
+          --repo ${{ github.repository }} --delete-branch
+          ${{ steps.create-pr.outputs.pull-request-number }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Print output of auto merge
+        run: |
+          echo "output: ${{ steps.auto-merge.outputs.success }}"
+
+      # - name: Delete branch
+      #   if: |
+      #     env.version_change == 'true' ||
+      #     env.VERSION_LINE_CHANGED == 'true'
+      #   run: |
+      #     git push origin --delete github-actions/readme-update
