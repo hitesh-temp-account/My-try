@@ -69,8 +69,8 @@ jobs:
         id: my-app
         uses: getsentry/action-github-app-token@v2
         with:
-          app_id: 674111
-          private_key: SHA256:olbhVVGnRmCSDOINWBEe9cuW+V5TETE7zWX3ugtwUPg=
+          app_id: ${{ secrets.APP_ID }}
+          private_key: ${{ secrets.APP_PRIVATE_KEY }}
 
       - name: print app token
         run: |
