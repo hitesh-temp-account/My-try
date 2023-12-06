@@ -74,7 +74,7 @@ jobs:
 
       - name: print app token
         run: |
-          echo "app token: ${{ steps.my-app.outputs.token }}"
+          echo "APP_TOKEN=${{ steps.my-app.outputs.token }}" >> $GITHUB_ENV
 
       - name: Update version in README Badge
         if: env.version_change == 'true'
@@ -109,14 +109,14 @@ jobs:
           commit-message: ${{ env.COMMIT_MESSAGE }}2.1
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      # - name: Approve PR
-      #   if: |
-      #      env.version_change == 'true' ||
-      #      env.VERSION_LINE_CHANGED == 'true'
-      #   run: |
-      #      gh pr review ${{ steps.create-pr.outputs.pull-request-number }} --approve
-      #   env:
-      #      GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+      - name: Approve PR
+        if: |
+           env.version_change == 'true' ||
+           env.VERSION_LINE_CHANGED == 'true'
+        run: |
+           gh pr review ${{ steps.create-pr.outputs.pull-request-number }} --approve
+        env:
+           GITHUB_TOKEN: ${{ secrets.APP_TOKEN }}
 
       - name: Turn On PR Auto-Merge
         id: auto-merge
