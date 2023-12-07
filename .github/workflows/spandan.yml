@@ -113,10 +113,10 @@ jobs:
       #   if: |
       #      env.version_change == 'true' ||
       #      env.VERSION_LINE_CHANGED == 'true'
-        run: |
-           gh pr review ${{ steps.create-pr.outputs.pull-request-number }} --approve
-        env:
-           GITHUB_TOKEN: ${{ env.APP_TOKEN }}
+      #   run: |
+      #      gh pr review ${{ steps.create-pr.outputs.pull-request-number }} --approve
+      #   env:
+      #      GITHUB_TOKEN: ${{ env.APP_TOKEN }}
 
       - name: Turn On PR Auto-Merge
         id: auto-merge
