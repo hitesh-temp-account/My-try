@@ -111,7 +111,7 @@ jobs:
           author: ${{ github.actor }} <${{ github.actor }}@linkedin.com>
           title: 'Update readme'
           body: ${{ env.COMMIT_MESSAGE }}
-          commit-message: ${{ env.COMMIT_MESSAGE }}2.1
+          commit-message: ${{ env.COMMIT_MESSAGE }}
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Approve PR
