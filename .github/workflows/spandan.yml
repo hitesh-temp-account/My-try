@@ -109,10 +109,10 @@ jobs:
           commit-message: ${{ env.COMMIT_MESSAGE }}2.1
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Approve PR
-        if: |
-           env.version_change == 'true' ||
-           env.VERSION_LINE_CHANGED == 'true'
+      # - name: Approve PR
+      #   if: |
+      #      env.version_change == 'true' ||
+      #      env.VERSION_LINE_CHANGED == 'true'
         run: |
            gh pr review ${{ steps.create-pr.outputs.pull-request-number }} --approve
         env:
