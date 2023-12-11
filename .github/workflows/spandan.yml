@@ -6,6 +6,9 @@ on:
       - main
     paths:
       - 'gradle.properties'
+  pull_request:
+    branches:
+      - '*'
 
 env:
   COMMIT_MESSAGE: |
