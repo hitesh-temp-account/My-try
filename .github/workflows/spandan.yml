@@ -6,9 +6,6 @@ on:
       - main
     paths:
       - 'gradle.properties'
-  pull_request:
-    branches:
-      - '*'
 
 env:
   COMMIT_MESSAGE: |
@@ -23,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
 
     permissions:
-      # contents: write
+      contents: write
       pull-requests: write
     steps:
       - name: Checkout Repository
