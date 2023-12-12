@@ -71,8 +71,8 @@ jobs:
           env.VERSION_LINE_CHANGED == 'true'
         uses: actions/create-github-app-token@v1
         with:
-          app-id: ${{ secrets.APP_ID }}
-          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+          app-id: ${{ secrets.ALTERNATE_APP_ID }}
+          private-key: ${{ secrets.ALTERNATE_APP_PRIVATE_KEY }}
 
       - name: print app token
         if: |
