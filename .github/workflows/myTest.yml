@@ -1,0 +1,14 @@
+name: my test workflow
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  testing:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: push code
+        run: echo "code pushed"
