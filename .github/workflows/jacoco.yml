@@ -5,33 +5,16 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
+  badge_job:
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v2
-
-    - name: Set up the Java JDK
-      uses: actions/setup-java@v2
-      with:
-        java-version: '17'
-        distribution: 'adopt'
-        
-    - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
-
-    - name: Run Tests
-      run: ./gradlew test
-
-    - name: Run Test Coverage
-      run: ./gradlew jacocoTestReport
-
-    - name: Generate JaCoCo Badge
-      uses: cicirello/jacoco-badge-generator@v2
-      with:
-        jacoco-csv-file: build/reports/jacoco/test/jacocoTestReport.csv
-
-    - name: Log coverage percentage
-      run: |
-        echo "coverage = ${{ steps.jacoco.outputs.coverage }}"
-        echo "branch coverage = ${{ steps.jacoco.outputs.branches }}"
+      - id: date
+        run: echo "##[set-output name=data;]$(date)"
+      - name: Time badge
+        uses: RubbaBoy/BYOB@v1.3.0
+        with:
+          NAME: time
+          LABEL: 'Updated at'
+          STATUS: ${{ steps.date.outputs.data }}
+          COLOR: 00EEFF
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
