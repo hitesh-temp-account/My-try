@@ -27,5 +27,5 @@ jobs:
       - name: test
         uses: kevinfjiang/coverage-badge@v1
         with:
-          coverage: 67
+          coverage: 100
           change_file: ./README.md
