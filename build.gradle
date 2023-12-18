@@ -7,8 +7,8 @@ id 'java'
 
 jacocoTestReport {
     reports {
-        xml.required = false
+        xml.required = true
         csv.required = true
-        html.required = false
+        html.required = true
     }
 }
