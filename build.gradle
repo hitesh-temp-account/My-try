@@ -9,7 +9,7 @@ jacocoTestReport {
     reports {
         xml.required = false
         csv.required = true
-        csv,outputLocation = 'build/reports/jacoco/test/jacocoTestReport.csv'
+        csv.outputLocation = 'build/reports/jacoco/test/jacocoTestReport.csv'
         html.required = false
     }
 }
