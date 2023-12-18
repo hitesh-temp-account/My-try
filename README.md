@@ -4,6 +4,8 @@
 [![hitesh workflow](https://github.com/hitesh-temp-account/Breach/actions/workflows/hiteshWorkflow.yml/badge.svg)](https://github.com/hitesh-temp-account/Breach/actions/workflows/hiteshWorkflow.yml)
 ![hitesh workflow](https://img.shields.io/maven-central/v/xstream/xstream)
 ![](https://byob.yarr.is/hitesh-temp-account/Breach/time)
+![Coverage][coverage_badge]
 
-
+<!-- Coverage Comment:Begin -->
+<!-- Coverage Comment:End -->
 # Breach
