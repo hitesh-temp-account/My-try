@@ -7,5 +7,6 @@
 ![Coverage][coverage_badge]
 
 <!-- Coverage Comment:Begin -->
+[coverage_badge]: https://img.shields.io/badge/Coverage-100%25-green.svg?style=for-the-badge
 <!-- Coverage Comment:End -->
 # Breach
