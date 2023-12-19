@@ -40,6 +40,6 @@ jobs:
       - name: test
         uses: kevinfjiang/coverage-badge@v1
         with:
-          coverage: 64
+          coverage: 69
           change_file: ./README.md
           repo_token: ${{ env.APP_TOKEN }}

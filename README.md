@@ -8,4 +8,5 @@
 ![Coverage][coverage_badge]
 
 <!-- Coverage Comment:Begin -->
+[coverage_badge]: https://img.shields.io/badge/Coverage-69%25-yellow.svg?style=for-the-badge
 <!-- Coverage Comment:End -->
