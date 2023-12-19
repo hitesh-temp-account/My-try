@@ -19,7 +19,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Run Module Coverage
-        run: ./gradlew debugCoverage
+        run: ./gradlew allDebugCoverage
 
       - name: my-app-install token
         id: my-app
@@ -37,8 +37,7 @@ jobs:
         id: jacoco_reporter
         uses: PavanMudigonda/jacoco-reporter@v4.9
         with:
-          coverage_results_path: |
-            /build/reports/jacoco/debugCoverage.xml
+          coverage_results_path: build/reports/jacoco/allDebugCoverage.xml
       
       # Publish Coverage Job percent  # Optional
       - name: Add Coverage Job percent
