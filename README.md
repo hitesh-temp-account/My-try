@@ -5,5 +5,7 @@
 ![hitesh workflow](https://img.shields.io/maven-central/v/xstream/xstream)
 ![](https://byob.yarr.is/hitesh-temp-account/Breach/time)
 ![Coverage](https://img.shields.io/badge/coverage-0-green.svg)
+![Coverage][coverage_badge]
 
-test
+<!-- Coverage Comment:Begin -->
+<!-- Coverage Comment:End -->
