@@ -24,6 +24,7 @@ project.afterEvaluate {
                     reports {
                         html.required.set(true)
                         xml.required.set(true)
+                        csv.required.set(true)
                     }
 
                     def excludes = [
