@@ -38,7 +38,7 @@ jobs:
         uses: PavanMudigonda/jacoco-reporter@v4.9
         with:
           coverage_results_path: |
-            ${{ github.workspace }}/**/build/reports/jacoco/**/debugCoverage.xml
+            /build/reports/jacoco/debugCoverage.xml
       
       # Publish Coverage Job percent  # Optional
       - name: Add Coverage Job percent
