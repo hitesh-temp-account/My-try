@@ -19,7 +19,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Run Module Coverage
-        run: ./gradlew allDebugCoverage
+        run: ./gradlew androidTest
 
       - name: my-app-install token
         id: my-app
