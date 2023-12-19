@@ -1,4 +1,4 @@
-name: Measure coverage spandan
+name: Measure coverage
 
 on:
   push:
@@ -8,9 +8,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
     steps:
       - uses: actions/checkout@v2
       - name: Set up JDK 17
@@ -24,8 +21,26 @@ jobs:
       - name: Run Module Coverage
         run: ./gradlew debugCoverage
 
-      - name: test
-        uses: kevinfjiang/coverage-badge@v1
+      - name: Jacoco Report to PR
+        id: jacoco
+        uses: madrapps/jacoco-report@v1.6.1
         with:
-          coverage: 67
-          change_file: ./README.md
+          paths: |
+            ${{ github.workspace }}/**/build/reports/jacoco/**/debugCoverage.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
+          min-coverage-overall: 40
+          min-coverage-changed-files: 60
+          title: Code Coverage
+          debug-mode: true
+          pass-emoji: ':green_circle:'
+          fail-emoji: ':red_circle:'
+
+      - name: Get the Coverage info
+        run: |
+          echo "Total coverage ${{ steps.jacoco.outputs.coverage-overall }}"
+          echo "Changed Files coverage ${{ steps.jacoco.outputs.coverage-changed-files }}"
+
+      - name: trigger workflow
+        if: github.event.pull_request.merged == true
+        run: |
+          echo "triggered the workflow"
