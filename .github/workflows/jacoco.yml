@@ -23,26 +23,25 @@ jobs:
       - name: Run Module Coverage
         run: ./gradlew debugCoverage
 
-      - name: Jacoco Report to PR
-        id: jacoco
-        uses: madrapps/jacoco-report@v1.6.1
-        with:
-          paths: |
-            ${{ github.workspace }}/**/build/reports/jacoco/**/debugCoverage.xml
-          token: ${{ secrets.GITHUB_TOKEN }}
-          min-coverage-overall: 40
-          min-coverage-changed-files: 60
-          title: Code Coverage
-          debug-mode: true
-          pass-emoji: ':green_circle:'
-          fail-emoji: ':red_circle:'
-
-      - name: Get the Coverage info
-        run: |
-          echo "Total coverage ${{ steps.jacoco.outputs.coverage-overall }}"
-          echo "Changed Files coverage ${{ steps.jacoco.outputs.coverage-changed-files }}"
-
       - name: trigger workflow
         if: github.event.pull_request.merged == true
         run: |
           echo "triggered the workflow"
+
+      - name: my-app-install token
+        id: my-app
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.ALTERNATE_APP_ID }}
+          private-key: ${{ secrets.ALTERNATE_APP_PRIVATE_KEY }}
+
+      - name: print app token
+        run: |
+          echo "APP_TOKEN=${{ steps.my-app.outputs.token }}" >> $GITHUB_ENV
+
+      - name: test
+        uses: kevinfjiang/coverage-badge@v1
+        with:
+          coverage: 61
+          change_file: ./README.md
+          repo_token: ${{ env.APP_TOKEN }}
