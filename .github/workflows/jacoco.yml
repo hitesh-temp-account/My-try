@@ -66,6 +66,8 @@ jobs:
           body: ${{ env.COMMIT_MESSAGE }}
           commit-message: ${{ env.COMMIT_MESSAGE }}
           token: ${{ secrets.GITHUB_TOKEN }}
+          add-paths: |
+            */jacoco.svg
 
       - name: Approve PR
         run: |
