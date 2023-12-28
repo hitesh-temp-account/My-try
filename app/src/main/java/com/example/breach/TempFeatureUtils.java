@@ -1,4 +1,4 @@
-package com.example.quickcart;
+package com.example.breach;
 
 /**
  * This unused class is intentionally added to check
