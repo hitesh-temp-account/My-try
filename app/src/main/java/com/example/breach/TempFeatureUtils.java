@@ -6,11 +6,11 @@ package com.example.breach;
  */
 public class TempFeatureUtils {
 
-    public void utilMethod1() {
+    public int utilMethod1() {
         // Just some random logic
         int a = 10;
         int b = 20;
-        int c = a + b;
+        return a + b;
     }
 
     public int utilMethod2() {
