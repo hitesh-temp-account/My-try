@@ -29,14 +29,18 @@ jobs:
         run: ./gradlew debugCoverage --continue
 
       - name: print csv files
-        run: echo $(find . -type f -name "debugCoverage.csv")
+        id: csv_files
+        run: |
+          original_string=$(find . -type f -name "debugCoverage.xml" \( -path "*app*" -o -path "*paymentGateway*" \))
+          modified_string=$(echo "$original_string" | tr ' ' '\n')
+          echo "CSV=$modified_string" >> $GITHUB_ENV
 
       - name: Generate JaCoCo Badge
         id: jacoco
         uses: cicirello/jacoco-badge-generator@v2
         with:
           jacoco-csv-file: >
-            ./**/build/reports/jacoco/**/debugCoverage.csv
+            ${{ env.CSV }}
 
       - name: Log coverage percentage
         run: |
