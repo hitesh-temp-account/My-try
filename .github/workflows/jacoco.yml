@@ -31,7 +31,7 @@ jobs:
       - name: print csv files
         id: csv_files
         run: |
-          original_string=$(find . -type f -name "debugCoverage.xml" \( -path "*app*" -o -path "*paymentGateway*" \))
+          original_string=$(find . -type f -name "debugCoverage.csv" \( -path "*app*" -o -path "*paymentGateway*" \))
           modified_string=$(echo "$original_string" | tr ' ' '\n')
           echo "CSV=$modified_string" >> $GITHUB_ENV
 
@@ -40,7 +40,7 @@ jobs:
         uses: cicirello/jacoco-badge-generator@v2
         with:
           jacoco-csv-file: >
-            ${{ env.CSV }}
+            ./**/build/reports/jacoco/**/debugCoverage.csv
 
       - name: Log coverage percentage
         run: |
