@@ -48,35 +48,40 @@ jobs:
           echo "branch coverage = ${{ steps.jacoco.outputs.branches }}"
 
 
-      # - name: my-app-install token
-      #   id: my-app
-      #   uses: actions/create-github-app-token@v1
-      #   with:
-      #     app-id: ${{ secrets.ALTERNATE_APP_ID }}
-      #     private-key: ${{ secrets.ALTERNATE_APP_PRIVATE_KEY }}
+      - name: my-app-install token
+        id: my-app
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.ALTERNATE_APP_ID }}
+          private-key: ${{ secrets.ALTERNATE_APP_PRIVATE_KEY }}
 
-      # - name: print app token
-      #   run: |
-      #     echo "APP_TOKEN=${{ steps.my-app.outputs.token }}" >> $GITHUB_ENV
+      - name: print app token
+        run: |
+          echo "APP_TOKEN=${{ steps.my-app.outputs.token }}" >> $GITHUB_ENV
 
-      # - name: Create PR
-      #   id: create-pr
-      #   uses: peter-evans/create-pull-request@v5
-      #   with:
-      #     base: main
-      #     branch: github-actions/readme-update
-      #     delete-branch: true
-      #     author: ${{ github.actor }} <${{ github.actor }}@linkedin.com>
-      #     title: 'Update readme'
-      #     body: ${{ env.COMMIT_MESSAGE }}
-      #     commit-message: ${{ env.COMMIT_MESSAGE }}
-      #     token: ${{ secrets.GITHUB_TOKEN }}
-      #     add-paths: |
-      #       */jacoco.svg
+      - name: Create PR
+        id: create-pr
+        uses: peter-evans/create-pull-request@v5
+        with:
+          base: main
+          branch: github-actions/readme-update
+          delete-branch: true
+          author: ${{ github.actor }} <${{ github.actor }}@linkedin.com>
+          title: 'Update readme'
+          body: ${{ env.COMMIT_MESSAGE }}
+          commit-message: ${{ env.COMMIT_MESSAGE }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          add-paths: |
+            */jacoco.svg
             
-      # - name: pr number
-      #   run: | 
-      #     echo "pr number : ${{ steps.create-pr.outputs.pull-request-number }}"
+      - name: pr number
+        run: | 
+          echo "pr number : ${{ steps.create-pr.outputs.pull-request-number }}"
+
+      - name: Run script
+        run: |
+          chmod +x approve_and_merge_pr.sh
+          ./approve_and_merge_pr.sh ${{ steps.create-pr.outputs.pull-request-number }} ${{ env.APP_TOKEN }} ${{ secrets.GITHUB_TOKEN }}
 
       # - name: Approve PR
       #   if: steps.create-pr.outputs.pull-request-number
