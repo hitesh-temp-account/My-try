@@ -20,7 +20,7 @@ public class TempFeatureUtils {
         return a + b;
     }
 
-    // public void utilMethod3() {
-    //     // do nothing
-    // }
+    public void utilMethod3() {
+        // do nothing
+    }
 }
