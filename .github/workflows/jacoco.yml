@@ -82,7 +82,6 @@ jobs:
         uses: ./.github/actions/approve_and_merge
         with:
           pull-request-number: ${{ steps.create-pr.outputs.pull-request-number }}
-          app-token: ${{ env.APP_TOKEN }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
           
       # - name: Approve PR

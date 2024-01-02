@@ -5,19 +5,12 @@ inputs:
   pull-request-number:
     description: 'The pull request number'
     required: false
-  app-token:
-    description: 'The github app token'
-    required: true
   github-token:
     description: 'The github token'
     required: true
 runs:
   using: 'composite'
   steps:
-    # - name: Checkout code
-    #   run: actions/checkout@v2
-    #   shell: bash
-
     - name: Approve PR
       if: inputs.pull-request-number
       run: |
