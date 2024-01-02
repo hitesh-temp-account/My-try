@@ -3,8 +3,7 @@ name: Measure coverage
 on:
   push:
     branches:
-      - main 
-  pull_request:
+      - main
 
 env:
   COMMIT_MESSAGE: |
@@ -80,7 +79,9 @@ jobs:
 
       - name: Run script
         run: |
-          chmod +x ./.github/approve_and_merge_pr.sh
+          chmod +x .github/approve_and_merge_pr.sh
+          ./.github/approve_and_merge_pr.sh ${{ steps.create-pr.outputs.pull-request-number }} ${{ env.APP_TOKEN }} ${{ secrets.GITHUB_TOKEN }}
+          
       # - name: Approve PR
       #   if: steps.create-pr.outputs.pull-request-number
       #   run: |
