@@ -47,7 +47,7 @@ runs:
       shell: bash
             
     - name: Approve PR
-      if: ${{ steps.create-pr.outputs.pull-request-number }}
+      if: steps.create-pr.outputs.pull-request-number
       run: |
         gh pr review ${{ steps.create-pr.outputs.pull-request-number }} --approve
       shell: bash
@@ -55,7 +55,7 @@ runs:
         GITHUB_TOKEN: ${{ steps.my-app.outputs.token }}
 
     - name: Turn On PR Auto-Merge
-      if: ${{ steps.create-pr.outputs.pull-request-number }}
+      if: steps.create-pr.outputs.pull-request-number
       run: |
         gh pr merge --squash --auto --repo ${{ github.repository }} --delete-branch ${{ steps.create-pr.outputs.pull-request-number }}
       shell: bash
