@@ -24,10 +24,12 @@ runs:
         commit-message: ${{ env.COMMIT_MESSAGE }}
         token: ${{ inputs.github-token }}
         add-paths: ${{ inputs.add-paths }}
+      shell: bash
 
     - name: pr number
       run: | 
         echo "pr number : ${{ steps.create-pr.outputs.pull-request-number }}"
+      shell: bash
             
     - name: Approve PR
       if: ${{ steps.create-pr.outputs.pull-request-number }}
