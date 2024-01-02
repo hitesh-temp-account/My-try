@@ -12,18 +12,18 @@ runs:
   using: 'composite'
   steps:
     - name: Create PR
-        id: create-pr
-        uses: peter-evans/create-pull-request@v5
-        with:
-          base: main
-          branch: github-actions/readme-update
-          delete-branch: true
-          author: ${{ github.actor }} <${{ github.actor }}@linkedin.com>
-          title: 'Update readme'
-          body: ${{ env.COMMIT_MESSAGE }}
-          commit-message: ${{ env.COMMIT_MESSAGE }}
-          token: ${{ inputs.github-token }}
-          add-paths: ${{ inputs.add-paths }}
+      id: create-pr
+      uses: peter-evans/create-pull-request@v5
+      with:
+        base: main
+        branch: github-actions/readme-update
+        delete-branch: true
+        author: ${{ github.actor }} <${{ github.actor }}@linkedin.com>
+        title: 'Update readme'
+        body: ${{ env.COMMIT_MESSAGE }}
+        commit-message: ${{ env.COMMIT_MESSAGE }}
+        token: ${{ inputs.github-token }}
+        add-paths: ${{ inputs.add-paths }}
 
     - name: pr number
       run: | 
