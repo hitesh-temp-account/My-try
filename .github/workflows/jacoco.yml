@@ -3,8 +3,7 @@ name: Measure coverage
 on:
   push:
     branches:
-      - main 
-  pull_request:
+      - main
 
 env:
   COMMIT_MESSAGE: |
