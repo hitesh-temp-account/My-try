@@ -47,16 +47,16 @@ jobs:
           echo "branch coverage = ${{ steps.jacoco.outputs.branches }}"
 
 
-      - name: my-app-install token
-        id: my-app
-        uses: actions/create-github-app-token@v1
-        with:
-          app-id: ${{ secrets.ALTERNATE_APP_ID }}
-          private-key: ${{ secrets.ALTERNATE_APP_PRIVATE_KEY }}
+      # - name: my-app-install token
+      #   id: my-app
+      #   uses: actions/create-github-app-token@v1
+      #   with:
+      #     app-id: ${{ secrets.ALTERNATE_APP_ID }}
+      #     private-key: ${{ secrets.ALTERNATE_APP_PRIVATE_KEY }}
 
-      - name: print app token
-        run: |
-          echo "APP_TOKEN=${{ steps.my-app.outputs.token }}" >> $GITHUB_ENV
+      # - name: print app token
+      #   run: |
+      #     echo "APP_TOKEN=${{ steps.my-app.outputs.token }}" >> $GITHUB_ENV
 
       # - name: Create PR
       #   id: create-pr
