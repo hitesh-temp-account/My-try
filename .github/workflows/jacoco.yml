@@ -78,7 +78,7 @@ jobs:
       #     echo "pr number : ${{ steps.create-pr.outputs.pull-request-number }}"
 
       - name: Create, Approve and Merge PR
-        uses: ./.github/actions/approve_and_merge
+        uses: ./.github/actions/create_approve_and_merge
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           add-paths: |
