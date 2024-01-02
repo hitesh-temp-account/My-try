@@ -2,27 +2,41 @@
 name: 'Approve and Merge PR'
 description: 'Approves and merges a pull request'
 inputs:
-  pull-request-number:
-    description: 'The pull request number'
-    required: false
   github-token:
     description: 'The github token'
     required: true
+  add-paths:
+    description: 'path of the required changes'
+    required: false
 runs:
   using: 'composite'
   steps:
+    - name: Create PR
+        id: create-pr
+        uses: peter-evans/create-pull-request@v5
+        with:
+          base: main
+          branch: github-actions/readme-update
+          delete-branch: true
+          author: ${{ github.actor }} <${{ github.actor }}@linkedin.com>
+          title: 'Update readme'
+          body: ${{ env.COMMIT_MESSAGE }}
+          commit-message: ${{ env.COMMIT_MESSAGE }}
+          token: ${{ inputs.github-token }}
+          add-paths: ${{ inputs.add-paths }}
+            
     - name: Approve PR
-      if: inputs.pull-request-number
+      if: ${{ steps.create-pr.outputs.pull-request-number }}
       run: |
-        gh pr review ${{ inputs.pull-request-number }} --approve
+        gh pr review ${{ steps.create-pr.outputs.pull-request-number }} --approve
       shell: bash
       env:
         GITHUB_TOKEN: ${{ env.APP_TOKEN }}
 
     - name: Turn On PR Auto-Merge
-      if: inputs.pull-request-number
+      if: ${{ steps.create-pr.outputs.pull-request-number }}
       run: |
-        gh pr merge --squash --auto --repo ${{ github.repository }} --delete-branch ${{ inputs.pull-request-number }}
+        gh pr merge --squash --auto --repo ${{ github.repository }} --delete-branch ${{ steps.create-pr.outputs.pull-request-number }}
       shell: bash
       env:
         GITHUB_TOKEN: ${{ inputs.github-token }}
