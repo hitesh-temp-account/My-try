@@ -2,8 +2,14 @@
 name: 'Approve and Merge PR'
 description: 'Approves and merges a pull request'
 inputs:
+  app-id:
+    description:  github app id'
+    required: true
+  app-private-key:
+    description: 'github app private key'
+    required: true
   github-token:
-    description: 'The github token'
+    description: 'github token'
     required: true
   add-paths:
     description: 'path of the required changes'
@@ -15,8 +21,8 @@ runs:
       id: my-app
       uses: actions/create-github-app-token@v1
       with:
-        app-id: ${{ secrets.ALTERNATE_APP_ID }}
-        private-key: ${{ secrets.ALTERNATE_APP_PRIVATE_KEY }}
+        app-id: ${{ inputs.app-id }}
+        private-key: ${{ inputs.app-private-key }}
   
     - name: Create PR
       id: create-pr
