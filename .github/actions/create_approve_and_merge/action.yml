@@ -3,7 +3,7 @@ name: 'Approve and Merge PR'
 description: 'Approves and merges a pull request'
 inputs:
   app-id:
-    description:  github app id'
+    description:  'github app id'
     required: true
   app-private-key:
     description: 'github app private key'
