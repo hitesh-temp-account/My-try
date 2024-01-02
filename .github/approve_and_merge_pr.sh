@@ -5,7 +5,7 @@ github_token=$3
 
 
 - name: Approve PR
-  if: steps.create-pr.outputs.pull-request-number
+  if: pr_number
   run: |
   gh pr review pr_number --approve
   echo "approved"
