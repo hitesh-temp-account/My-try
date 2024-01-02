@@ -5,11 +5,11 @@ on:
     branches:
       - main
 
-env:
-  COMMIT_MESSAGE: |
-    Update jacoco badge
+# env:
+#   COMMIT_MESSAGE: |
+#     Update jacoco badge
 
-    Created by GitHub Action [${{ github.workflow }} #${{ github.run_number }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+#     Created by GitHub Action [${{ github.workflow }} #${{ github.run_number }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
 
 jobs:
   build:
