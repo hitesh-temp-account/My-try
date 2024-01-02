@@ -80,6 +80,7 @@ jobs:
       - name: Create, Approve and Merge PR
         uses: ./.github/actions/create_approve_and_merge
         with:
+          title: 'custom title'
           app-id: ${{ secrets.ALTERNATE_APP_ID }}
           app-private-key: ${{ secrets.ALTERNATE_APP_PRIVATE_KEY }}
           github-token: ${{ secrets.GITHUB_TOKEN }}

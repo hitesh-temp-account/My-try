@@ -2,8 +2,11 @@
 name: 'Approve and Merge PR'
 description: 'Approves and merges a pull request'
 inputs:
+  title:
+    description: 'title'
+    required: true
   app-id:
-    description:  'github app id'
+    description: 'github app id'
     required: true
   app-private-key:
     description: 'github app private key'
@@ -32,7 +35,7 @@ runs:
         branch: github-actions/readme-update
         delete-branch: true
         author: ${{ github.actor }} <${{ github.actor }}@linkedin.com>
-        title: 'Update readme'
+        title: ${{ inputs.title }}
         body: ${{ env.COMMIT_MESSAGE }}
         commit-message: ${{ env.COMMIT_MESSAGE }}
         token: ${{ inputs.github-token }}
