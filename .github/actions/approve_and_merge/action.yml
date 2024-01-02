@@ -4,7 +4,7 @@ description: 'Approves and merges a pull request'
 inputs:
   pull-request-number:
     description: 'The pull request number'
-    required: true
+    required: false
   app-token:
     description: 'The github app token'
     required: true
@@ -19,6 +19,7 @@ runs:
     #   shell: bash
 
     - name: Approve PR
+      if: inputs.pull-request-number
       run: |
         gh pr review ${{ inputs.pull-request-number }} --approve
       shell: bash
@@ -26,6 +27,7 @@ runs:
         GITHUB_TOKEN: ${{ inputs.app-token }}
 
     - name: Turn On PR Auto-Merge
+      if: inputs.pull-request-number
       run: |
         gh pr merge --squash --auto --repo ${{ github.repository }} --delete-branch ${{ inputs.pull-request-number }}
       shell: bash
