@@ -11,6 +11,13 @@ inputs:
 runs:
   using: 'composite'
   steps:
+    - name: my-app-install token
+      id: my-app
+      uses: actions/create-github-app-token@v1
+      with:
+        app-id: ${{ secrets.ALTERNATE_APP_ID }}
+        private-key: ${{ secrets.ALTERNATE_APP_PRIVATE_KEY }}
+  
     - name: Create PR
       id: create-pr
       uses: peter-evans/create-pull-request@v5
