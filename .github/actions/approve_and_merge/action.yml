@@ -1,0 +1,21 @@
+# .github/actions/approve_and_merge/action.yml
+name: 'Approve and Merge PR'
+description: 'Approves and merges a pull request'
+inputs:
+  pull-request-number:
+    description: 'The pull request number'
+    required: true
+  app-token:
+    description: 'The github app token'
+    required: true
+runs:
+  using: 'composite'
+  steps:
+    - name: Approve PR
+      run: gh pr review ${{ inputs.pull-request-number }} --approve
+      env:
+        GITHUB_TOKEN: ${{ inputs.app-token }}
+    - name: Turn On PR Auto-Merge
+      run: gh pr merge --squash --auto --repo ${{ github.repository }} --delete-branch ${{ inputs.pull-request-number }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
