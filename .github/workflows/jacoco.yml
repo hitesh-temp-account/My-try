@@ -78,9 +78,7 @@ jobs:
           echo "pr number : ${{ steps.create-pr.outputs.pull-request-number }}"
 
       - name: Run script
-        run: |
-          chmod +x .github/approve_and_merge_pr.sh
-          ./.github/approve_and_merge_pr.sh ${{ steps.create-pr.outputs.pull-request-number }} ${{ env.APP_TOKEN }} ${{ secrets.GITHUB_TOKEN }}
+        uses: ./.github/approve_and_merge_pr.yml
           
       # - name: Approve PR
       #   if: steps.create-pr.outputs.pull-request-number
