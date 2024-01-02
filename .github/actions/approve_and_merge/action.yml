@@ -32,4 +32,4 @@ runs:
         gh pr merge --squash --auto --repo ${{ github.repository }} --delete-branch ${{ inputs.pull-request-number }}
       shell: bash
       env:
-        GITHUB_TOKEN: ${{ inputs.github-token }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
