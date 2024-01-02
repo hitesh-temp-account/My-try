@@ -16,6 +16,7 @@ runs:
   steps:
     - name: Checkout code
       run: actions/checkout@v2
+      shell: bash
 
     - name: Approve PR
       run: |
