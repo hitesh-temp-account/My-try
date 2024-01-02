@@ -78,6 +78,7 @@ jobs:
           echo "pr number : ${{ steps.create-pr.outputs.pull-request-number }}"
 
       - name: Approve and Merge PR
+        if: steps.create-pr.outputs.pull-request-number
         uses: ./.github/actions/approve_and_merge
         with:
           pull-request-number: ${{ steps.create-pr.outputs.pull-request-number }}
