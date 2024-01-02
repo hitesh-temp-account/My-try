@@ -5,11 +5,11 @@ on:
     branches:
       - main
 
-env:
-  COMMIT_MESSAGE: |
-    Update jacoco badge
+# env:
+#   COMMIT_MESSAGE: |
+#     Update jacoco badge
 
-    Created by GitHub Action [${{ github.workflow }} #${{ github.run_number }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+#     Created by GitHub Action [${{ github.workflow }} #${{ github.run_number }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
 
 jobs:
   build:
@@ -80,6 +80,8 @@ jobs:
       - name: Create, Approve and Merge PR
         uses: ./.github/actions/create_approve_and_merge
         with:
+          app-id: ${{ secrets.ALTERNATE_APP_ID }}
+          private-key: ${{ secrets.ALTERNATE_APP_PRIVATE_KEY }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
           add-paths: |
             */jacoco.svg
