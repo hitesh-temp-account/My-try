@@ -24,7 +24,6 @@ runs:
         commit-message: ${{ env.COMMIT_MESSAGE }}
         token: ${{ inputs.github-token }}
         add-paths: ${{ inputs.add-paths }}
-      shell: bash
 
     - name: pr number
       run: | 
