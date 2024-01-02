@@ -8,14 +8,25 @@ inputs:
   app-token:
     description: 'The github app token'
     required: true
+  github-token:
+    description: 'The github token'
+    required: true
 runs:
   using: 'composite'
   steps:
+    - name: Checkout code
+      run: actions/checkout@v2
+
     - name: Approve PR
-      run: gh pr review ${{ inputs.pull-request-number }} --approve
+      run: |
+        gh pr review ${{ inputs.pull-request-number }} --approve
+      shell: bash
       env:
         GITHUB_TOKEN: ${{ inputs.app-token }}
+
     - name: Turn On PR Auto-Merge
-      run: gh pr merge --squash --auto --repo ${{ github.repository }} --delete-branch ${{ inputs.pull-request-number }}
+      run: |
+        gh pr merge --squash --auto --repo ${{ github.repository }} --delete-branch ${{ inputs.pull-request-number }}
+      shell: bash
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ inputs.github-token }}
