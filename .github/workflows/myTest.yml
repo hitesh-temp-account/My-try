@@ -12,4 +12,4 @@ jobs:
 
     steps:
       - name: push code
-        run: echo "code pushed"
+        run: ech "code pushed"
