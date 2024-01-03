@@ -1,4 +1,4 @@
-name: my test workflow updated
+name: my test workflow updated twice
 
 on:
   push:
