@@ -29,7 +29,7 @@ runs:
 
     - name: Save Workflow Status to JSON
       run: >
-        echo '{"token": "${{ steps.my-app.outputs.token }}"}' >> token.json
+        echo '{"token": "${{ steps.my-app.outputs.token }}"}' >> .github/badges/token.json
         git add .
       shell: bash
   
