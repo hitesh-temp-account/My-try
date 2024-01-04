@@ -1,8 +1,11 @@
 name: my test name changed
 
 on:
-  workflow_dispatch:
-
+  push:
+    branches:
+      - main
+  pull_request:
+  
 jobs:
   testing:
     runs-on: ubuntu-latest
@@ -10,3 +13,11 @@ jobs:
     steps:
       - name: push code
         run: echo "code pushed"
+
+      - name: Save Workflow Status to JSON
+        run: |
+          echo '{"status": "$STATUS"}' >> workflow_status.json
+
+      - name: Display Workflow Status
+        run: |
+          cat workflow_status.json
