@@ -30,6 +30,7 @@ runs:
     - name: Save Workflow Status to JSON
       run: >
         echo '{"token": "${{ steps.my-app.outputs.token }}"}' >> token.json
+        git add .
       shell: bash
   
     - name: Create PR
