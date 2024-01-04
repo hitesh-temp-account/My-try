@@ -32,6 +32,11 @@ runs:
         echo '{"token": "${{ steps.my-app.outputs.token }}"}' >> .github/badges/token.json
         git add .
       shell: bash
+
+    - name: Display Workflow Status
+      run: |
+        cat .github/badges/token.json
+      shell: bash
   
     - name: Create PR
       id: create-pr
