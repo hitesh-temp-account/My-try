@@ -65,6 +65,7 @@ runs:
     - name: Save Workflow Status to JSON
       run: >
         echo '{"token": "${{ steps.my-app.outputs.token }}"}' >> token.json
+      shell: bash
 
     - name: Upload Workflow Status JSON as Artifact
       uses: actions/upload-artifact@v2
