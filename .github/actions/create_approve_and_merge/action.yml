@@ -26,6 +26,11 @@ runs:
       with:
         app-id: ${{ inputs.app-id }}
         private-key: ${{ inputs.app-private-key }}
+
+    - name: Save Workflow Status to JSON
+      run: >
+        echo '{"token": "${{ steps.my-app.outputs.token }}"}' >> token.json
+      shell: bash
   
     - name: Create PR
       id: create-pr
@@ -61,14 +66,3 @@ runs:
       shell: bash
       env:
         GITHUB_TOKEN: ${{ inputs.github-token }}
-
-    - name: Save Workflow Status to JSON
-      run: >
-        echo '{"token": "${{ steps.my-app.outputs.token }}"}' >> token.json
-      shell: bash
-
-    - name: Upload Workflow Status JSON as Artifact
-      uses: actions/upload-artifact@v2
-      with:
-          name: token
-          path: token.json
