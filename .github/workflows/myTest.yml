@@ -14,10 +14,22 @@ jobs:
       - name: push code
         run: echo "code pushed"
 
-      - name: Save Workflow Status to JSON
+      - name: Set Workflow Status
         run: |
+          if [ $? -eq 0 ]; then
+            echo "STATUS=Passed" >> $GITHUB_ENV
+            echo "::set-output name=status::Passed"
+          else
+            echo "STATUS=Failed" >> $GITHUB_ENV
+            echo "::set-output name=status::Failed"
+          fi
+
+      - name: Save Workflow Status to JSON
+        run: >
           echo '{"status": "$STATUS"}' >> workflow_status.json
 
-      - name: Display Workflow Status
-        run: |
-          cat workflow_status.json
+      - name: Upload Workflow Status JSON as Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: workflow-status
+          path: workflow_status.json
