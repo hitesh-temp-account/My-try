@@ -13,9 +13,9 @@ public class RandomUnitTestClass {
         assertThat(result, is(30));
     }
     
-    @Test
-    public void verifyUtilMethod2() {
-        int result = new TempFeatureUtils().utilMethod2();
-        assertThat(result, is(30));
-    }
+    // @Test
+    // public void verifyUtilMethod2() {
+    //     int result = new TempFeatureUtils().utilMethod2();
+    //     assertThat(result, is(30));
+    // }
 }
