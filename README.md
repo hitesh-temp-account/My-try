@@ -4,5 +4,6 @@
 [![hitesh workflow](https://github.com/hitesh-temp-account/Breach/actions/workflows/hiteshWorkflow.yml/badge.svg)](https://github.com/hitesh-temp-account/Breach/actions/workflows/hiteshWorkflow.yml)
 ![hitesh workflow](https://img.shields.io/maven-central/v/xstream/xstream)
 ![Coverage](.github/badges/jacoco.svg)
-![Endpoint Badge](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fhitesh-temp-account%2FBreach%2Fmain%2F.github%2Fbadge.json)
+[![Known Vulnerabilities](https://snyk.io/test/github/hitesh-temp-account/Breach/badge.svg)](https://snyk.io/test/github/hitesh-temp-account/Breach)
+.
 
