@@ -69,7 +69,7 @@ jobs:
 
       - name: Commit and push changes
         run: |
-          git add */jacoco.csv
+          git add */jacoco.svg
           git commit -m "Auto-generated changes"
           git push origin feature-branch
 
