@@ -57,21 +57,20 @@ jobs:
           if [ -z "$changes" ]; then
             echo "No changes to commit. Exiting..."
             echo "check_changes=false" >> $GITHUB_ENV
-            exit 0
           else
             echo "check_changes=true" >> $GITHUB_ENV
             echo "Changes detected. Continuing with the workflow."
           fi
 
       - name: Create branch
-        if: ${{ env.check_changes }}
+        if: env.check_changes == 'true'
         run: |
           git checkout -b feature-branch
 
       # Add your build/test steps here
 
       - name: Commit and push changes
-        if: ${{ env.check_changes }}
+        if: env.check_changes == 'true'
         run: |
           git add */jacoco.svg
           git commit -m "Auto-generated changes"
@@ -79,7 +78,7 @@ jobs:
 
       - name: Create Pull Request
         id: create_pr
-        if: ${{ env.check_changes }}
+        if: env.check_changes == 'true'
         run: |
           pr_number=$(curl -X POST -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
             -H "Accept: application/vnd.github.v3+json" \
