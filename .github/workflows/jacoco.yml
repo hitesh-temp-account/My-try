@@ -46,56 +46,56 @@ jobs:
           echo "coverage = ${{ steps.jacoco.outputs.coverage }}"
           echo "branch coverage = ${{ steps.jacoco.outputs.branches }}"
 
-      # - name: Set up Git
-      #   run: |
-      #     git config --global user.name "${{ github.actor }}"
-      #     git config --global user.email "<${{ github.actor }}@linkedin.com>"
+      - name: Set up Git
+        run: |
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "<${{ github.actor }}@linkedin.com>"
 
-      # - name: Determine if there are changes
-      #   id: check_changes
-      #   run: |
-      #     changes=$(git diff --name-only)
-      #     if [ -z "$changes" ]; then
-      #       echo "No changes to commit. Exiting..."
-      #       exit 0
-      #     fi
-      #     echo "Changes detected. Continuing with the workflow."
+      - name: Determine if there are changes
+        id: check_changes
+        run: |
+          changes=$(git diff --name-only */jacoco.svg)
+          if [ -z "$changes" ]; then
+            echo "No changes to commit. Exiting..."
+            exit 0
+          fi
+          echo "Changes detected. Continuing with the workflow."
 
-      # - name: Create branch
-      #   run: |
-      #     git checkout -b feature-branch
+      - name: Create branch
+        run: |
+          git checkout -b feature-branch
 
-      # # Add your build/test steps here
+      # Add your build/test steps here
 
-      # - name: Commit and push changes
-      #   run: |
-      #     git add */jacoco.svg
-      #     git commit -m "Auto-generated changes"
-      #     git push origin feature-branch
+      - name: Commit and push changes
+        run: |
+          git add */jacoco.svg
+          git commit -m "Auto-generated changes"
+          git push origin feature-branch
 
-      # - name: Create Pull Request
-      #   id: create_pr
-      #   if: steps.check_changes.outcome == 'success'
-      #   run: |
-      #     pr_number=$(curl -X POST -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-      #       -H "Accept: application/vnd.github.v3+json" \
-      #       https://api.github.com/repos/${{ github.repository }}/pulls \
-      #       -d '{"title":"Auto-generated Pull Request","head":"feature-branch","base":"main","body":"This PR is automatically generated."}' | jq -r '.number')
+      - name: Create Pull Request
+        id: create_pr
+        if: steps.check_changes.outcome == 'success'
+        run: |
+          pr_number=$(curl -X POST -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            https://api.github.com/repos/${{ github.repository }}/pulls \
+            -d '{"title":"Auto-generated Pull Request","head":"feature-branch","base":"main","body":"This PR is automatically generated."}' | jq -r '.number')
 
-      #     echo "PR number: $pr_number"
-      #     echo "::set-output name=pr_number::$pr_number"
+          echo "PR number: $pr_number"
+          echo "PR_NUMBER=$pr_number" >> $GITHUB_ENV
 
 
-      # - name: my-app-install token
-      #   id: my-app
-      #   uses: actions/create-github-app-token@v1
-      #   with:
-      #     app-id: ${{ secrets.ALTERNATE_APP_ID }}
-      #     private-key: ${{ secrets.ALTERNATE_APP_PRIVATE_KEY }}
+      - name: my-app-install token
+        id: my-app
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.ALTERNATE_APP_ID }}
+          private-key: ${{ secrets.ALTERNATE_APP_PRIVATE_KEY }}
 
-      # - name: print app token
-      #   run: |
-      #     echo "APP_TOKEN=${{ steps.my-app.outputs.token }}" >> $GITHUB_ENV
+      - name: print app token
+        run: |
+          echo "APP_TOKEN=${{ steps.my-app.outputs.token }}" >> $GITHUB_ENV
 
       # - name: Create PR
       #   id: create-pr
@@ -116,30 +116,30 @@ jobs:
       #   run: | 
       #     echo "pr number : ${{ steps.create-pr.outputs.pull-request-number }}"
 
-      - name: Create, Approve and Merge PR
-        uses: ./.github/actions/create_approve_and_merge
-        with:
-          title: 'custom title'
-          app-id: ${{ secrets.ALTERNATE_APP_ID }}
-          app-private-key: ${{ secrets.ALTERNATE_APP_PRIVATE_KEY }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          add-paths: |
-            */jacoco.svg
+      # - name: Create, Approve and Merge PR
+      #   uses: ./.github/actions/create_approve_and_merge
+      #   with:
+      #     title: 'custom title'
+      #     app-id: ${{ secrets.ALTERNATE_APP_ID }}
+      #     app-private-key: ${{ secrets.ALTERNATE_APP_PRIVATE_KEY }}
+      #     github-token: ${{ secrets.GITHUB_TOKEN }}
+      #     add-paths: |
+      #       */jacoco.svg
           
-      # - name: Approve PR
-      #   if: steps.create-pr.outputs.pull-request-number
-      #   run: |
-      #      gh pr review ${{ steps.create-pr.outputs.pull-request-number }} --approve
-      #      echo "approved"
-      #   env:
-      #      GITHUB_TOKEN: ${{ env.APP_TOKEN }}
+      - name: Approve PR
+        if: steps.create-pr.outputs.pull-request-number
+        run: |
+           gh pr review ${{ env.PR_NUMBER }} --approve
+           echo "approved"
+        env:
+           GITHUB_TOKEN: ${{ env.APP_TOKEN }}
 
-      # - name: Turn On PR Auto-Merge
-      #   id: auto-merge
-      #   if: steps.create-pr.outputs.pull-request-number
-      #   run: >
-      #     gh pr merge --squash --auto 
-      #     --repo ${{ github.repository }} --delete-branch
-      #     ${{ steps.create-pr.outputs.pull-request-number }}
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Turn On PR Auto-Merge
+        id: auto-merge
+        if: steps.create-pr.outputs.pull-request-number
+        run: >
+          gh pr merge --squash --auto 
+          --repo ${{ github.repository }} --delete-branch
+          ${{ env.PR_NUMBER }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
