@@ -5,5 +5,3 @@
 ![hitesh workflow](https://img.shields.io/maven-central/v/xstream/xstream)
 ![Coverage](.github/badges/jacoco.svg)
 [![Known Vulnerabilities](https://snyk-widget.herokuapp.com/badge/pip/hitesh-temp-account/Breach/badge.svg)](https://snyk.io/test/github/hitesh-temp-account/Breach)
-.
-
