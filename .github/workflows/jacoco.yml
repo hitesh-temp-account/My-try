@@ -58,9 +58,10 @@ jobs:
             echo "No changes to commit. Exiting..."
             echo "check_changes=false" >> $GITHUB_ENV
             exit 0
+          else
+            echo "check_changes=true" >> $GITHUB_ENV
+            echo "Changes detected. Continuing with the workflow."
           fi
-          echo "check_changes=true" >> $GITHUB_ENV
-          echo "Changes detected. Continuing with the workflow."
 
       - name: Create branch
         if: ${{ env.check_changes }}
