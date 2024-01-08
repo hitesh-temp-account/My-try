@@ -61,6 +61,7 @@ runs:
       run: |
         git config --global user.name "${{ github.actor }}"
         git config --global user.email "<${{ github.actor }}@linkedin.com>"
+      shell: bash
 
     - name: Determine if there are changes
       run: |
@@ -72,11 +73,13 @@ runs:
           echo "check_changes=true" >> $GITHUB_ENV
           echo "Changes detected. Continuing with the workflow."
         fi
+      shell: bash
 
     - name: Create branch
       if: env.check_changes == 'true'
       run: |
         git checkout -b feature-branch
+      shell: bash
 
       # Add your build/test steps here
 
@@ -86,6 +89,7 @@ runs:
         git add ${{ inputs.add-paths }}
         git commit -m "Auto-generated changes"
         git push origin feature-branch
+      shell: bash
 
     - name: Create Pull Request
       id: create_pr
@@ -98,6 +102,7 @@ runs:
 
         echo "PR number: $pr_number"
         echo "PR_NUMBER=$pr_number" >> $GITHUB_ENV
+      shell: bash
             
     - name: Approve PR
       if: ${{ env.PR_NUMBER }}
