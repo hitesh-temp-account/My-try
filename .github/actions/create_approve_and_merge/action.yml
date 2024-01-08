@@ -58,9 +58,9 @@ runs:
     #   shell: bash
 
     - name: Set up Git
-        run: |
-          git config --global user.name "${{ github.actor }}"
-          git config --global user.email "<${{ github.actor }}@linkedin.com>"
+      run: |
+        git config --global user.name "${{ github.actor }}"
+        git config --global user.email "<${{ github.actor }}@linkedin.com>"
 
     - name: Determine if there are changes
       run: |
