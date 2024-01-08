@@ -52,22 +52,25 @@ jobs:
           git config --global user.email "<${{ github.actor }}@linkedin.com>"
 
       - name: Determine if there are changes
-        id: check_changes
         run: |
           changes=$(git diff --name-only */jacoco.svg)
           if [ -z "$changes" ]; then
             echo "No changes to commit. Exiting..."
+            echo "check_changes=false" >> $GITHUB_ENV
             exit 0
           fi
+          echo "check_changes=true" >> $GITHUB_ENV
           echo "Changes detected. Continuing with the workflow."
 
       - name: Create branch
+        if: ${{ env.check_changes }}
         run: |
           git checkout -b feature-branch
 
       # Add your build/test steps here
 
       - name: Commit and push changes
+        if: ${{ env.check_changes }}
         run: |
           git add */jacoco.svg
           git commit -m "Auto-generated changes"
@@ -75,7 +78,7 @@ jobs:
 
       - name: Create Pull Request
         id: create_pr
-        if: steps.check_changes.outcome == 'success'
+        if: ${{ env.check_changes }}
         run: |
           pr_number=$(curl -X POST -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
             -H "Accept: application/vnd.github.v3+json" \
@@ -127,7 +130,7 @@ jobs:
       #       */jacoco.svg
           
       - name: Approve PR
-        if: steps.create-pr.outputs.pull-request-number
+        if: ${{ env.PR_NUMBER }}
         run: |
            gh pr review ${{ env.PR_NUMBER }} --approve
            echo "approved"
@@ -136,7 +139,7 @@ jobs:
 
       - name: Turn On PR Auto-Merge
         id: auto-merge
-        if: steps.create-pr.outputs.pull-request-number
+        if: ${{ env.PR_NUMBER }}
         run: >
           gh pr merge --squash --auto 
           --repo ${{ github.repository }} --delete-branch
