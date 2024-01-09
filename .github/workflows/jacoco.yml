@@ -44,7 +44,7 @@ jobs:
       - name: Update Badge
         run: |
           # Replace the coverage percentage
-          new_percentage=76.56  # Replace with your desired percentage
+          new_percentage=2.56  # Replace with your desired percentage
 
           # Compare old and new percentages
           old_percentage="${{ env.OLD }}"
@@ -149,6 +149,7 @@ jobs:
         uses: ./.github/actions/create_approve_and_merge
         with:
           title: 'custom title'
+          commit-message: ${{ env.COMMIT_MESSAGE }}
           app-id: ${{ secrets.ALTERNATE_APP_ID }}
           app-private-key: ${{ secrets.ALTERNATE_APP_PRIVATE_KEY }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
