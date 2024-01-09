@@ -20,6 +20,11 @@ inputs:
   add-paths:
     description: 'path of the required changes'
     required: false
+
+defaults:
+  run:
+    shell: bash
+
 runs:
   using: 'composite'
   steps:
@@ -75,13 +80,11 @@ runs:
           echo "check_changes=true" >> $GITHUB_ENV
           echo "Changes detected. Continuing with the workflow."
         fi
-      shell: bash
 
     - name: Create branch
       if: env.check_changes == 'true'
       run: |
         git checkout -b feature-branch
-      shell: bash
 
       # Add your build/test steps here
 
@@ -91,7 +94,6 @@ runs:
         git add ${{ inputs.add-paths }}
         git commit -m "Auto-generated changes"
         git push origin feature-branch
-      shell: bash
 
     - name: Create Pull Request
       id: create_pr
@@ -104,13 +106,11 @@ runs:
 
         echo "PR number: $pr_number"
         echo "PR_NUMBER=$pr_number" >> $GITHUB_ENV
-      shell: bash
             
     - name: Approve PR
       if: ${{ env.PR_NUMBER }}
       run: |
         gh pr review ${{ env.PR_NUMBER }} --approve
-      shell: bash
       env:
         GITHUB_TOKEN: ${{ steps.my-app.outputs.token }}
 
@@ -118,6 +118,5 @@ runs:
       if: ${{ env.PR_NUMBER }}
       run: |
         gh pr merge --squash --auto --repo ${{ github.repository }} --delete-branch ${{ env.PR_NUMBER }}
-      shell: bash
       env:
         GITHUB_TOKEN: ${{ inputs.github-token }}
