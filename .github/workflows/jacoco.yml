@@ -38,6 +38,7 @@ jobs:
         id: get_old_percentage
         run: |
           old_percentage=$(sed -nE 's/coverage-([0-9]+)/\1/p' README.md)
+          echo "old: $old_percentage"
           echo "OLD=$old_percentage" >> $GITHUB_ENV
 
       - name: Update Badge
@@ -56,6 +57,7 @@ jobs:
               sed -i "s/red.svg/green.svg/" README.md
               echo "updated the color"
             fi
+            cat README.md
           fi
       
       # - name: Generate JaCoCo Badge
