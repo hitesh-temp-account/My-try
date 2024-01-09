@@ -37,7 +37,7 @@ jobs:
       - name: Get Old Percentage
         id: get_old_percentage
         run: |
-          old_percentage=$(sed -nE 's/.*coverage-([0-9]+)\%25.*/\1/p' README.md)
+          old_percentage=$(sed -nE 's/.*coverage-([0-9]+\.[0-9]+)\%25.*/\1/p' README.md)
           echo "old: $old_percentage"
           echo "OLD=$old_percentage" >> $GITHUB_ENV
 
