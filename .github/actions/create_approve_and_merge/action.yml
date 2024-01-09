@@ -60,6 +60,11 @@ runs:
     #     echo "pr number : ${{ steps.create-pr.outputs.pull-request-number }}"
     #   shell: bash
 
+    - name: Set up Git
+      run: |
+        git config --list
+      shell: bash
+
     # - name: Set up Git
     #   run: |
     #     git config --global user.name "${{ github.actor }}"
