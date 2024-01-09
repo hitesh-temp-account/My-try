@@ -5,6 +5,9 @@ inputs:
   title:
     description: 'title'
     required: true
+  commit-message:
+    description: 'commit message'
+    required: true
   app-id:
     description: 'github app id'
     required: true
@@ -98,7 +101,7 @@ runs:
         pr_number=$(curl -X POST -H "Authorization: Bearer ${{ inputs.github-token }}" \
           -H "Accept: application/vnd.github.v3+json" \
           https://api.github.com/repos/${{ github.repository }}/pulls \
-          -d '{"title":"Auto-generated Pull Request","head":"feature-branch","base":"main","body":"This PR is automatically generated."}' | jq -r '.number')
+          -d '{"title":"Auto-generated Pull Request","head":"feature-branch","base":"main","body":${{ inputs.commit-message }}}' | jq -r '.number')
 
         echo "PR number: $pr_number"
         echo "PR_NUMBER=$pr_number" >> $GITHUB_ENV
