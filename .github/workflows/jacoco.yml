@@ -54,7 +54,7 @@ jobs:
 
             # Update the color based on the percentage
             if (( $(echo "$new_percentage < 33.00" | bc -l) )); then
-              sed -i "s/%25-*.svg/%25-red.svg/" README.md
+              sed -i "s/%25-green.svg/%25-red.svg/" README.md
               echo "updated to red"
             else
               echo "updated to green"
