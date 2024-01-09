@@ -6,3 +6,4 @@
 ![Coverage](.github/badges/jacoco.svg)
 ![Coverage](https://img.shields.io/badge/coverage-50-red.svg)
 [![Known Vulnerabilities](https://snyk-widget.herokuapp.com/badge/pip/hitesh-temp-account/Breach/badge.svg)](https://snyk.io/test/github/hitesh-temp-account/Breach)
+
