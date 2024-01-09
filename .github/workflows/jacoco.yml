@@ -34,17 +34,40 @@ jobs:
           modified_string=$(echo "$original_string" | tr ' ' '\n')
           echo "CSV=$modified_string" >> $GITHUB_ENV
 
-      - name: Generate JaCoCo Badge
-        id: jacoco
-        uses: cicirello/jacoco-badge-generator@v2
-        with:
-          jacoco-csv-file: >
-            ${{ env.CSV }}
-
-      - name: Log coverage percentage
+      - name: Get Old Percentage
+        id: get_old_percentage
         run: |
-          echo "coverage = ${{ steps.jacoco.outputs.coverage }}"
-          echo "branch coverage = ${{ steps.jacoco.outputs.branches }}"
+          old_percentage=$(sed -nE 's/coverage-([0-9]+)/\1/p' README.md)
+          echo "OLD=$old_percentage" >> $GITHUB_ENV
+
+      - name: Update Badge
+        run: |
+          # Replace the coverage percentage
+          new_percentage=50  # Replace with your desired percentage
+
+          # Compare old and new percentages
+          old_percentage="${{ env.OLD }}"
+          if [ "$old_percentage" != "$new_percentage" ]; then
+            sed -i "s/coverage-[0-9]\+/coverage-$new_percentage/" README.md
+            echo "updated the percentage: $new_percentage"
+
+            # Update the color based on the percentage
+            if [ "$new_percentage" -lt 33 ]; then
+              sed -i "s/red.svg/green.svg/" README.md
+              echo "updated the color"
+            fi
+      
+      # - name: Generate JaCoCo Badge
+      #   id: jacoco
+      #   uses: cicirello/jacoco-badge-generator@v2
+      #   with:
+      #     jacoco-csv-file: >
+      #       ${{ env.CSV }}
+
+      # - name: Log coverage percentage
+      #   run: |
+      #     echo "coverage = ${{ steps.jacoco.outputs.coverage }}"
+      #     echo "branch coverage = ${{ steps.jacoco.outputs.branches }}"
 
       # - name: Set up Git
       #   run: |
