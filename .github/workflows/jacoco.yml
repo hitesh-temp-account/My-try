@@ -44,7 +44,7 @@ jobs:
       - name: Update Badge
         run: |
           # Replace the coverage percentage
-          new_percentage=69.56  # Replace with your desired percentage
+          new_percentage=89.56  # Replace with your desired percentage
 
           # Compare old and new percentages
           old_percentage="${{ env.OLD }}"
