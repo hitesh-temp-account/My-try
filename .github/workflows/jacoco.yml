@@ -37,19 +37,19 @@ jobs:
       - name: Get Old Percentage
         id: get_old_percentage
         run: |
-          old_percentage=$(sed -nE 's/.*coverage-([0-9]+)&#37;.*/\1/p' README.md)
+          old_percentage=$(sed -nE 's/.*coverage-([0-9]+)%25.*/\1/p' README.md)
           echo "old: $old_percentage"
           echo "OLD=$old_percentage" >> $GITHUB_ENV
 
       - name: Update Badge
         run: |
           # Replace the coverage percentage
-          new_percentage=27  # Replace with your desired percentage
+          new_percentage=91  # Replace with your desired percentage
 
           # Compare old and new percentages
           old_percentage="${{ env.OLD }}"
           if [ "$old_percentage" != "$new_percentage" ]; then
-            sed -i "s/coverage-$old_percentage&#37;coverage-$new_percentage&#37;/" README.md
+            sed -i "s/coverage-$old_percentage%25;coverage-$new_percentage%25/" README.md
             echo "updated the percentage: $new_percentage"
 
             # Update the color based on the percentage
