@@ -139,8 +139,7 @@ jobs:
           body: ${{ env.COMMIT_MESSAGE }}
           commit-message: ${{ env.COMMIT_MESSAGE }}
           token: ${{ secrets.GITHUB_TOKEN }}
-          add-paths: |
-            */README.md
+          add-paths: README.md
             
       - name: pr number
         run: | 
