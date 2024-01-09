@@ -37,7 +37,7 @@ jobs:
       - name: Get Old Percentage
         id: get_old_percentage
         run: |
-          old_percentage=$(sed -nE 's/.*coverage-([0-9]+)/\1/p' README.md)
+          old_percentage=$(sed -nE 's/.*coverage-([0-9]+)[^0-9]*.*/\1/p' README.md)
           echo "old: $old_percentage"
           echo "OLD=$old_percentage" >> $GITHUB_ENV
 
@@ -127,34 +127,34 @@ jobs:
       #   run: |
       #     echo "APP_TOKEN=${{ steps.my-app.outputs.token }}" >> $GITHUB_ENV
 
-      # - name: Create PR
-      #   id: create-pr
-      #   uses: peter-evans/create-pull-request@v5
-      #   with:
-      #     base: main
-      #     branch: github-actions/readme-update
-      #     delete-branch: true
-      #     author: ${{ github.actor }} <${{ github.actor }}@linkedin.com>
-      #     title: 'Update readme'
-      #     body: ${{ env.COMMIT_MESSAGE }}
-      #     commit-message: ${{ env.COMMIT_MESSAGE }}
-      #     token: ${{ secrets.GITHUB_TOKEN }}
-      #     add-paths: |
-      #       */jacoco.svg
-            
-      # - name: pr number
-      #   run: | 
-      #     echo "pr number : ${{ steps.create-pr.outputs.pull-request-number }}"
-
-      - name: Create, Approve and Merge PR
-        uses: ./.github/actions/create_approve_and_merge
+      - name: Create PR
+        id: create-pr
+        uses: peter-evans/create-pull-request@v5
         with:
-          title: 'custom title'
-          app-id: ${{ secrets.ALTERNATE_APP_ID }}
-          app-private-key: ${{ secrets.ALTERNATE_APP_PRIVATE_KEY }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          base: main
+          branch: github-actions/readme-update
+          delete-branch: true
+          author: ${{ github.actor }} <${{ github.actor }}@linkedin.com>
+          title: 'Update readme'
+          body: ${{ env.COMMIT_MESSAGE }}
+          commit-message: ${{ env.COMMIT_MESSAGE }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           add-paths: |
             */README.md
+            
+      - name: pr number
+        run: | 
+          echo "pr number : ${{ steps.create-pr.outputs.pull-request-number }}"
+
+      # - name: Create, Approve and Merge PR
+      #   uses: ./.github/actions/create_approve_and_merge
+      #   with:
+      #     title: 'custom title'
+      #     app-id: ${{ secrets.ALTERNATE_APP_ID }}
+      #     app-private-key: ${{ secrets.ALTERNATE_APP_PRIVATE_KEY }}
+      #     github-token: ${{ secrets.GITHUB_TOKEN }}
+      #     add-paths: |
+      #       */README.md
           
       # - name: Approve PR
       #   if: ${{ env.PR_NUMBER }}
