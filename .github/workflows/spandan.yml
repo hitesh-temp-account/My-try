@@ -114,6 +114,14 @@ jobs:
           commit-message: ${{ env.COMMIT_MESSAGE }}
           token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Add Empty Commit
+        run: |
+          # Add an empty commit
+          git commit --allow-empty -m "Add empty commit to trigger actions"
+
+          # Push the changes back to the pull request branch
+          git push origin github-actions/readme-update
+
       # - name: Approve PR
       #   if: |
       #      env.version_change == 'true' ||
