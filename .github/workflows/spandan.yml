@@ -98,6 +98,24 @@ jobs:
           sed -i "s/properties#L[0-9]*)/properties#L$current_line\)/" README.md
           cat README.md
 
+      - name: Create PR
+        id: create-pr
+        uses: peter-evans/create-pull-request@v5
+        with:
+          base: main
+          branch: github-actions/readme-update
+          delete-branch: true
+          author: ${{ github.actor }} <${{ github.actor }}@linkedin.com>
+          title: 'Update readme'
+          body: ${{ env.COMMIT_MESSAGE }}
+          commit-message: ${{ env.COMMIT_MESSAGE }}
+          token: ${{ env.APP_TOKEN }}
+          add-paths: README.md
+            
+      - name: pr number
+        run: | 
+          echo "pr number : ${{ steps.create-pr.outputs.pull-request-number }}"
+
 
       # - name: Create, Approve and Merge PR
       #   uses: ./.github/actions/create_approve_and_merge
