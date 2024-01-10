@@ -108,7 +108,6 @@ jobs:
         with:
           base: main
           branch: github-actions/readme-update
-          delete-branch: true
           author: ${{ github.actor }} <${{ github.actor }}@linkedin.com>
           title: 'Update readme'
           body: ${{ env.COMMIT_MESSAGE }}
