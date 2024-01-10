@@ -116,6 +116,10 @@ jobs:
 
       - name: Add Empty Commit
         run: |
+          # Configure Git with the GitHub Actions bot identity
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor }}@linkedin.com"
+
           # Add an empty commit
           git commit --allow-empty -m "Add empty commit to trigger actions"
 
