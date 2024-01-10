@@ -114,31 +114,31 @@ jobs:
           commit-message: ${{ env.COMMIT_MESSAGE }}
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Approve PR
-        if: |
-           env.version_change == 'true' ||
-           env.VERSION_LINE_CHANGED == 'true'
-        run: |
-           gh pr review ${{ steps.create-pr.outputs.pull-request-number }} --approve
-           echo "approved"
-        env:
-           GITHUB_TOKEN: ${{ env.APP_TOKEN }}
+      # - name: Approve PR
+      #   if: |
+      #      env.version_change == 'true' ||
+      #      env.VERSION_LINE_CHANGED == 'true'
+      #   run: |
+      #      gh pr review ${{ steps.create-pr.outputs.pull-request-number }} --approve
+      #      echo "approved"
+      #   env:
+      #      GITHUB_TOKEN: ${{ env.APP_TOKEN }}
 
-      - name: Turn On PR Auto-Merge
-        id: auto-merge
-        if: |
-          env.version_change == 'true' ||
-          env.VERSION_LINE_CHANGED == 'true'
-        run: >
-          gh pr merge --squash --auto 
-          --repo ${{ github.repository }} --delete-branch
-          ${{ steps.create-pr.outputs.pull-request-number }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # - name: Turn On PR Auto-Merge
+      #   id: auto-merge
+      #   if: |
+      #     env.version_change == 'true' ||
+      #     env.VERSION_LINE_CHANGED == 'true'
+      #   run: >
+      #     gh pr merge --squash --auto 
+      #     --repo ${{ github.repository }} --delete-branch
+      #     ${{ steps.create-pr.outputs.pull-request-number }}
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Print output of auto merge
-        run: |
-          echo "output: ${{ steps.auto-merge.outputs.success }}"
+      # - name: Print output of auto merge
+      #   run: |
+      #     echo "output: ${{ steps.auto-merge.outputs.success }}"
 
       # - name: Delete branch
       #   if: |
