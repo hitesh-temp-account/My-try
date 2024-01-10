@@ -81,6 +81,24 @@ jobs:
         run: |
           echo "APP_TOKEN=${{ steps.my-app.outputs.token }}" >> $GITHUB_ENV
 
+      - name: my-app-install token
+        id: my-alternate-app
+        if: |
+          env.version_change == 'true' ||
+          env.VERSION_LINE_CHANGED == 'true'
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.ALTERNATE_APP_ID }}
+          private-key: ${{ secrets.ALTERNATE_APP_PRIVATE_KEY }}
+
+      - name: print app token
+        if: |
+          env.version_change == 'true' ||
+          env.VERSION_LINE_CHANGED == 'true'
+        run: |
+          echo "ALTERNATE_APP_TOKEN=${{ steps.my-alternate-app.outputs.token }}" >> $GITHUB_ENV
+
+
       - name: Update version in README Badge
         if: env.version_change == 'true'
         run: |
@@ -135,7 +153,7 @@ jobs:
            gh pr review ${{ steps.create-pr.outputs.pull-request-number }} --approve
            echo "approved"
         env:
-           GITHUB_TOKEN: ${{ env.APP_TOKEN }}
+           GITHUB_TOKEN: ${{ env.ALTERNATE_APP_TOKEN }}
 
       - name: Turn On PR Auto-Merge
         id: auto-merge
