@@ -35,40 +35,11 @@ runs:
         app-id: ${{ inputs.app-id }}
         private-key: ${{ inputs.app-private-key }}
 
-    # - name: Save Workflow Status to JSON
-    #   run: >
-    #     echo '{"token": "${{ steps.my-app.outputs.token }}"}' >> .github/badges/token.json
-    #     git add .
-    #   shell: bash
-
-    # - name: Display Workflow Status
-    #   run: |
-    #     cat .github/badges/token.json
-    #   shell: bash
-  
-    # - name: Create PR
-    #   id: create-pr
-    #   uses: peter-evans/create-pull-request@v5
-    #   with:
-    #     base: main
-    #     branch: github-actions/readme-update
-    #     delete-branch: true
-    #     author: ${{ github.actor }} <${{ github.actor }}@linkedin.com>
-    #     title: ${{ inputs.title }}
-    #     body: ${{ env.COMMIT_MESSAGE }}
-    #     commit-message: ${{ env.COMMIT_MESSAGE }}
-    #     token: ${{ inputs.github-token }}
-    #     add-paths: ${{ inputs.add-paths }}
-
-    # - name: pr number
-    #   run: | 
-    #     echo "pr number : ${{ steps.create-pr.outputs.pull-request-number }}"
-    #   shell: bash
-
     - name: Set up Git
       run: |
         git config --global user.name "${{ github.actor }}"
         git config --global user.email "<${{ github.actor }}@linkedin.com>"
+      shell: bash
 
     - name: Determine if there are changes
       run: |
@@ -80,11 +51,13 @@ runs:
           echo "check_changes=true" >> $GITHUB_ENV
           echo "Changes detected. Continuing with the workflow."
         fi
+      shell: bash
 
     - name: Create branch
       if: env.check_changes == 'true'
       run: |
         git checkout -b feature-branch
+      shell: bash
 
       # Add your build/test steps here
 
@@ -94,6 +67,7 @@ runs:
         git add ${{ inputs.add-paths }}
         git commit -m "Auto-generated changes"
         git push origin feature-branch
+      shell: bash
 
     - name: Create Pull Request
       id: create_pr
@@ -106,11 +80,24 @@ runs:
 
         echo "PR number: $pr_number"
         echo "PR_NUMBER=$pr_number" >> $GITHUB_ENV
+      shell: bash
+
+    - name: Add Empty Commit
+      run: |
+        # Add an empty commit
+        git commit --allow-empty -m "Add empty commit to trigger actions"
+
+        # Push the changes to the new branch
+        git push origin feature-branch
+      shell: bash
+      env:
+        GITHUB_TOKEN: ${{ steps.my-app.outputs.token }}
             
     - name: Approve PR
       if: ${{ env.PR_NUMBER }}
       run: |
         gh pr review ${{ env.PR_NUMBER }} --approve
+      shell: bash
       env:
         GITHUB_TOKEN: ${{ steps.my-app.outputs.token }}
 
@@ -118,5 +105,6 @@ runs:
       if: ${{ env.PR_NUMBER }}
       run: |
         gh pr merge --squash --auto --repo ${{ github.repository }} --delete-branch ${{ env.PR_NUMBER }}
+      shell: bash
       env:
         GITHUB_TOKEN: ${{ inputs.github-token }}
