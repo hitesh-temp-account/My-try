@@ -109,18 +109,6 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           add-paths: README.md
 
-      - name: Add Empty Commit
-        run: |
-          # Configure Git with the GitHub Actions bot identity
-          git config user.name "${{ github.actor }}"
-          git config user.email "${{ github.actor }}@linkedin.com"
-
-          # Add an empty commit
-          git commit --allow-empty -m "Add empty commit to trigger actions"
-
-          # Push the changes back to the pull request branch
-          git push origin github-actions/readme-update
-
       # - name: Approve PR
       #   if: |
       #      env.version_change == 'true' ||
