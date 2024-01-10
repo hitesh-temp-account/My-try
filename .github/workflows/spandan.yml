@@ -99,41 +99,41 @@ jobs:
           cat README.md
 
 
-      - name: Create, Approve and Merge PR
-        uses: ./.github/actions/create_approve_and_merge
-        with:
-          title: 'custom title'
-          commit-message: 'test commit message'
-          app-id: ${{ secrets.ALTERNATE_APP_ID }}
-          app-private-key: ${{ secrets.ALTERNATE_APP_PRIVATE_KEY }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          add-paths: README.md
+      # - name: Create, Approve and Merge PR
+      #   uses: ./.github/actions/create_approve_and_merge
+      #   with:
+      #     title: 'custom title'
+      #     commit-message: 'test commit message'
+      #     app-id: ${{ secrets.ALTERNATE_APP_ID }}
+      #     app-private-key: ${{ secrets.ALTERNATE_APP_PRIVATE_KEY }}
+      #     github-token: ${{ secrets.GITHUB_TOKEN }}
+      #     add-paths: README.md
 
-      # - name: Approve PR
-      #   if: |
-      #      env.version_change == 'true' ||
-      #      env.VERSION_LINE_CHANGED == 'true'
-      #   run: |
-      #      gh pr review ${{ steps.create-pr.outputs.pull-request-number }} --approve
-      #      echo "approved"
-      #   env:
-      #      GITHUB_TOKEN: ${{ env.APP_TOKEN }}
+      - name: Approve PR
+        if: |
+           env.version_change == 'true' ||
+           env.VERSION_LINE_CHANGED == 'true'
+        run: |
+           gh pr review ${{ steps.create-pr.outputs.pull-request-number }} --approve
+           echo "approved"
+        env:
+           GITHUB_TOKEN: ${{ env.APP_TOKEN }}
 
-      # - name: Turn On PR Auto-Merge
-      #   id: auto-merge
-      #   if: |
-      #     env.version_change == 'true' ||
-      #     env.VERSION_LINE_CHANGED == 'true'
-      #   run: >
-      #     gh pr merge --squash --auto 
-      #     --repo ${{ github.repository }} --delete-branch
-      #     ${{ steps.create-pr.outputs.pull-request-number }}
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Turn On PR Auto-Merge
+        id: auto-merge
+        if: |
+          env.version_change == 'true' ||
+          env.VERSION_LINE_CHANGED == 'true'
+        run: >
+          gh pr merge --squash --auto 
+          --repo ${{ github.repository }} --delete-branch
+          ${{ steps.create-pr.outputs.pull-request-number }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # - name: Print output of auto merge
-      #   run: |
-      #     echo "output: ${{ steps.auto-merge.outputs.success }}"
+      - name: Print output of auto merge
+        run: |
+          echo "output: ${{ steps.auto-merge.outputs.success }}"
 
       # - name: Delete branch
       #   if: |
