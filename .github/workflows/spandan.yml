@@ -99,20 +99,15 @@ jobs:
           cat README.md
 
 
-      - name: Create PR
-        if: |
-          env.version_change == 'true' ||
-          env.VERSION_LINE_CHANGED == 'true'
-        id: create-pr
-        uses: peter-evans/create-pull-request@v5
+      - name: Create, Approve and Merge PR
+        uses: ./.github/actions/create_approve_and_merge
         with:
-          base: main
-          branch: github-actions/readme-update
-          author: ${{ github.actor }} <${{ github.actor }}@linkedin.com>
-          title: 'Update readme'
-          body: ${{ env.COMMIT_MESSAGE }}
-          commit-message: ${{ env.COMMIT_MESSAGE }}
-          token: ${{ secrets.GITHUB_TOKEN }}
+          title: 'custom title'
+          commit-message: 'test commit message'
+          app-id: ${{ secrets.ALTERNATE_APP_ID }}
+          app-private-key: ${{ secrets.ALTERNATE_APP_PRIVATE_KEY }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          add-paths: README.md
 
       - name: Add Empty Commit
         run: |
