@@ -48,7 +48,7 @@ runs:
       run: |
         changes=$(git diff --name-only ${{ inputs.add-paths }})
         echo "changes: $changes"
-        if [ $changes -eq 0 ]; then
+        if [ "$changes" == "" ]; then
           echo "No changes to commit. Exiting..."
           echo "check_changes=false" >> $GITHUB_ENV
         else
