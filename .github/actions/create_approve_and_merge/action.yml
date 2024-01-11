@@ -94,22 +94,22 @@ runs:
       env:
         GITHUB_TOKEN: ${{ steps.my-app.outputs.token }}
 
-    # - name: Add Empty Commit to Auto-Created PR
-    #   if: env.PR_NUMBER
-    #   run: |
-    #     # Checkout the branch associated with the PR
-    #     git checkout feature-branch
+    - name: Add Empty Commit to Auto-Created PR
+      if: env.PR_NUMBER
+      run: |
+        # Checkout the branch associated with the PR
+        git checkout feature-branch
 
-    #     # Set user information for the empty commit
-    #     git config user.name "hiteshkuberr"
-    #     git config user.email "hiteshkuberr@gmail.com"
+        # Set user information for the empty commit
+        git config user.name "hiteshkuberr"
+        git config user.email "hiteshkuberr@gmail.com"
 
-    #     # Add an empty commit
-    #     git commit --allow-empty -m "Add empty commit to trigger actions"
+        # Add an empty commit
+        git commit --allow-empty -m "Add empty commit to trigger actions"
 
-    #     # Push the changes to the existing branch
-    #     git push origin feature-branch
-    #   shell: bash
+        # Push the changes to the existing branch
+        git push origin feature-branch
+      shell: bash
 
     - name: Turn On PR Auto-Merge
       if: ${{ env.PR_NUMBER }}
