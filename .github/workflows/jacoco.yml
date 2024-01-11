@@ -44,7 +44,7 @@ jobs:
       - name: Update Badge
         run: |
           # Replace the coverage percentage
-          new_percentage=39.56  # Replace with your desired percentage
+          new_percentage=19.56  # Replace with your desired percentage
 
           # Compare old and new percentages
           old_percentage="${{ env.OLD }}"
@@ -159,19 +159,19 @@ jobs:
       #     add-paths: README.md
           
       - name: Approve PR
-        if: ${{ env.PR_NUMBER }}
+        if: steps.create-pr.outputs.pull-request-number
         run: |
-           gh pr review ${{ env.PR_NUMBER }} --approve
+           gh pr review ${{ steps.create-pr.outputs.pull-request-number }} --approve
            echo "approved"
         env:
            GITHUB_TOKEN: ${{ env.APP_TOKEN }}
 
       - name: Turn On PR Auto-Merge
         id: auto-merge
-        if: ${{ env.PR_NUMBER }}
+        if: steps.create-pr.outputs.pull-request-number
         run: >
           gh pr merge --squash --auto 
           --repo ${{ github.repository }} --delete-branch
-          ${{ env.PR_NUMBER }}
+          ${{ steps.create-pr.outputs.pull-request-numberR }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
