@@ -130,23 +130,23 @@ jobs:
       #   run: |
       #     echo "APP_TOKEN=${{ steps.my-app.outputs.token }}" >> $GITHUB_ENV
 
-      - name: Create PR
-        id: create-pr
-        uses: peter-evans/create-pull-request@v5
-        with:
-          base: main
-          branch: github-actions/readme-update
-          delete-branch: true
-          author: ${{ github.actor }} <${{ github.actor }}@linkedin.com>
-          title: 'Update readme'
-          body: ${{ env.COMMIT_MESSAGE }}
-          commit-message: ${{ env.COMMIT_MESSAGE }}
-          token: ${{ secrets.GITHUB_TOKEN }}
-          add-paths: README.md
+      # - name: Create PR
+      #   id: create-pr
+      #   uses: peter-evans/create-pull-request@v5
+      #   with:
+      #     base: main
+      #     branch: github-actions/readme-update
+      #     delete-branch: true
+      #     author: ${{ github.actor }} <${{ github.actor }}@linkedin.com>
+      #     title: 'Update readme'
+      #     body: ${{ env.COMMIT_MESSAGE }}
+      #     commit-message: ${{ env.COMMIT_MESSAGE }}
+      #     token: ${{ secrets.GITHUB_TOKEN }}
+      #     add-paths: README.md
             
-      - name: pr number
-        run: | 
-          echo "pr number : ${{ steps.create-pr.outputs.pull-request-number }}"
+      # - name: pr number
+      #   run: | 
+      #     echo "pr number : ${{ steps.create-pr.outputs.pull-request-number }}"
 
       # - name: Create, Approve and Merge PR
       #   uses: ./.github/actions/create_approve_and_merge
@@ -158,20 +158,20 @@ jobs:
       #     github-token: ${{ secrets.GITHUB_TOKEN }}
       #     add-paths: README.md
           
-      - name: Approve PR
-        if: steps.create-pr.outputs.pull-request-number
-        run: |
-           gh pr review ${{ steps.create-pr.outputs.pull-request-number }} --approve
-           echo "approved"
-        env:
-           GITHUB_TOKEN: ${{ env.APP_TOKEN }}
+      # - name: Approve PR
+      #   if: steps.create-pr.outputs.pull-request-number
+      #   run: |
+      #      gh pr review ${{ steps.create-pr.outputs.pull-request-number }} --approve
+      #      echo "approved"
+      #   env:
+      #      GITHUB_TOKEN: ${{ env.APP_TOKEN }}
 
-      - name: Turn On PR Auto-Merge
-        id: auto-merge
-        if: steps.create-pr.outputs.pull-request-number
-        run: >
-          gh pr merge --squash --auto 
-          --repo ${{ github.repository }} --delete-branch
-          ${{ steps.create-pr.outputs.pull-request-numberR }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # - name: Turn On PR Auto-Merge
+      #   id: auto-merge
+      #   if: steps.create-pr.outputs.pull-request-number
+      #   run: >
+      #     gh pr merge --squash --auto 
+      #     --repo ${{ github.repository }} --delete-branch
+      #     ${{ steps.create-pr.outputs.pull-request-numberR }}
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
