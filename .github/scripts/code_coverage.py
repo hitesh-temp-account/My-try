@@ -2,7 +2,7 @@ import sys
 import re
 
 def code_coverage_report():
-  if table_list == ""
+  if table_list == "":
     print(get_table_list(file_paths))
 
 def get_table_list(file_paths):
