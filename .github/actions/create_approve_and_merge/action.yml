@@ -47,11 +47,13 @@ runs:
     - name: Determine if there are changes
       run: |
         if [ "$(git diff --name-only ${{ inputs.add-paths }})" ]; then
-          git checkout main
+          git checkout -b featire-branch
           git add ${{ inputs.add-paths }}
           git commit -m "Auto-generated changes"
           git show
-          git push
+          git push origin HEAD
+          gh pr create --title "The bug is fixed" --head feature-branch --base main --body "Everything works again"
+          echo "PR created"
         else 
           echo "No file changes"
         fi
