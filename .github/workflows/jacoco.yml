@@ -59,7 +59,7 @@ jobs:
       - name: Update Badge
         run: |
           # Replace the coverage percentage
-          new_percentage=35.67  # Replace with your desired percentage
+          new_percentage="${{ env.NEW }}"
 
           # Compare old and new percentages
           old_percentage="${{ env.OLD }}"
@@ -68,13 +68,15 @@ jobs:
             echo "updated the percentage: $new_percentage"
 
             # Update the color based on the percentage
+            color=""
             if (( $(echo "$new_percentage < 33.00" | bc -l) )); then
-              sed -i "s/%25-[^.]*.svg)/%25-red.svg)/" README.md
+              color="red"
               echo "updated to red"
             else
               echo "updated to green"
-              sed -i "s/%25-[^.]*.svg)/%25-green.svg)/" README.md
+              color="green"
             fi
+            sed -i "s/%25-[^.]*.svg)/%25-$color.svg)/" README.md
             cat README.md
           fi
           git status
