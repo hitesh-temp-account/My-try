@@ -47,14 +47,11 @@ runs:
     - name: Determine if there are changes
       run: |
         if [ "$(git diff --name-only ${{ inputs.add-paths }})" ]; then
-          git checkout -b feature-branch
+          git checkout main
           git add ${{ inputs.add-paths }}
           git commit -m "Auto-generated changes"
           git show
-          git push origin feature-branch
-          pr_number=$(gh pr create --base main --head feature-branch --title "The bug is fixed" --body "Everything works again" | jq -r '.number')
-          echo "PR number: $pr_number"
-          echo "PR_NUMBER=$pr_number" >> $GITHUB_ENV
+          git push
         else 
           echo "No file changes"
         fi
@@ -90,13 +87,13 @@ runs:
     #     echo "PR_NUMBER=$pr_number" >> $GITHUB_ENV
     #   shell: bash
             
-    - name: Approve PR
-      if: ${{ env.PR_NUMBER }}
-      run: |
-        gh pr review ${{ env.PR_NUMBER }} --approve
-      shell: bash
-      env:
-        GITHUB_TOKEN: ${{ steps.my-app.outputs.token }}
+    # - name: Approve PR
+    #   if: ${{ env.PR_NUMBER }}
+    #   run: |
+    #     gh pr review ${{ env.PR_NUMBER }} --approve
+    #   shell: bash
+    #   env:
+    #     GITHUB_TOKEN: ${{ steps.my-app.outputs.token }}
 
     # - name: Add Empty Commit to Auto-Created PR
     #   if: env.PR_NUMBER
@@ -115,13 +112,13 @@ runs:
     #     git push origin feature-branch
     #   shell: bash
 
-    - name: Turn On PR Auto-Merge
-      if: ${{ env.PR_NUMBER }}
-      run: |
-        gh pr merge --squash --auto --repo ${{ github.repository }} --delete-branch ${{ env.PR_NUMBER }}
-      shell: bash
-      env:
-        GITHUB_TOKEN: ${{ inputs.github-token }}
+    # - name: Turn On PR Auto-Merge
+    #   if: ${{ env.PR_NUMBER }}
+    #   run: |
+    #     gh pr merge --squash --auto --repo ${{ github.repository }} --delete-branch ${{ env.PR_NUMBER }}
+    #   shell: bash
+    #   env:
+    #     GITHUB_TOKEN: ${{ inputs.github-token }}
 
     # - name: Wait for checks to complete
     #   if: ${{ env.PR_NUMBER }}
