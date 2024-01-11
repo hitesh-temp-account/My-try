@@ -69,7 +69,7 @@ jobs:
 
             # Update the color based on the percentage
             color=""
-            if (( $(echo "$new_percentage < 33.00" | bc -l) )); then
+            if [ $(echo "$new_percentage < 35.00" | bc -l) ]; then
               color="red"
               echo "updated to red"
             else
