@@ -47,7 +47,7 @@ runs:
     - name: Determine if there are changes
       run: |
         if [ "$(git diff --name-only ${{ inputs.add-paths }})" ]; then
-          git checkout -b featire-branch
+          git checkout -b feature-branch
           git add ${{ inputs.add-paths }}
           git commit -m "Auto-generated changes"
           git show
@@ -58,6 +58,8 @@ runs:
           echo "No file changes"
         fi
       shell: bash
+      env:
+        GITHUB_TOKEN: ${{ inputs.personal-access-token }}
 
     # - name: Create branch
     #   if: env.check_changes == 'true'
