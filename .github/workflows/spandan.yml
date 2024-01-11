@@ -167,16 +167,9 @@ jobs:
           --repo ${{ github.repository }} --delete-branch
           ${{ steps.create-pr.outputs.pull-request-number }}
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ env.ALTERNATE_APP_TOKEN }}
 
       - name: Print output of auto merge
         run: |
           echo "output: ${{ steps.auto-merge.outputs.success }}"
-
-      - name: Delete branch
-        if: |
-          env.version_change == 'true' ||
-          env.VERSION_LINE_CHANGED == 'true'
-        run: |
-          git push origin --delete github-actions/readme-update
 
