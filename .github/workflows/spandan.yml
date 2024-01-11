@@ -117,76 +117,76 @@ jobs:
           sed -i "s/properties#L[0-9]*)/properties#L$current_line\)/" README.md
           cat README.md
 
-      - name: Create PR
-        id: create-pr
-        uses: peter-evans/create-pull-request@v5
-        with:
-          base: main
-          branch: github-actions/readme-update
-          delete-branch: true
-          author: ${{ github.actor }} <${{ github.actor }}@linkedin.com>
-          title: 'Update readme'
-          body: ${{ env.COMMIT_MESSAGE }}
-          commit-message: ${{ env.COMMIT_MESSAGE }}
-          token: ${{ env.APP_TOKEN }}
-          add-paths: README.md
-            
-      - name: pr number
-        run: | 
-          echo "pr number : ${{ steps.create-pr.outputs.pull-request-number }}"
-
-
-      # - name: Create, Approve and Merge PR
-      #   uses: ./.github/actions/create_approve_and_merge
+      # - name: Create PR
+      #   id: create-pr
+      #   uses: peter-evans/create-pull-request@v5
       #   with:
-      #     title: 'custom title'
-      #     commit-message: 'test commit message'
-      #     app-id: ${{ secrets.ALTERNATE_APP_ID }}
-      #     app-private-key: ${{ secrets.ALTERNATE_APP_PRIVATE_KEY }}
-      #     github-token: ${{ secrets.GITHUB_TOKEN }}
-      #     personal-access-token: ${{ secrets.ACCESS_TOKEN }}
+      #     base: main
+      #     branch: github-actions/readme-update
+      #     delete-branch: true
+      #     author: ${{ github.actor }} <${{ github.actor }}@linkedin.com>
+      #     title: 'Update readme'
+      #     body: ${{ env.COMMIT_MESSAGE }}
+      #     commit-message: ${{ env.COMMIT_MESSAGE }}
+      #     token: ${{ env.APP_TOKEN }}
       #     add-paths: README.md
+            
+      # - name: pr number
+      #   run: | 
+      #     echo "pr number : ${{ steps.create-pr.outputs.pull-request-number }}"
 
-      - name: Approve PR
-        if: |
-           env.version_change == 'true' ||
-           env.VERSION_LINE_CHANGED == 'true'
-        run: |
-           gh pr review ${{ steps.create-pr.outputs.pull-request-number }} --approve
-           echo "approved"
-        env:
-           GITHUB_TOKEN: ${{ env.ALTERNATE_APP_TOKEN }}
 
-      - name: Turn On PR Auto-Merge
-        id: auto-merge
-        if: |
-          env.version_change == 'true' ||
-          env.VERSION_LINE_CHANGED == 'true'
-        run: >
-          gh pr merge --squash --auto --repo
-          ${{ github.repository }} --delete-branch
-          ${{ steps.create-pr.outputs.pull-request-number }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create, Approve and Merge PR
+        uses: ./.github/actions/create_approve_and_merge
+        with:
+          title: 'custom title'
+          commit-message: 'test commit message'
+          app-id: ${{ secrets.ALTERNATE_APP_ID }}
+          app-private-key: ${{ secrets.ALTERNATE_APP_PRIVATE_KEY }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          personal-access-token: ${{ secrets.ACCESS_TOKEN }}
+          add-paths: README.md
 
-      - name: Print output of auto merge
-        run: |
-          echo "output: ${{ steps.auto-merge.outputs.success }}"
+      # - name: Approve PR
+      #   if: |
+      #      env.version_change == 'true' ||
+      #      env.VERSION_LINE_CHANGED == 'true'
+      #   run: |
+      #      gh pr review ${{ steps.create-pr.outputs.pull-request-number }} --approve
+      #      echo "approved"
+      #   env:
+      #      GITHUB_TOKEN: ${{ env.ALTERNATE_APP_TOKEN }}
 
-      - name: Wait for checks to complete
-        if: |
-          env.version_change == 'true' ||
-          env.VERSION_LINE_CHANGED == 'true'
-        run: gh api -X GET /repos/${{ github.repository }}/commits/${{ github.sha }}/check-runs --silent
-        id: wait-for-checks
-        env:
-          GH_TOKEN: ${{ github.token }}
+      # - name: Turn On PR Auto-Merge
+      #   id: auto-merge
+      #   if: |
+      #     env.version_change == 'true' ||
+      #     env.VERSION_LINE_CHANGED == 'true'
+      #   run: >
+      #     gh pr merge --squash --auto --repo
+      #     ${{ github.repository }} --delete-branch
+      #     ${{ steps.create-pr.outputs.pull-request-number }}
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Delete branch
-        if: |
-          env.version_change == 'true' ||
-          env.VERSION_LINE_CHANGED == 'true' &&
-          steps.wait-for-checks.outputs.status == 'completed'
-        run: |
-          git push origin --delete github-actions/readme-update
+      # - name: Print output of auto merge
+      #   run: |
+      #     echo "output: ${{ steps.auto-merge.outputs.success }}"
+
+      # - name: Wait for checks to complete
+      #   if: |
+      #     env.version_change == 'true' ||
+      #     env.VERSION_LINE_CHANGED == 'true'
+      #   run: gh api -X GET /repos/${{ github.repository }}/commits/${{ github.sha }}/check-runs --silent
+      #   id: wait-for-checks
+      #   env:
+      #     GH_TOKEN: ${{ github.token }}
+
+      # - name: Delete branch
+      #   if: |
+      #     env.version_change == 'true' ||
+      #     env.VERSION_LINE_CHANGED == 'true' &&
+      #     steps.wait-for-checks.outputs.status == 'completed'
+      #   run: |
+      #     git push origin --delete github-actions/readme-update
 
