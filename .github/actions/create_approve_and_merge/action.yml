@@ -17,6 +17,9 @@ inputs:
   github-token:
     description: 'github token'
     required: true
+  personal-access-token:
+    desccription: 'personal access token to create PR'
+    required: true
   add-paths:
     description: 'path of the required changes'
     required: false
@@ -73,7 +76,7 @@ runs:
       id: create_pr
       if: env.check_changes == 'true'
       run: |
-        pr_number=$(curl -X POST -H "Authorization: Bearer ${{ inputs.github-token }}" \
+        pr_number=$(curl -X POST -H "Authorization: Bearer ${{ inputs.personal-access-token }}" \
           -H "Accept: application/vnd.github.v3+json" \
           https://api.github.com/repos/${{ github.repository }}/pulls \
           -d '{"title":"${{ inputs.title }}","head":"feature-branch","base":"main","body":"${{ inputs.commit-message }}"}' | jq -r '.number')
