@@ -46,7 +46,7 @@ runs:
 
     - name: Determine if there are changes
       run: |
-        if [ "$(git diff --name-only ${{ inputs.add-paths }}) ]; then
+        if [ "$(git diff --name-only ${{ inputs.add-paths }})" ]; then
           git checkout -b feature-branch
           git add ${{ inputs.add-paths }}
           git commit -m "Auto-generated changes"
