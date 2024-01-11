@@ -126,12 +126,14 @@ runs:
         pr_checks_status=$(curl -s -H "Authorization: Bearer ${{ inputs.github-token }}" \
           -H "Accept: application/vnd.github.v3+json" \
           https://api.github.com/repos/${{ github.repository }}/pulls/${{ env.PR_NUMBER }}/commits/${{ github.sha }}/status | jq -r '.state')
+        echo "status: $pr_checks_status"
 
         while [ "$pr_checks_status" != "success" ] && [ "$pr_checks_status" != "failure" ]; do
-          sleep 20
+          sleep 5
           pr_checks_status=$(curl -s -H "Authorization: Bearer ${{ inputs.github-token }}" \
             -H "Accept: application/vnd.github.v3+json" \
             https://api.github.com/repos/${{ github.repository }}/pulls/${{ env.PR_NUMBER }}/commits/${{ github.sha }}/status | jq -r '.state')
+            echo "status: $pr_checks_status"
         done
 
         if [ "$pr_checks_status" == "success" ]; then
