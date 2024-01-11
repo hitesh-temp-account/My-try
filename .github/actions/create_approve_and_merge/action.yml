@@ -126,14 +126,14 @@ runs:
         echo "pr number: ${{ env.PR_NUMBER }}"
         pr_checks_status=$(curl -s -H "Authorization: Bearer ${{ inputs.personal-access-token }}" \
           -H "Accept: application/vnd.github.v3+json" \
-          https://api.github.com/repos/${{ github.repository }}/pulls/${{ env.PR_NUMBER }}/commits/${{ github.sha }}/status | jq -r '.state')
+          https://api.github.com/repos/hitesh-temp-account/${{ github.repository }}/pulls/${{ env.PR_NUMBER }}/commits/${{ github.sha }}/status | jq -r '.state')
         echo "status: $pr_checks_status"
 
         while [ "$pr_checks_status" != "success" ] && [ "$pr_checks_status" != "failure" ]; do
           sleep 5
           pr_checks_status_api=$(curl -s -H "Authorization: Bearer ${{ inputs.personal-access-token }}" \
             -H "Accept: application/vnd.github.v3+json" \
-            https://api.github.com/repos/${{ github.repository }}/pulls/${{ env.PR_NUMBER }}/commits/${{ github.sha }}/status)
+            https://api.github.com/repos/hitesh-temp-account/${{ github.repository }}/pulls/${{ env.PR_NUMBER }}/commits/${{ github.sha }}/status)
           echo "API Response: $pr_checks_status_api"
           pr_checks_status=$(echo "$pr_checks_status_api" | jq -r '.state')
           echo "PR Checks Status: $pr_checks_status"
