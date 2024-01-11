@@ -120,31 +120,31 @@ runs:
       env:
         GITHUB_TOKEN: ${{ inputs.github-token }}
 
-    - name: Wait for checks to complete
-      if: ${{ env.PR_NUMBER }}
-      run: |
-        echo "pr number: ${{ env.PR_NUMBER }}"
-        pr_checks_status=$(curl -s -H "Authorization: Bearer ${{ inputs.personal-access-token }}" \
-          -H "Accept: application/vnd.github.v3+json" \
-          https://api.github.com/repos/hitesh-temp-account/${{ github.repository }}/pulls/${{ env.PR_NUMBER }}/commits/${{ github.sha }}/status | jq -r '.state')
-        echo "status: $pr_checks_status"
+    # - name: Wait for checks to complete
+    #   if: ${{ env.PR_NUMBER }}
+    #   run: |
+    #     echo "pr number: ${{ env.PR_NUMBER }}"
+    #     pr_checks_status=$(curl -s -H "Authorization: Bearer ${{ inputs.personal-access-token }}" \
+    #       -H "Accept: application/vnd.github.v3+json" \
+    #       https://api.github.com/repos/hitesh-temp-account/${{ github.repository }}/pulls/${{ env.PR_NUMBER }}/commits/${{ github.sha }}/status | jq -r '.state')
+    #     echo "status: $pr_checks_status"
 
-        while [ "$pr_checks_status" != "success" ] && [ "$pr_checks_status" != "failure" ]; do
-          sleep 5
-          pr_checks_status_api=$(curl -s -H "Authorization: Bearer ${{ inputs.personal-access-token }}" \
-            -H "Accept: application/vnd.github.v3+json" \
-            https://api.github.com/repos/hitesh-temp-account/${{ github.repository }}/pulls/${{ env.PR_NUMBER }}/commits/${{ github.sha }}/status)
-          echo "API Response: $pr_checks_status_api"
-          pr_checks_status=$(echo "$pr_checks_status_api" | jq -r '.state')
-          echo "PR Checks Status: $pr_checks_status"
-        done
+    #     while [ "$pr_checks_status" != "success" ] && [ "$pr_checks_status" != "failure" ]; do
+    #       sleep 5
+    #       pr_checks_status_api=$(curl -s -H "Authorization: Bearer ${{ inputs.personal-access-token }}" \
+    #         -H "Accept: application/vnd.github.v3+json" \
+    #         https://api.github.com/repos/hitesh-temp-account/${{ github.repository }}/pulls/${{ env.PR_NUMBER }}/commits/${{ github.sha }}/status)
+    #       echo "API Response: $pr_checks_status_api"
+    #       pr_checks_status=$(echo "$pr_checks_status_api" | jq -r '.state')
+    #       echo "PR Checks Status: $pr_checks_status"
+    #     done
 
-        if [ "$pr_checks_status" == "success" ]; then
-          echo "PR checks passed. Deleting branch."
-          git push origin --delete feature-branch
-        else
-          echo "PR checks failed. Keeping the branch."
-        fi
-      shell: bash
+    #     if [ "$pr_checks_status" == "success" ]; then
+    #       echo "PR checks passed. Deleting branch."
+    #       git push origin --delete feature-branch
+    #     else
+    #       echo "PR checks failed. Keeping the branch."
+    #     fi
+    #   shell: bash
 
 
