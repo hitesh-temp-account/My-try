@@ -41,10 +41,23 @@ jobs:
           echo "old: $old_percentage"
           echo "OLD=$old_percentage" >> $GITHUB_ENV
 
+      - name: Get new percentage
+        id: get_new_percentage
+        run: |
+          ./gradlew debugCoverage --continue
+          files=$(find . -type f -and -path '*/build/reports/jacoco/debugCoverage/html/index.html')
+          chmod +x ./.github/scripts/code_coverage.py
+          table_string=$(python3 ./.github/scripts/code_coverage.py "$files" "")
+          IFS=',' read -ra table_list <<< "$table_string"
+          length=${#table_list[@]}
+          coverage=${table_list[$length-1]}
+          echo "new: $coverage"
+          echo "NEW=$coverage" >> $GITHUB_ENV
+
       - name: Update Badge
         run: |
           # Replace the coverage percentage
-          new_percentage=29.56  # Replace with your desired percentage
+          new_percentage="${{ env.NEW }}"  # Replace with your desired percentage
 
           # Compare old and new percentages
           old_percentage="${{ env.OLD }}"
