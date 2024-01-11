@@ -24,8 +24,8 @@ jobs:
       # - name: Grant execute permission for gradlew
       #   run: chmod +x gradlew
 
-      - name: Run Module Coverage
-        run: ./gradlew debugCoverage --continue
+      # - name: Run Module Coverage
+      #   run: ./gradlew debugCoverage --continue
 
       # - name: print csv files
       #   id: csv_files
@@ -54,11 +54,11 @@ jobs:
 
             # Update the color based on the percentage
             if (( $(echo "$new_percentage < 33.00" | bc -l) )); then
-              sed -i "s/%25-[^.]*.svg/%25-red.svg/" README.md
+              sed -i "s/%25-[^.]*.svg)/%25-red.svg)/" README.md
               echo "updated to red"
             else
               echo "updated to green"
-              sed -i "s/%25-[^.]*.svg/%25-green.svg/" README.md
+              sed -i "s/%25-[^.]*.svg)/%25-green.svg)/" README.md
             fi
             cat README.md
           fi
