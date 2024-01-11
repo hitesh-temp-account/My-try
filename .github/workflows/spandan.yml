@@ -64,6 +64,7 @@ jobs:
           else
             echo "VERSION_LINE_CHANGED=false" >> $GITHUB_ENV
           fi
+          
       - name: my-app-install token
         id: my-app
         if: |
