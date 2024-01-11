@@ -163,15 +163,15 @@ jobs:
       #   run: | 
       #     echo "pr number : ${{ steps.create-pr.outputs.pull-request-number }}"
 
-      - name: Create, Approve and Merge PR
-        uses: ./.github/actions/create_approve_and_merge
-        with:
-          title: 'custom title'
-          commit-message: 'test commit message'
-          app-id: ${{ secrets.ALTERNATE_APP_ID }}
-          app-private-key: ${{ secrets.ALTERNATE_APP_PRIVATE_KEY }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          add-paths: README.md
+      # - name: Create, Approve and Merge PR
+      #   uses: ./.github/actions/create_approve_and_merge
+      #   with:
+      #     title: 'custom title'
+      #     commit-message: 'test commit message'
+      #     app-id: ${{ secrets.ALTERNATE_APP_ID }}
+      #     app-private-key: ${{ secrets.ALTERNATE_APP_PRIVATE_KEY }}
+      #     github-token: ${{ secrets.GITHUB_TOKEN }}
+      #     add-paths: README.md
           
       # - name: Approve PR
       #   if: steps.create-pr.outputs.pull-request-number
