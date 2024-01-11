@@ -81,6 +81,14 @@ runs:
         echo "PR number: $pr_number"
         echo "PR_NUMBER=$pr_number" >> $GITHUB_ENV
       shell: bash
+            
+    - name: Approve PR
+      if: ${{ env.PR_NUMBER }}
+      run: |
+        gh pr review ${{ env.PR_NUMBER }} --approve
+      shell: bash
+      env:
+        GITHUB_TOKEN: ${{ steps.my-app.outputs.token }}
 
     - name: Add Empty Commit to Auto-Created PR
       if: env.PR_NUMBER
@@ -98,14 +106,6 @@ runs:
         # Push the changes to the existing branch
         git push origin feature-branch
       shell: bash
-            
-    - name: Approve PR
-      if: ${{ env.PR_NUMBER }}
-      run: |
-        gh pr review ${{ env.PR_NUMBER }} --approve
-      shell: bash
-      env:
-        GITHUB_TOKEN: ${{ steps.my-app.outputs.token }}
 
     - name: Turn On PR Auto-Merge
       if: ${{ env.PR_NUMBER }}
