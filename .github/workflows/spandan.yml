@@ -144,6 +144,7 @@ jobs:
           app-id: ${{ secrets.ALTERNATE_APP_ID }}
           app-private-key: ${{ secrets.ALTERNATE_APP_PRIVATE_KEY }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          personal-access-token: ${{ secrets.ACCESS_TOKEN }}
           add-paths: README.md
 
       # - name: Approve PR
