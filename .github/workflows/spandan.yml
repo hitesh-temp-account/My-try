@@ -23,29 +23,11 @@ jobs:
       contents: write
       pull-requests: write
     steps:
-      - name: my-app-install token
-        id: my-app
-        if: |
-          env.version_change == 'true' ||
-          env.VERSION_LINE_CHANGED == 'true'
-        uses: actions/create-github-app-token@v1
-        with:
-          app-id: ${{ secrets.APP_ID }}
-          private-key: ${{ secrets.APP_PRIVATE_KEY }}
-
-      - name: print app token
-        if: |
-          env.version_change == 'true' ||
-          env.VERSION_LINE_CHANGED == 'true'
-        run: |
-          echo "APP_TOKEN=${{ steps.my-app.outputs.token }}" >> $GITHUB_ENV
-          
       - name: Checkout Repository
         uses: actions/checkout@v3
         with:
           ref: ${{  github.head_ref }}
           fetch-depth: 0
-          token: ${{ steps.my-app.outputs.token }}
 
       - name: Get previous version
         id: get-previous-version
@@ -82,22 +64,23 @@ jobs:
           else
             echo "VERSION_LINE_CHANGED=false" >> $GITHUB_ENV
           fi
-      # - name: my-app-install token
-      #   id: my-app
-      #   if: |
-      #     env.version_change == 'true' ||
-      #     env.VERSION_LINE_CHANGED == 'true'
-      #   uses: actions/create-github-app-token@v1
-      #   with:
-      #     app-id: ${{ secrets.APP_ID }}
-      #     private-key: ${{ secrets.APP_PRIVATE_KEY }}
+          
+      - name: my-app-install token
+        id: my-app
+        if: |
+          env.version_change == 'true' ||
+          env.VERSION_LINE_CHANGED == 'true'
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
 
-      # - name: print app token
-      #   if: |
-      #     env.version_change == 'true' ||
-      #     env.VERSION_LINE_CHANGED == 'true'
-      #   run: |
-      #     echo "APP_TOKEN=${{ steps.my-app.outputs.token }}" >> $GITHUB_ENV
+      - name: print app token
+        if: |
+          env.version_change == 'true' ||
+          env.VERSION_LINE_CHANGED == 'true'
+        run: |
+          echo "APP_TOKEN=${{ steps.my-app.outputs.token }}" >> $GITHUB_ENV
 
       - name: my-app-install token
         id: my-alternate-app
