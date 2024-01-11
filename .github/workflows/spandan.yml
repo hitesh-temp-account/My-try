@@ -173,10 +173,18 @@ jobs:
         run: |
           echo "output: ${{ steps.auto-merge.outputs.success }}"
 
-      - name: Delete branch
+      - name: Wait for checks to complete
         if: |
           env.version_change == 'true' ||
           env.VERSION_LINE_CHANGED == 'true'
+        run: gh api -X GET /repos/${{ github.repository }}/commits/${{ github.sha }}/check-runs --silent
+        id: wait-for-checks
+
+      - name: Delete branch
+        if: |
+          env.version_change == 'true' ||
+          env.VERSION_LINE_CHANGED == 'true' &&
+          steps.wait-for-checks.outputs.status == 'completed'
         run: |
           git push origin --delete github-actions/readme-update
 
