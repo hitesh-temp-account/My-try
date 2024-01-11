@@ -44,6 +44,7 @@ jobs:
       - name: Get new percentage
         id: get_new_percentage
         run: |
+          chmod +x gradlew
           ./gradlew debugCoverage --continue
           files=$(find . -type f -and -path '*/build/reports/jacoco/debugCoverage/html/index.html')
           chmod +x ./.github/scripts/code_coverage.py
