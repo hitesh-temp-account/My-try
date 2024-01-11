@@ -128,7 +128,7 @@ jobs:
           title: 'Update readme'
           body: ${{ env.COMMIT_MESSAGE }}
           commit-message: ${{ env.COMMIT_MESSAGE }}
-          token: ${{ secrests.ACCESS_TOKEN }}
+          token: ${{ secrets.ACCESS_TOKEN }}
           add-paths: README.md
             
       - name: pr number
