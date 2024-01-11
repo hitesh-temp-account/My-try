@@ -27,12 +27,12 @@ jobs:
       - name: Run Module Coverage
         run: ./gradlew debugCoverage --continue
 
-      - name: print csv files
-        id: csv_files
-        run: |
-          original_string=$(find . -type f -name "debugCoverage.csv" \( -path "*app*" -o -path "*paymentGateway*" \))
-          modified_string=$(echo "$original_string" | tr ' ' '\n')
-          echo "CSV=$modified_string" >> $GITHUB_ENV
+      # - name: print csv files
+      #   id: csv_files
+      #   run: |
+      #     original_string=$(find . -type f -name "debugCoverage.csv" \( -path "*app*" -o -path "*paymentGateway*" \))
+      #     modified_string=$(echo "$original_string" | tr ' ' '\n')
+      #     echo "CSV=$modified_string" >> $GITHUB_ENV
 
       - name: Get Old Percentage
         id: get_old_percentage
@@ -44,7 +44,7 @@ jobs:
       - name: Update Badge
         run: |
           # Replace the coverage percentage
-          new_percentage=30.56  # Replace with your desired percentage
+          new_percentage=39.56  # Replace with your desired percentage
 
           # Compare old and new percentages
           old_percentage="${{ env.OLD }}"
@@ -130,48 +130,48 @@ jobs:
       #   run: |
       #     echo "APP_TOKEN=${{ steps.my-app.outputs.token }}" >> $GITHUB_ENV
 
-      # - name: Create PR
-      #   id: create-pr
-      #   uses: peter-evans/create-pull-request@v5
-      #   with:
-      #     base: main
-      #     branch: github-actions/readme-update
-      #     delete-branch: true
-      #     author: ${{ github.actor }} <${{ github.actor }}@linkedin.com>
-      #     title: 'Update readme'
-      #     body: ${{ env.COMMIT_MESSAGE }}
-      #     commit-message: ${{ env.COMMIT_MESSAGE }}
-      #     token: ${{ secrets.GITHUB_TOKEN }}
-      #     add-paths: README.md
-            
-      # - name: pr number
-      #   run: | 
-      #     echo "pr number : ${{ steps.create-pr.outputs.pull-request-number }}"
-
-      - name: Create, Approve and Merge PR
-        uses: ./.github/actions/create_approve_and_merge
+      - name: Create PR
+        id: create-pr
+        uses: peter-evans/create-pull-request@v5
         with:
-          title: 'custom title'
-          commit-message: 'test commit message'
-          app-id: ${{ secrets.ALTERNATE_APP_ID }}
-          app-private-key: ${{ secrets.ALTERNATE_APP_PRIVATE_KEY }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          base: main
+          branch: github-actions/readme-update
+          delete-branch: true
+          author: ${{ github.actor }} <${{ github.actor }}@linkedin.com>
+          title: 'Update readme'
+          body: ${{ env.COMMIT_MESSAGE }}
+          commit-message: ${{ env.COMMIT_MESSAGE }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           add-paths: README.md
-          
-      # - name: Approve PR
-      #   if: ${{ env.PR_NUMBER }}
-      #   run: |
-      #      gh pr review ${{ env.PR_NUMBER }} --approve
-      #      echo "approved"
-      #   env:
-      #      GITHUB_TOKEN: ${{ env.APP_TOKEN }}
+            
+      - name: pr number
+        run: | 
+          echo "pr number : ${{ steps.create-pr.outputs.pull-request-number }}"
 
-      # - name: Turn On PR Auto-Merge
-      #   id: auto-merge
-      #   if: ${{ env.PR_NUMBER }}
-      #   run: >
-      #     gh pr merge --squash --auto 
-      #     --repo ${{ github.repository }} --delete-branch
-      #     ${{ env.PR_NUMBER }}
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # - name: Create, Approve and Merge PR
+      #   uses: ./.github/actions/create_approve_and_merge
+      #   with:
+      #     title: 'custom title'
+      #     commit-message: 'test commit message'
+      #     app-id: ${{ secrets.ALTERNATE_APP_ID }}
+      #     app-private-key: ${{ secrets.ALTERNATE_APP_PRIVATE_KEY }}
+      #     github-token: ${{ secrets.GITHUB_TOKEN }}
+      #     add-paths: README.md
+          
+      - name: Approve PR
+        if: ${{ env.PR_NUMBER }}
+        run: |
+           gh pr review ${{ env.PR_NUMBER }} --approve
+           echo "approved"
+        env:
+           GITHUB_TOKEN: ${{ env.APP_TOKEN }}
+
+      - name: Turn On PR Auto-Merge
+        id: auto-merge
+        if: ${{ env.PR_NUMBER }}
+        run: >
+          gh pr merge --squash --auto 
+          --repo ${{ github.repository }} --delete-branch
+          ${{ env.PR_NUMBER }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
