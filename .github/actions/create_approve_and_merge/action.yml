@@ -69,6 +69,7 @@ runs:
       run: |
         git add ${{ inputs.add-paths }}
         git commit -m "Auto-generated changes"
+        git show
         git push origin feature-branch
       shell: bash
 
