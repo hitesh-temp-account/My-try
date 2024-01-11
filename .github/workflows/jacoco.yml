@@ -49,6 +49,7 @@ jobs:
           files=$(find . -type f -and -path '*/build/reports/jacoco/debugCoverage/html/index.html')
           chmod +x ./.github/scripts/code_coverage.py
           table_string=$(python3 ./.github/scripts/code_coverage.py "$files" "")
+          echo "$table_string"
           IFS=',' read -ra table_list <<< "$table_string"
           length=${#table_list[@]}
           coverage=${table_list[$length-1]}
