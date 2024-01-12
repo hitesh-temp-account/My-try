@@ -1,0 +1,163 @@
+# .github/actions/approve_and_merge/action.yml 
+name: 'Approve and Merge PR'
+description: 'Approves and merges a pull request'
+inputs:
+  title:
+    description: 'title'
+    required: true
+  commit-message:
+    description: 'commit message'
+    required: true
+  app-id:
+    description: 'github app id'
+    required: true
+  app-private-key:
+    description: 'github app private key'
+    required: true
+  github-token:
+    description: 'github token'
+    required: true
+  personal-access-token:
+    desccription: 'personal access token to create PR'
+    required: true
+  add-paths:
+    description: 'path of the required changes'
+    required: false
+
+defaults:
+  run:
+    shell: bash
+
+runs:
+  using: 'composite'
+  steps:
+    - name: my-app-install token
+      id: my-app
+      uses: actions/create-github-app-token@v1
+      with:
+        app-id: ${{ inputs.app-id }}
+        private-key: ${{ inputs.app-private-key }}
+
+    - name: Set up Git
+      run: |
+        git config --global user.name "${{ github.actor }}"
+        git config --global user.email "<${{ github.actor }}@linkedin.com>"
+      shell: bash
+
+    - name: create PR
+      run: |
+        changes=$(git diff --name-only ${{ inputs.add-paths }})
+        echo "changes: $changes"
+        if [ "$changes" == "" ]; then
+          echo "No changes to commit. Exiting..."
+          echo "check_changes=false" >> $GITHUB_ENV
+        else
+          echo "check_changes=true" >> $GITHUB_ENV
+          echo "Changes detected. Continuing with the workflow."
+        fi
+      shell: bash
+      env:
+        GH_TOKEN: ${{ github.token }}
+
+    - name: Create branch
+      if: env.check_changes == 'true'
+      run: |
+        git checkout -b new-feature-branch
+      shell: bash
+
+      # Add your build/test steps here
+
+    - name: Commit and push changes
+      if: env.check_changes == 'true'
+      run: |
+        git add ${{ inputs.add-paths }}
+        git commit -m "Auto-generated changes"
+        git show
+        git push origin feature-branch
+      shell: bash
+
+    - name: Create Pull Request
+      id: create_pr
+      if: env.check_changes == 'true'
+      run: |
+        pr_number=$(curl -X POST -H "Authorization: Bearer ${{ inputs.personal-access-token }}" \
+          -H "Accept: application/vnd.github.v3+json" \
+          https://api.github.com/repos/${{ github.repository }}/pulls \
+          -d '{"title":"${{ inputs.title }}","head":"feature-branch","base":"main","body":"${{ inputs.commit-message }}"}' | jq -r '.number')
+
+        echo "PR number: $pr_number"
+        echo "PR_NUMBER=$pr_number" >> $GITHUB_ENV
+      shell: bash
+            
+    - name: Approve PR
+      if: ${{ env.PR_NUMBER }}
+      run: |
+        gh pr review ${{ env.PR_NUMBER }} --approve
+      shell: bash
+      env:
+        GITHUB_TOKEN: ${{ steps.my-app.outputs.token }}
+
+    - name: Add Empty Commit to Auto-Created PR
+      if: env.PR_NUMBER
+      run: |
+        # Checkout the branch associated with the PR
+        git checkout feature-branch
+
+        # Set user information for the empty commit
+        git config user.name "hiteshkuberr"
+        git config user.email "hiteshkuberr@gmail.com"
+
+        # Add an empty commit
+        git commit --allow-empty -m "Add empty commit to trigger actions"
+
+        # Push the changes to the existing branch
+        git push origin feature-branch
+      shell: bash
+
+    - name: Turn On PR Auto-Merge
+      if: ${{ env.PR_NUMBER }}
+      run: |
+        gh pr merge --squash --auto --repo ${{ github.repository }} --delete-branch ${{ env.PR_NUMBER }}
+      shell: bash
+      env:
+        GITHUB_TOKEN: ${{ inputs.github-token }}
+
+    - name: Wait for checks to complete
+      if: ${{ env.PR_NUMBER }}
+      run: |
+        echo "pr number: ${{ env.PR_NUMBER }}"
+        # Replace 'YOUR-ACCESS-TOKEN' with your actual GitHub access token
+          ACCESS_TOKEN=${{ inputs.personal-access-token }}
+          REPO_OWNER="hitesh-temp-account"
+          REPO_NAME="Breach"
+        pr_checks_status=$(curl -s -H "Authorization: Bearer ${{ inputs.personal-access-token }}" \
+          -H "Accept: application/vnd.github.v3+json" \
+          https://api.github.com/repos/hitesh-temp-account/${{ github.repository }}/pulls/${{ env.PR_NUMBER }}/commits/${{ github.sha }}/status | jq -r '.state')
+        echo "status: $pr_checks_status"
+
+        while [ "$pr_checks_status" != "success" ] && [ "$pr_checks_status" != "failure" ]; do
+          sleep 5
+
+          # Get the latest commit SHA
+          LATEST_COMMIT_SHA=$(curl -s -H "Authorization: token $ACCESS_TOKEN" "https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/commits" | jq -r '.[0].sha')
+
+          # Get the state of the latest commit
+          COMMIT_STATE=$(curl -s -H "Authorization: token $ACCESS_TOKEN" "https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/statuses/$LATEST_COMMIT_SHA" | jq -r '.[0].state')
+
+          echo "State of the latest commit: $COMMIT_STATE"
+          pr_checks_status = $COMMIT_STATE
+          # pr_checks_status_api=$(curl -s -H "Authorization: Bearer ${{ inputs.personal-access-token }}" \
+          #   -H "Accept: application/vnd.github.v3+json" \
+          #   https://api.github.com/repos/hitesh-temp-account/${{ github.repository }}/pulls/${{ env.PR_NUMBER }}/commits/${{ github.sha }}/status)
+          # echo "API Response: $pr_checks_status_api"
+          # pr_checks_status=$(echo "$pr_checks_status_api" | jq -r '.state')
+          # echo "PR Checks Status: $pr_checks_status"
+        done
+
+        if [ "$pr_checks_status" == "success" ]; then
+          echo "PR checks passed. Deleting branch."
+          git push origin --delete new-feature-branch
+        else
+          echo "PR checks failed. Keeping the branch."
+        fi
+      shell: bash
