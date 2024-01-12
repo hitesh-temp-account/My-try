@@ -186,7 +186,7 @@ jobs:
           # echo "status: $pr_merged"
           timer=0
 
-          while [[ "$pr_merged" != "true" || $timer -lt 9]]; do
+          while [[ "$pr_merged" != "true" || $timer -lt 9 ]]; do
             sleep 5
           
             # Get PR info
