@@ -60,7 +60,7 @@ runs:
         fi
       shell: bash
       env:
-        GITHUB_TOKEN: ${{ inputs.personal-access-token }}
+        GH_TOKEN: ${{ github.token }}
 
     # - name: Create branch
     #   if: env.check_changes == 'true'
