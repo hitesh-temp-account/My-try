@@ -2,10 +2,7 @@ name: my test name changed
 
 on:
   push:
-    branches:
-      - main
   pull_request:
-  #   paths-ignore: "**/*.md"
   
 jobs:
   testing:
