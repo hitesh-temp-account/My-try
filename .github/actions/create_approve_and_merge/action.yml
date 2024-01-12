@@ -53,7 +53,7 @@ runs:
           git show
           git push -u origin feature-branch
           echo "pushed successfully"
-          pr_numer=$(gh pr create --title "The bug is fixed" --head feature-branch --base main --body "Everything works again" | jq -r '.number')
+          pr_numer=$(gh pr create --title "The bug is fixed" --head feature-branch --base main --body "Everything works again" .number)
           echo $pr_numer
           echo "PR_NUMBER=$pr_number" >> $GITHUB_ENV
           echo "PR created"
