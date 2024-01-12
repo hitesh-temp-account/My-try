@@ -57,8 +57,8 @@ runs:
           echo "pr link is $pr"
           IFS='/' read -ra pr_parts <<< "$pr"
           echo "pr parts are ${pr_parts[@]}"
-          echo "length is ${#pr_parts[@]}"
-          pr_numer=${pr_parts[${#pr_parts[@]}-2]}
+          echo "length is ${#pr_parts[@]} last element is ${pr_parts[6]}"
+          pr_numer=${pr_parts[${#pr_parts[@]}-1]}
           echo "pr number $pr_number"
           echo "PR_NUMBER=$pr_number" >> $GITHUB_ENV
           echo "PR created"
