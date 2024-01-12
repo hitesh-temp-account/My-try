@@ -184,8 +184,9 @@ jobs:
           pr_merged="false"
           # pr_merged=$(curl -s -H "Authorization: token $ACCESS_TOKEN" "https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/pulls/${{ steps.create-pr.outputs.pull-request-number }}" | jq -r '.merged')
           # echo "status: $pr_merged"
+          timer=0
 
-          while [ "$pr_merged" != "true" ]; do
+          while [ "$pr_merged" != "true" || $timer>9]; do
             sleep 5
           
             # Get PR info
@@ -193,6 +194,7 @@ jobs:
             echo "pr: $PR"
             pr_merged=$(echo "$PR" | jq -r '.merged')
             echo "State of the PR: $pr_merged"
+            timer=timer+5
           done
 
           if [ "$pr_merged" == "true" ]; then
