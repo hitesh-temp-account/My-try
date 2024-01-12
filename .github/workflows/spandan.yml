@@ -196,7 +196,7 @@ jobs:
 
           if [ "$pr_merged" == "true" ]; then
             echo "PR checks passed. Deleting branch."
-            git push origin --delete new-feature-branch
+            git push origin --delete github-actions/readme-update
           else
             echo "PR checks failed. Keeping the branch."
           fi
