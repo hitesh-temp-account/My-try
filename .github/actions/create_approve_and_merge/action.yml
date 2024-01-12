@@ -56,7 +56,7 @@ runs:
           pr=$(gh pr create --title "The bug is fixed" --head feature-branch --base main --body "Everything works again")
           echo "pr link is $pr"
           IFS='/' read -ra pr_parts <<< "$pr"
-          echo "parts are $pr_parts"
+          echo "pr parts are ${pr_parts[@]}"
           pr_numer=${pr_parts[${#pr_parts[@]}-1]}
           echo "pr number $pr_number"
           echo "PR_NUMBER=$pr_number" >> $GITHUB_ENV
