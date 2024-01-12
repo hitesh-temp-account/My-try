@@ -8,6 +8,12 @@ inputs:
   commit-message:
     description: 'commit message'
     required: true
+  create-pr-app-id:
+    description: 'github app id'
+    required: true
+  create-pr-app-private-key:
+    description: 'github app id'
+    required: true
   app-id:
     description: 'github app id'
     required: true
@@ -31,8 +37,15 @@ defaults:
 runs:
   using: 'composite'
   steps:
-    - name: my-app-install token
-      id: my-app
+    - name: my-app-install token for create Pr
+      id: my-app-create
+      uses: actions/create-github-app-token@v1
+      with:
+        app-id: ${{ inputs.create-pr-app-id }}
+        private-key: ${{ inputs.create-pr-app-private-key }}
+
+    - name: my-app-install token for approve PR
+      id: my-app-approve
       uses: actions/create-github-app-token@v1
       with:
         app-id: ${{ inputs.app-id }}
@@ -66,7 +79,7 @@ runs:
         fi
       shell: bash
       env:
-        GH_TOKEN: ${{ github.token }}
+        GH_TOKEN: ${{ steps.my-app-create.outputs.token }}
 
     # - name: Create branch
     #   if: env.check_changes == 'true'
@@ -103,7 +116,7 @@ runs:
         gh pr review ${{ env.PR_NUMBER }} --approve
       shell: bash
       env:
-        GITHUB_TOKEN: ${{ steps.my-app.outputs.token }}
+        GITHUB_TOKEN: ${{ steps.my-app-approve.outputs.token }}
 
     # - name: Add Empty Commit to Auto-Created PR
     #   if: env.PR_NUMBER
