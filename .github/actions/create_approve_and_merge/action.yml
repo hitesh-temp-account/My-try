@@ -49,11 +49,11 @@ runs:
         if [ "$(git diff --name-only ${{ inputs.add-paths }})" ]; then
           git checkout -b feature-branch
           git add ${{ inputs.add-paths }}
-          git commit -m "Auto-generated changes"
+          git commit -m "${{ inputs.commit-message }}"
           git show
           git push -u origin feature-branch
           echo "pushed successfully"
-          pr=$(gh pr create --title "The bug is fixed" --head feature-branch --base main --body "Everything works again")
+          pr=$(gh pr create --title "The bug is fixed" --head feature-branch --base main --body "${{ inputs.commit-message }}")
           echo "pr link is $pr"
           IFS='/' read -ra pr_parts <<< "$pr"
           echo "pr parts are ${pr_parts[@]}"
@@ -125,7 +125,7 @@ runs:
     - name: Turn On PR Auto-Merge
       if: ${{ env.PR_NUMBER }}
       run: |
-        gh pr merge --squash --auto --repo ${{ github.repository }} --delete-branch ${{ env.PR_NUMBER }}
+        gh pr merge ${{ env.PR_NUMBER }} --squash --body "${{ inputs.commit-message }}" --delete-branch
       shell: bash
       env:
         GITHUB_TOKEN: ${{ inputs.github-token }}
