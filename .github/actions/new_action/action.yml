@@ -130,26 +130,21 @@ runs:
         ACCESS_TOKEN=${{ inputs.personal-access-token }}
         REPO_OWNER="hitesh-temp-account"
         REPO_NAME="Breach"
-        pr_checks_status=$(curl -s -H "Authorization: Bearer ${{ inputs.personal-access-token }}" \
+        pr_merged=$(curl -s -H "Authorization: Bearer ${{ inputs.personal-access-token }}" \
           -H "Accept: application/vnd.github.v3+json" \
-          https://api.github.com/repos/hitesh-temp-account/${{ github.repository }}/pulls/${{ env.PR_NUMBER }}/commits/${{ github.sha }}/status | jq -r '.state')
-        echo "status: $pr_checks_status"
+          https://api.github.com/repos/hitesh-temp-account/${{ github.repository }}/pulls/${{ env.PR_NUMBER }} | jq -r '.merged')
+        echo "status: $pr_merged"
 
-        while [ "$pr_checks_status" != "success" ] && [ "$pr_checks_status" != "failure" ]; do
+        while [ "$pr_merged" != "true" ]; do
           sleep 5
+          
+          # Get PR info
+          PR=$(curl -s -H "Authorization: token $ACCESS_TOKEN" "https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/pulls/${{ env.PR_NUMBER }}")
+          echo "pr: $PR"
 
-          # Get the latest commit SHA
-          LATEST_COMMIT_SHA=$(curl -s -H "Authorization: token $ACCESS_TOKEN" "https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/commits" | jq -r '.[0].sha')
-          echo "latest commit sha: $LATEST_COMMIT_SHA"
+          pr_merged=$(echo "$PR" | jq -r '.merged')
 
-          # Get the state of the latest commit
-          COMMIT=$(curl -s -H "Authorization: token $ACCESS_TOKEN" "https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/statuses/$LATEST_COMMIT_SHA")
-          echo "commit: $COMMIT"
-
-          COMMIT_STATE=$(echo "$COMMIT" | jq -r '.[0].state')
-
-          echo "State of the latest commit: $COMMIT_STATE"
-          pr_checks_status=$COMMIT_STATE
+          echo "State of the PR: $pr_merged"
           
           # pr_checks_status_api=$(curl -s -H "Authorization: Bearer ${{ inputs.personal-access-token }}" \
           #   -H "Accept: application/vnd.github.v3+json" \
@@ -159,7 +154,7 @@ runs:
           # echo "PR Checks Status: $pr_checks_status"
         done
 
-        if [ "$pr_checks_status" == "success" ]; then
+        if [ "$pr_merged" == "true" ]; then
           echo "PR checks passed. Deleting branch."
           git push origin --delete new-feature-branch
         else
