@@ -51,7 +51,6 @@ runs:
           git add ${{ inputs.add-paths }}
           git commit -m "Auto-generated changes"
           git show
-          git pull --rebase
           git push -u origin HEAD
           echo "pushed successfully"
           gh pr create --title "The bug is fixed" --head feature-branch --base main --body "Everything works again"
