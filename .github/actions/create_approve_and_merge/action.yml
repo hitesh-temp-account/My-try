@@ -54,7 +54,7 @@ runs:
           git push -u origin feature-branch
           echo "pushed successfully"
           pr=$(gh pr create --title "The bug is fixed" --head feature-branch --base main --body "Everything works again")
-          echo $pr
+          echo "pr link is $pr"
           IFS='/' read -ra pr_parts <<< "$pr"
           pr_numer=${pr_parts[${#pr_parts[@]}-1]}
           echo "pr number $pr_number"
