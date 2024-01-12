@@ -44,14 +44,15 @@ runs:
         git config --global user.email "<${{ github.actor }}@linkedin.com>"
       shell: bash
 
-    - name: Determine if there are changes
+    - name: create PR
       run: |
         if [ "$(git diff --name-only ${{ inputs.add-paths }})" ]; then
+          git branch -D feature-branch
           git checkout -b feature-branch
           git add ${{ inputs.add-paths }}
           git commit -m "Auto-generated changes"
           git show
-          git push -u origin HEAD
+          git push -u origin feature-branch
           echo "pushed successfully"
           gh pr create --title "The bug is fixed" --head feature-branch --base main --body "Everything works again"
           echo "PR created"
