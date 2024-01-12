@@ -194,7 +194,7 @@ jobs:
             echo "pr: $PR"
             pr_merged=$(echo "$PR" | jq -r '.merged')
             echo "State of the PR: $pr_merged"
-            timer=timer+5
+            timer=$((timer+5))
           done
 
           if [ "$pr_merged" == "true" ]; then
