@@ -181,7 +181,7 @@ jobs:
           ACCESS_TOKEN=${{ env.APP_TOKEN }}
           REPO_OWNER="hitesh-temp-account"
           REPO_NAME="Breach"
-          pr_merged = "false"
+          pr_merged="false"
           # pr_merged=$(curl -s -H "Authorization: token $ACCESS_TOKEN" "https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/pulls/${{ steps.create-pr.outputs.pull-request-number }}" | jq -r '.merged')
           # echo "status: $pr_merged"
 
