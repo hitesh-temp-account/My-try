@@ -130,7 +130,9 @@ runs:
         ACCESS_TOKEN=${{ inputs.personal-access-token }}
         REPO_OWNER="hitesh-temp-account"
         REPO_NAME="Breach"
-        pr_merged=$(curl -s -H "Authorization: token $ACCESS_TOKEN" "https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/pulls/${{ env.PR_NUMBER }}" | jq -r '.merged')
+        pr_merged=$(curl -s -H "Authorization: Bearer ${{ inputs.personal-access-token }}" \
+          -H "Accept: application/vnd.github.v3+json" \
+          https://api.github.com/repos/hitesh-temp-account/${{ github.repository }}/pulls/${{ env.PR_NUMBER }} | jq -r '.merged')
         echo "status: $pr_merged"
 
         while [ "$pr_merged" != "true" ]; do
@@ -141,6 +143,13 @@ runs:
           echo "pr: $PR"
           pr_merged=$(echo "$PR" | jq -r '.merged')
           echo "State of the PR: $pr_merged"
+                    
+          # pr_checks_status_api=$(curl -s -H "Authorization: Bearer ${{ inputs.personal-access-token }}" \
+          #   -H "Accept: application/vnd.github.v3+json" \
+          #   https://api.github.com/repos/hitesh-temp-account/${{ github.repository }}/pulls/${{ env.PR_NUMBER }}/commits/${{ github.sha }}/status)
+          # echo "API Response: $pr_checks_status_api"
+          # pr_checks_status=$(echo "$pr_checks_status_api" | jq -r '.state')
+          # echo "PR Checks Status: $pr_checks_status"
         done
 
         if [ "$pr_merged" == "true" ]; then
