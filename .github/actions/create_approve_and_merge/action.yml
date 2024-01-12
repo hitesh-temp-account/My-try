@@ -125,7 +125,7 @@ runs:
     - name: Turn On PR Auto-Merge
       if: ${{ env.PR_NUMBER }}
       run: |
-        gh pr merge ${{ env.PR_NUMBER }} --squash --body "${{ inputs.commit-message }}" --delete-branch
+        gh pr merge ${{ env.PR_NUMBER }} --squash --auto --body "${{ inputs.commit-message }}" --delete-branch
       shell: bash
       env:
         GITHUB_TOKEN: ${{ inputs.github-token }}
