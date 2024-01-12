@@ -178,7 +178,7 @@ jobs:
         run: |
           echo "pr number: ${{ steps.create-pr.outputs.pull-request-number }}"
           # Replace 'YOUR-ACCESS-TOKEN' with your actual GitHub access token
-          ACCESS_TOKEN=${{ inputs.personal-access-token }}
+          ACCESS_TOKEN=${{ env.APP_TOKEN }}
           REPO_OWNER="hitesh-temp-account"
           REPO_NAME="Breach"
           pr_merged=$(curl -s -H "Authorization: token $ACCESS_TOKEN" "https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/pulls/${{ steps.create-pr.outputs.pull-request-number }}" | jq -r '.merged')
