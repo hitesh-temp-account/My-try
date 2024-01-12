@@ -51,7 +51,7 @@ runs:
           git add ${{ inputs.add-paths }}
           git commit -m "${{ inputs.commit-message }}"
           git show
-          git push -u origin feature-branch
+          git push origin feature-branch
           echo "pushed successfully"
           pr=$(gh pr create --title "The bug is fixed" --head feature-branch --base main --body "${{ inputs.commit-message }}")
           echo "pr link is $pr"
@@ -60,7 +60,7 @@ runs:
           echo "length is ${#pr_parts[@]} last element is ${pr_parts[${#pr_parts[@]}-1]}"
           echo "PR_NUMBER=${pr_parts[${#pr_parts[@]}-1]}" >> $GITHUB_ENV
           echo "PR created"
-          echo "{{ env.PR_NUMBER }}"
+          echo "${{ env.PR_NUMBER }}"
         else 
           echo "No file changes"
         fi
