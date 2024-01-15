@@ -66,7 +66,7 @@ runs:
           git show
           git push origin feature-branch
           echo "pushed successfully"
-          pr=$(gh pr create --title "The bug is fixed" --head feature-branch --base main --body "${{ inputs.commit-message }}")
+          pr=$(gh pr create --title "The bug is fixed" --head feature-branch-$(shuf -i 10000000-99999999 -n 1) --base main --body "${{ inputs.commit-message }}")
           echo "pr link is $pr"
           IFS='/' read -ra pr_parts <<< "$pr"
           echo "pr parts are ${pr_parts[@]}"
