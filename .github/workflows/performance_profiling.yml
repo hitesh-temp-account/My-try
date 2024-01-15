@@ -1,0 +1,45 @@
+name: Performance Profiling
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - '*'
+
+jobs:
+  internal_memory_usage_calculate:
+    name: Internal Memory Usage
+    runs-on: ubuntu-latest
+
+    outputs:
+      on_base_branch: ${{ steps.on_base_branch }}
+      on_current_branch: ${{ steps.on_current_branch }}
+
+    steps:
+      - name: Checkout PR base branch
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.base_ref }}
+          
+      - name: on base branch
+        id: on_base_branch
+        uses: ./.github/actions/internal_memory_usage
+
+      - name: akhil
+        run: |
+          echo "::set-output name=on_base_branch::${{ steps.on_base_branch.outputs.abc }}"
+          echo "${{ outputs.on_base_branch }}"
+          
+      - name: Checkout the code
+        uses: actions/checkout@v3
+
+      - name: on current branch
+        id: on_current_branch
+        uses: ./.github/actions/internal_memory_usage
+
+      - name: reddy
+        run: |
+          echo "::set-output name=on_current_branch::${{ steps.on_current_branch.outputs.def }}"
+          echo "${{ outputs.on_current_branch }}"
