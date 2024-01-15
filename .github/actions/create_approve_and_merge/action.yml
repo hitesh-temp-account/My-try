@@ -44,13 +44,6 @@ runs:
         app-id: ${{ inputs.create-pr-app-id }}
         private-key: ${{ inputs.create-pr-app-private-key }}
 
-    - name: my-app-install token for approve PR
-      id: my-app-approve
-      uses: actions/create-github-app-token@v1
-      with:
-        app-id: ${{ inputs.app-id }}
-        private-key: ${{ inputs.app-private-key }}
-
     - name: Set up Git
       run: |
         git config --global user.name "${{ github.actor }}"
@@ -59,57 +52,29 @@ runs:
 
     - name: create PR
       run: |
-        if [ "$(git diff --name-only ${{ inputs.add-paths }})" ]; then
-          random_number=$(shuf -i 10000000-99999999 -n 1)
-          git checkout -b feature-branch-$random_number
-          git add ${{ inputs.add-paths }}
-          git commit -m "${{ inputs.commit-message }}"
-          git show
-          git push origin feature-branch-$random_number
-          echo "pushed successfully"
-          pr=$(gh pr create --title "The bug is fixed" --head feature-branch-$random_number --base main --body "${{ inputs.commit-message }}")
-          echo "pr link is $pr"
-          IFS='/' read -ra pr_parts <<< "$pr"
-          echo "pr parts are ${pr_parts[@]}"
-          echo "length is ${#pr_parts[@]} last element is ${pr_parts[${#pr_parts[@]}-1]}"
-          echo "PR_NUMBER=${pr_parts[${#pr_parts[@]}-1]}" >> $GITHUB_ENV
-          echo "PR created"
-          echo "${{ env.PR_NUMBER }}"
-        else 
-          echo "No file changes"
-        fi
+        random_number=$(shuf -i 10000000-99999999 -n 1)
+        git checkout -b feature-branch-$random_number
+        git add ${{ inputs.add-paths }}
+        git commit -m "${{ inputs.commit-message }}"
+        git show
+        git push origin feature-branch-$random_number
+        echo "pushed successfully"
+        pr=$(gh pr create --title "The bug is fixed" --head feature-branch-$random_number --base main --body "${{ inputs.commit-message }}")
+        echo "pr link is $pr"
+        IFS='/' read -ra pr_parts <<< "$pr"
+        echo "PR_NUMBER=${pr_parts[${#pr_parts[@]}-1]}" >> $GITHUB_ENV
+        echo "PR created"
       shell: bash
       env:
         GH_TOKEN: ${{ steps.my-app-create.outputs.token }}
 
-    # - name: Create branch
-    #   if: env.check_changes == 'true'
-    #   run: |
-    #     git checkout -b feature-branch
-    #   shell: bash
-
-    #   # Add your build/test steps here
-
-    # - name: Commit and push changes
-    #   if: env.check_changes == 'true'
-    #   run: |
-    #     git add ${{ inputs.add-paths }}
-    #     git commit -m "Auto-generated changes"
-    #     git show
-    #     git push origin feature-branch
-    #   shell: bash
-
-    # - name: Create Pull Request
-    #   id: create_pr
-    #   if: env.check_changes == 'true'
-    #   run: |
-    #     pr_number=$(curl -X POST -H "Authorization: Bearer ${{ inputs.personal-access-token }}" \
-    #       -H "Accept: application/vnd.github.v3+json" \
-    #       https://api.github.com/repos/${{ github.repository }}/pulls \
-    #       -d '{"title":"${{ inputs.title }}","head":"feature-branch","base":"main","body":"${{ inputs.commit-message }}"}' | jq -r '.number')
-    #     echo "PR number: $pr_number"
-    #     echo "PR_NUMBER=$pr_number" >> $GITHUB_ENV
-    #   shell: bash
+    - name: my-app-install token for approve PR
+      if: ${{ env.PR_NUMBER }}
+      id: my-app-approve
+      uses: actions/create-github-app-token@v1
+      with:
+        app-id: ${{ inputs.app-id }}
+        private-key: ${{ inputs.app-private-key }}
 
     - name: Approve PR
       if: ${{ env.PR_NUMBER }}
@@ -119,56 +84,10 @@ runs:
       env:
         GITHUB_TOKEN: ${{ steps.my-app-approve.outputs.token }}
 
-    # - name: Add Empty Commit to Auto-Created PR
-    #   if: env.PR_NUMBER
-    #   run: |
-    #     # Checkout the branch associated with the PR
-    #     git checkout feature-branch
-
-    #     # Set user information for the empty commit
-    #     git config user.name "hiteshkuberr"
-    #     git config user.email "hiteshkuberr@gmail.com"
-
-    #     # Add an empty commit
-    #     git commit --allow-empty -m "Add empty commit to trigger actions"
-
-    #     # Push the changes to the existing branch
-    #     git push origin feature-branch
-    #   shell: bash
-
     - name: Turn On PR Auto-Merge
       if: ${{ env.PR_NUMBER }}
       run: |
-        gh pr merge ${{ env.PR_NUMBER }} --squash --auto --body "${{ inputs.commit-message }}" --delete-branch
+        gh pr merge ${{ env.PR_NUMBER }} --squash --auto --body "${{ inputs.commit-message }}"
       shell: bash
       env:
         GITHUB_TOKEN: ${{ inputs.github-token }}
-
-    # - name: Wait for checks to complete
-    #   if: ${{ env.PR_NUMBER }}
-    #   run: |
-    #     echo "pr number: ${{ env.PR_NUMBER }}"
-    #     pr_checks_status=$(curl -s -H "Authorization: Bearer ${{ inputs.personal-access-token }}" \
-    #       -H "Accept: application/vnd.github.v3+json" \
-    #       https://api.github.com/repos/hitesh-temp-account/${{ github.repository }}/pulls/${{ env.PR_NUMBER }}/commits/${{ github.sha }}/status | jq -r '.state')
-    #     echo "status: $pr_checks_status"
-
-    #     while [ "$pr_checks_status" != "success" ] && [ "$pr_checks_status" != "failure" ]; do
-    #       sleep 5
-    #       pr_checks_status_api=$(curl -s -H "Authorization: Bearer ${{ inputs.personal-access-token }}" \
-    #         -H "Accept: application/vnd.github.v3+json" \
-    #         https://api.github.com/repos/hitesh-temp-account/${{ github.repository }}/pulls/${{ env.PR_NUMBER }}/commits/${{ github.sha }}/status)
-    #       echo "API Response: $pr_checks_status_api"
-    #       pr_checks_status=$(echo "$pr_checks_status_api" | jq -r '.state')
-    #       echo "PR Checks Status: $pr_checks_status"
-    #     done
-
-    #     if [ "$pr_checks_status" == "success" ]; then
-    #       echo "PR checks passed. Deleting branch."
-    #       git push origin --delete feature-branch
-    #     else
-    #       echo "PR checks failed. Keeping the branch."
-    #     fi
-    #   shell: bash
-
-
