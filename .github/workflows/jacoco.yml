@@ -51,7 +51,7 @@ jobs:
           if [ "$old_percentage" != "$new_percentage" ]; then
             echo "COVERAGE_CHANGED=true" >> $GITHUB_ENV
             color=""
-            if [ $(echo "$new_percentage < 35.00" | bc -l) ]; then
+            if (( $(echo "$new_percentage < 35.00" | bc -l) )); then
               color="red"
               echo "updated to red"
             else
