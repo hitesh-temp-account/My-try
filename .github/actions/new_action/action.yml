@@ -59,10 +59,17 @@ runs:
       env:
         GH_TOKEN: ${{ github.token }}
 
+    - name: Generate 8-digit random number
+      id: random-number
+      run: echo "RANDOM_NUMBER=$(shuf -i 10000000-99999999 -n 1)" >> $GITHUB_ENV
+
+    - name: Display random number
+      run: echo "Random Number: ${{ env.RANDOM_NUMBER }}"
+
     - name: Create branch
       if: env.check_changes == 'true'
       run: |
-        git checkout -b new-feature-branch
+        git checkout -b new-feature-branch-${{ env.RANDOM_NUMBER }}
       shell: bash
 
       # Add your build/test steps here
@@ -73,7 +80,7 @@ runs:
         git add ${{ inputs.add-paths }}
         git commit -m "Auto-generated changes"
         git show
-        git push origin new-feature-branch
+        git push origin new-feature-branch-${{ env.RANDOM_NUMBER }
       shell: bash
 
     - name: Create Pull Request
@@ -83,7 +90,7 @@ runs:
         pr_number=$(curl -X POST -H "Authorization: Bearer ${{ inputs.personal-access-token }}" \
           -H "Accept: application/vnd.github.v3+json" \
           https://api.github.com/repos/${{ github.repository }}/pulls \
-          -d '{"title":"${{ inputs.title }}","head":"new-feature-branch","base":"main","body":"${{ inputs.commit-message }}"}' | jq -r '.number')
+          -d '{"title":"${{ inputs.title }}","head":"new-feature-branch-${{ env.RANDOM_NUMBER }","base":"main","body":"${{ inputs.commit-message }}"}' | jq -r '.number')
 
         echo "PR number: $pr_number"
         echo "PR_NUMBER=$pr_number" >> $GITHUB_ENV
@@ -122,31 +129,31 @@ runs:
       env:
         GITHUB_TOKEN: ${{ inputs.github-token }}
 
-    - name: Wait for checks to complete
-      if: ${{ env.PR_NUMBER }}
-      run: |
-        echo "pr number: ${{ env.PR_NUMBER }}"
-        # Replace 'YOUR-ACCESS-TOKEN' with your actual GitHub access token
-        ACCESS_TOKEN=${{ inputs.personal-access-token }}
-        REPO_OWNER="hitesh-temp-account"
-        REPO_NAME="Breach"
-        pr_merged=$(curl -s -H "Authorization: token $ACCESS_TOKEN" "https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/pulls/${{ env.PR_NUMBER }}" | jq -r '.merged')
-        echo "status: $pr_merged"
+    # - name: Wait for checks to complete
+    #   if: ${{ env.PR_NUMBER }}
+    #   run: |
+    #     echo "pr number: ${{ env.PR_NUMBER }}"
+    #     # Replace 'YOUR-ACCESS-TOKEN' with your actual GitHub access token
+    #     ACCESS_TOKEN=${{ inputs.personal-access-token }}
+    #     REPO_OWNER="hitesh-temp-account"
+    #     REPO_NAME="Breach"
+    #     pr_merged=$(curl -s -H "Authorization: token $ACCESS_TOKEN" "https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/pulls/${{ env.PR_NUMBER }}" | jq -r '.merged')
+    #     echo "status: $pr_merged"
 
-        while [ "$pr_merged" != "true" ]; do
-          sleep 5
+    #     while [ "$pr_merged" != "true" ]; do
+    #       sleep 5
           
-          # Get PR info
-          PR=$(curl -s -H "Authorization: token $ACCESS_TOKEN" "https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/pulls/${{ env.PR_NUMBER }}")
-          echo "pr: $PR"
-          pr_merged=$(echo "$PR" | jq -r '.merged')
-          echo "State of the PR: $pr_merged"
-        done
+    #       # Get PR info
+    #       PR=$(curl -s -H "Authorization: token $ACCESS_TOKEN" "https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/pulls/${{ env.PR_NUMBER }}")
+    #       echo "pr: $PR"
+    #       pr_merged=$(echo "$PR" | jq -r '.merged')
+    #       echo "State of the PR: $pr_merged"
+    #     done
 
-        if [ "$pr_merged" == "true" ]; then
-          echo "PR checks passed. Deleting branch."
-          git push origin --delete new-feature-branch
-        else
-          echo "PR checks failed. Keeping the branch."
-        fi
-      shell: bash
+    #     if [ "$pr_merged" == "true" ]; then
+    #       echo "PR checks passed. Deleting branch."
+    #       git push origin --delete new-feature-branch
+    #     else
+    #       echo "PR checks failed. Keeping the branch."
+    #     fi
+    #   shell: bash
