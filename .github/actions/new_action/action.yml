@@ -23,9 +23,6 @@ inputs:
   github-token:
     description: 'github token'
     required: true
-  add-paths:
-    description: 'path of the required changes'
-    required: false
 
 defaults:
   run:
@@ -54,21 +51,6 @@ runs:
         git config --global user.email "<${{ github.actor }}@linkedin.com>"
       shell: bash
 
-    - name: check changes
-      run: |
-        changes=$(git diff --name-only ${{ inputs.add-paths }})
-        echo "changes: $changes"
-        if [ "$changes" == "" ]; then
-          echo "No changes to commit. Exiting..."
-          echo "check_changes=false" >> $GITHUB_ENV
-        else
-          echo "check_changes=true" >> $GITHUB_ENV
-          echo "Changes detected. Continuing with the workflow."
-        fi
-      shell: bash
-      env:
-        GH_TOKEN: ${{ github.token }}
-
     - name: Generate 8-digit random number
       if: env.check_changes == 'true'
       run: |
@@ -82,7 +64,6 @@ runs:
       shell: bash
 
     - name: Create branch
-      if: env.check_changes == 'true'
       run: |
         git checkout -b new-feature-branch-${{ env.RANDOM_NUMBER }}
       shell: bash
@@ -90,9 +71,8 @@ runs:
       # Add your build/test steps here
 
     - name: Commit and push changes
-      if: env.check_changes == 'true'
       run: |
-        git add ${{ inputs.add-paths }}
+        git add README.md
         git commit -m "Auto-generated changes"
         git show
         git push origin new-feature-branch-${{ env.RANDOM_NUMBER }}
@@ -100,7 +80,6 @@ runs:
 
     - name: Create Pull Request
       id: create_pr
-      if: env.check_changes == 'true'
       run: |
         pr_number=$(curl -X POST -H "Authorization: Bearer ${{ steps.my-app-create.outputs.token }}" \
           -H "Accept: application/vnd.github.v3+json" \
