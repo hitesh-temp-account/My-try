@@ -66,7 +66,7 @@ jobs:
           git status
       
       - name: Create, Approve and Merge PR
-        if: env.COVERAGE_CHANGED == true
+        if: env.COVERAGE_CHANGED == 'true'
         uses: ./.github/actions/create_approve_and_merge
         with:
           title: 'custom title'
@@ -76,22 +76,4 @@ jobs:
           app-id: ${{ secrets.ALTERNATE_APP_ID }}
           app-private-key: ${{ secrets.ALTERNATE_APP_PRIVATE_KEY }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          add-paths: README.md
           
-      # - name: Approve PR
-      #   if: steps.create-pr.outputs.pull-request-number
-      #   run: |
-      #      gh pr review ${{ steps.create-pr.outputs.pull-request-number }} --approve
-      #      echo "approved"
-      #   env:
-      #      GITHUB_TOKEN: ${{ env.APP_TOKEN }}
-
-      # - name: Turn On PR Auto-Merge
-      #   id: auto-merge
-      #   if: steps.create-pr.outputs.pull-request-number
-      #   run: >
-      #     gh pr merge --squash --auto 
-      #     --repo ${{ github.repository }} --delete-branch
-      #     ${{ steps.create-pr.outputs.pull-request-numberR }}
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
