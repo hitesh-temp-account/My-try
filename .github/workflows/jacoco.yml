@@ -58,7 +58,7 @@ jobs:
               echo "updated to green"
               color="green"
             fi
-            sed -i "s/coverage-[^.]*.svg)/coverage-$new_percentage\%25-$color.svg)/" README.md
+            sed -i "s/coverage-*.svg)/coverage-$new_percentage\%25-$color.svg)/" README.md
             cat README.md
           fi
           git status
