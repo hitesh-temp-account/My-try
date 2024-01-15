@@ -60,13 +60,14 @@ runs:
     - name: create PR
       run: |
         if [ "$(git diff --name-only ${{ inputs.add-paths }})" ]; then
-          git checkout -b feature-branch
+          random_number=$(shuf -i 10000000-99999999 -n 1)
+          git checkout -b feature-branch-$random_number
           git add ${{ inputs.add-paths }}
           git commit -m "${{ inputs.commit-message }}"
           git show
-          git push origin feature-branch
+          git push origin feature-branch-$random_number
           echo "pushed successfully"
-          pr=$(gh pr create --title "The bug is fixed" --head feature-branch-$(shuf -i 10000000-99999999 -n 1) --base main --body "${{ inputs.commit-message }}")
+          pr=$(gh pr create --title "The bug is fixed" --head feature-branch-$random_number --base main --body "${{ inputs.commit-message }}")
           echo "pr link is $pr"
           IFS='/' read -ra pr_parts <<< "$pr"
           echo "pr parts are ${pr_parts[@]}"
