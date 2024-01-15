@@ -39,14 +39,14 @@ runs:
       uses: actions/create-github-app-token@v1
       with:
         app-id: ${{ inputs.pr-creation-app-id }}
-        private-key: ${{ inputs.pr-creation-private-key }}
+        private-key: ${{ inputs.pr-creation-app-private-key }}
 
     - name: my-app-install token for approve PR
       id: my-app-approve
       uses: actions/create-github-app-token@v1
       with:
         app-id: ${{ inputs.pr-approval-app-id }}
-        private-key: ${{ inputs.pr-approval-private-key }}
+        private-key: ${{ inputs.pr-approval-app-private-key }}
 
     - name: Set up Git
       run: |
