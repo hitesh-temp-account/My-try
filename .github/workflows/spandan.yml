@@ -141,10 +141,11 @@ jobs:
         with:
           title: 'custom title'
           commit-message: 'test commit message'
-          app-id: ${{ secrets.ALTERNATE_APP_ID }}
-          app-private-key: ${{ secrets.ALTERNATE_APP_PRIVATE_KEY }}
+          pr-creation-app-id: ${{ secrets.ALTERNATE_APP_ID }}
+          pr-creation-app-private-key: ${{ secrets.ALTERNATE_APP_PRIVATE_KEY }}
+          pr-approval-app-id: ${{ secrets.APP_ID }}
+          pr-approval-app-private-key: ${{ secrets.APP_PRIVATE_KEY }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          personal-access-token: ${{ secrets.ACCESS_TOKEN }}
           add-paths: README.md
 
       # - name: Approve PR
