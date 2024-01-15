@@ -61,10 +61,14 @@ runs:
 
     - name: Generate 8-digit random number
       id: random-number
-      run: echo "RANDOM_NUMBER=$(shuf -i 10000000-99999999 -n 1)" >> $GITHUB_ENV
+      run: |
+        echo "RANDOM_NUMBER=$(shuf -i 10000000-99999999 -n 1)" >> $GITHUB_ENV
+      shell: bash
 
     - name: Display random number
-      run: echo "Random Number: ${{ env.RANDOM_NUMBER }}"
+      run: |
+        echo "Random Number: ${{ env.RANDOM_NUMBER }}"
+      shell: bash
 
     - name: Create branch
       if: env.check_changes == 'true'
