@@ -1,4 +1,4 @@
-name: Measure coverage
+o name: Measure coverage
 
 on:
   push:
@@ -69,7 +69,7 @@ jobs:
 
             # Update the color based on the percentage
             color=""
-            if [ $new_percentage < 35.00 ]; then
+            if [ echo "$new_percentage < 35.00" | bc -l ]; then
               color="red"
               echo "updated to red"
             else
