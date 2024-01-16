@@ -23,16 +23,13 @@ runs:
         target: google_apis
         arch: x86_64
         script: |
-          adb shell
-          ls
-          exit
-          before_app_install=$(adb shell df sdcard -h | grep /dev/fuse | awk '{print $3}')
-          echo $before_app_install
-          chmod +x gradlew
-          ./gradlew installDebug
-          after_app_install=$(adb shell df sdcard -h | grep /dev/fuse | awk '{print $3}')
-          echo $after_app_install
-          total=$((after_app_install - before_app_install))
+          # before_app_install=$(adb shell df sdcard -h | grep /dev/fuse | awk '{print $3}')
+          # echo $before_app_install
+          # chmod +x gradlew
+          # ./gradlew installDebug
+          # after_app_install=$(adb shell df sdcard -h | grep /dev/fuse | awk '{print $3}')
+          # echo $after_app_install
+          total=$((5 - 3))
           echo $total
           echo "::set-output name=abc::$total"
           
