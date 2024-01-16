@@ -1,0 +1,30 @@
+name: 'Internal Memory Usage'
+
+outputs:
+  abc: ${{ steps.memory_usage.outputs.internal_memory }}
+
+runs:
+  using: "composite"
+
+  steps:
+    - name: set up java
+      uses: actions/setup-java@v3
+      with:
+        java-version: 17
+        distribution: 'zulu'
+        cache: 'gradle'
+
+    - name: emulator chalu karo
+      id: memory_usage
+      uses: ReactiveCircus/android-emulator-runner@v2
+      with:
+        api-level: 31
+        target: google_apis
+        arch: x86_64
+        script: |
+          before_app_install=$(adb shell df sdcard -h | grep /dev/fuse | awk '{print $3}')
+          ./gradlew installDebug
+          after_app_install=$(adb shell df sdcard -h | grep /dev/fuse | awk '{print $3}')
+          total=$((after_app_install - before_app_install))
+          echo "::set-output name=abc::$total"
+          
