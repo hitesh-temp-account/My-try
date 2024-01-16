@@ -24,6 +24,7 @@ runs:
         arch: x86_64
         script: |
           before_app_install=$(adb shell df sdcard -h | grep /dev/fuse | awk '{print $3}')
+          chmod +x gradlew
           ./gradlew installDebug
           after_app_install=$(adb shell df sdcard -h | grep /dev/fuse | awk '{print $3}')
           total=$((after_app_install - before_app_install))
