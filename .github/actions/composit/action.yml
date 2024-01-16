@@ -1,7 +1,8 @@
 name: 'Internal Memory Usage'
 
 outputs:
-  abc: ${{ steps.memory_usage.outputs.internal_memory }}
+  abc: 
+    description: 'output abc'
 
 runs:
   using: "composite"
