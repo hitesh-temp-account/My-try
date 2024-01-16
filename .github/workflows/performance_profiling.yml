@@ -25,7 +25,7 @@ jobs:
           
       - name: on base branch
         id: on_base_branch
-        uses: ./.github/actions/internal_memory_usage
+        uses: ./.github/actions/composit
 
       - name: akhil
         run: |
@@ -37,7 +37,7 @@ jobs:
 
       - name: on current branch
         id: on_current_branch
-        uses: ./.github/actions/internal_memory_usage
+        uses: ./.github/actions/composit
 
       - name: reddy
         run: |
