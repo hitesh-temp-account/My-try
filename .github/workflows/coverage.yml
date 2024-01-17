@@ -23,8 +23,9 @@ jobs:
             const filePath = 'code-coverage.html'
             const content = fs.readFileSync(filePath, 'utf8')
             const result = await github.rest.issues.createComment({
-              issue_number: context.repo_owner,
-              repo: context.repo.repo
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
               body: content
               })
               console.log(result)
