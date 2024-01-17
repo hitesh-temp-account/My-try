@@ -20,7 +20,7 @@ jobs:
           script: |
             const fs = require('fs')
             try {
-            const filePath = 'code-coverage.html'
+            const filePath = 'C:\Users\Team-RSL\Downloads\code-coverage.html'
             const content = fs.readFileSync(filePath, 'utf8')
             const result = await github.rest.issues.createComment({
               issue_number: context.issue.number,
