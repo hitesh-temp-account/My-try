@@ -29,8 +29,8 @@ runs:
           # ./gradlew installDebug
           # after_app_install=$(adb shell df sdcard -h | grep /dev/fuse | awk '{print $3}')
           # echo $after_app_install
-          a:: 5
-          b:: 3
+          a=$((5))
+          b=$((3))
           total=$((a - b))
           echo $total
           echo "::set-output name=abc::$total"
