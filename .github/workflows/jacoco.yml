@@ -43,7 +43,7 @@ jobs:
       - name: Get new percentage
         run: |
           chmod +x ./.github/scripts/code_coverage.py
-          echo "${{ steps.get_new_percentage.outputs.file_paths }}"
+          echo "${{ env.file_paths }}"
           table_string=$(python3 ./.github/scripts/code_coverage.py "${{ env.file_paths }}" "")
           echo "$table_string"
           IFS=',' read -ra table_list <<< "$table_string"
