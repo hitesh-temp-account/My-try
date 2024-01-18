@@ -34,8 +34,13 @@ jobs:
           chmod +x gradlew
           ./gradlew debugCoverage --continue
           files=$(find . -type f -and -path '*/build/reports/jacoco/debugCoverage/html/index.html')
+          files="./group-matching/impl/build/reports/jacoco/debugCoverage/html/index.html ./core/impl/build/reports/jacoco/debugCoverage/html/index.html ./core/api/build/reports/jacoco/debugCoverage/html/index.html ./ads-rendering/impl/build/reports/jacoco/debugCoverage/html/index.html ./attribution/impl/build/reports/jacoco/debugCoverage/html/index.html ./signal-collection/impl/build/reports/jacoco/debugCoverage/html/index.html" 
+          echo "::set-output name=file_paths::$files"
+
+      - name: Get new percentage
+        run: |
           chmod +x ./.github/scripts/code_coverage.py
-          table_string=$(python3 ./.github/scripts/code_coverage.py "$files" "")
+          table_string=$(python3 ./.github/scripts/code_coverage.py "${{ steps.get_new_percentage.outputs.file_paths }}" "")
           echo "$table_string"
           IFS=',' read -ra table_list <<< "$table_string"
           length=${#table_list[@]}
