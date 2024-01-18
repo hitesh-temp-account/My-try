@@ -33,8 +33,11 @@ jobs:
         run: |
           chmod +x gradlew
           ./gradlew debugCoverage --continue
-          files=$(find . -type f -and -path '*.txt')
-          echo "{file_paths}=${files}" >> "$GITHUB_OUTPUT"
+          {
+            echo 'file_paths<<EOF'
+            find . -type f -and -path '*.txt'
+            echo EOF
+          } >> "$GITHUB_OUTPUT"
           echo "multi lines"
           echo "$files"
           echo "single line"
