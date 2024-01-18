@@ -36,5 +36,5 @@ jobs:
       - name: gen report
         run: |
           chmod +x ./.github/scripts/code_coverage.py
-          table_string=$(python3 ./.github/scripts/code_coverage.py "{{ steps.report-files.outputs.file_paths}}" "")
+          table_string=$(python3 ./.github/scripts/code_coverage.py "${{ steps.report-files.outputs.file_paths}}" "")
           echo "$table_string"
