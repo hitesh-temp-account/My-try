@@ -37,9 +37,9 @@ jobs:
           files="./group-matching/impl/build/reports/jacoco/debugCoverage/html/index.html ./core/impl/build/reports/jacoco/debugCoverage/html/index.html ./core/api/build/reports/jacoco/debugCoverage/html/index.html ./ads-rendering/impl/build/reports/jacoco/debugCoverage/html/index.html ./attribution/impl/build/reports/jacoco/debugCoverage/html/index.html ./signal-collection/impl/build/reports/jacoco/debugCoverage/html/index.html" 
           echo "::set-output name=file_paths::$files"
           echo "multi lines"
-          echo "${{ steps.get_new_percentage.outputs.file_paths }}"
+          echo "$files"
           echo "single line"
-          echo ${{ steps.get_new_percentage.outputs.file_paths }}
+          echo $files
 
       - name: Get new percentage
         run: |
