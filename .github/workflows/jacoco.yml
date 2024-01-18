@@ -21,27 +21,21 @@ jobs:
         with:
           java-version: 17
 
-      # - name: Get Old Percentage
-      #   id: get_old_percentage
-      #   run: |
-      #     old_percentage=$(sed -nE 's/.*coverage-([0-9]+\.[0-9]+)\%25.*/\1/p' README.md)
-      #     echo "old: $old_percentage"
-      #     echo "OLD=$old_percentage" >> $GITHUB_ENV
+      - name: Get Old Percentage
+        id: get_old_percentage
+        run: |
+          old_percentage=$(sed -nE 's/.*coverage-([0-9]+\.[0-9]+)\%25.*/\1/p' README.md)
+          echo "old: $old_percentage"
+          echo "OLD=$old_percentage" >> $GITHUB_ENV
 
       - name: Get new percentage
         id: get_new_percentage
         run: |
-          chmod +x gradlew
-          ./gradlew debugCoverage --continue
           {
             echo 'file_paths<<EOF'
-            find . -type f -and -path '*.txt'
+            find . -type f -and -path '*build/reports/jacoco/debugCoverage/html/index.html'
             echo EOF
           } >> "$GITHUB_OUTPUT"
-          echo "multi lines"
-          echo "$files"
-          echo "single line"
-          echo $files
 
       - name: Get new percentage
         run: |
