@@ -4,7 +4,7 @@ import re
 def code_coverage_report():
   table_list = get_table_list(file_paths).split(',')
 
-  html = "<summary><h2>Code coverage</h2></summary><br>"
+  html = "##Code coverage"
   html += "<table><tr><th>Module</th><th>Coverage</th></tr>"
   
   for index in range(0, len(table_list), 3):
