@@ -2,7 +2,7 @@ import sys
 import re
 
 def code_coverage_report():
-  table_list = get_table_list(file_paths)).split(',')
+  table_list = get_table_list(file_paths).split(',')
 
 html = "<summary><h2>Code coverage</h2></summary><br>"
 html += "<table><tr><th>Module</th><th>Coverage</th></tr>"
