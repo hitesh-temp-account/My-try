@@ -4,21 +4,21 @@ import re
 def code_coverage_report():
   table_list = get_table_list(file_paths).split(',')
 
-html = "<summary><h2>Code coverage</h2></summary><br>"
-html += "<table><tr><th>Module</th><th>Coverage</th></tr>"
-
-for index in range(0, len(table_list), 3):
-  start_tag = ""
-  end_tag = ""
-  link_tag = f"<a href='{table_list[index+2]}'>"
-  if index == len(table_list)-3:
-    start_tag = "<b>"
-    end_tag = "</b>"
-    link_tag = ""
-  html += f"<tr><td>{start_tag}{link_tag}{table_list[index]}{end_tag}</td>" \
-          f"<td>{start_tag}<img src={format_percentage(table_list[index+1])}>{end_tag}</td></tr>"
-  html += "</table><br><i>MIN Cverage: 35%</i>"
-  print(html)
+  html = "<summary><h2>Code coverage</h2></summary><br>"
+  html += "<table><tr><th>Module</th><th>Coverage</th></tr>"
+  
+  for index in range(0, len(table_list), 3):
+    start_tag = ""
+    end_tag = ""
+    link_tag = f"<a href='{table_list[index+2]}'>"
+    if index == len(table_list)-3:
+      start_tag = "<b>"
+      end_tag = "</b>"
+      link_tag = ""
+    html += f"<tr><td>{start_tag}{link_tag}{table_list[index]}{end_tag}</td>" \
+            f"<td>{start_tag}<img src={format_percentage(table_list[index+1])}>{end_tag}</td></tr>"
+    html += "</table><br><i>MIN Cverage: 35%</i>"
+    print(html)
 
 def get_table_list(file_paths):
   coveredSum=0
