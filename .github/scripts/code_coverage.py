@@ -17,7 +17,7 @@ def code_coverage_report():
       link_tag = ""
     html += f"<tr><td>{start_tag}{link_tag}{table_list[index]}{end_tag}</td>" \
             f"<td>{start_tag}<img src={format_percentage(table_list[index+1])}>{end_tag}</td></tr>"
-    html += "</table><br><i>MIN Cverage: 35%</i>"
+  html += "</table><br><i>MIN Cverage: 35%</i>"
   print(html)
 
 def get_table_list(file_paths):
