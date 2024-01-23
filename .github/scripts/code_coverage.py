@@ -6,10 +6,7 @@ def code_coverage_report():
     print(get_table_list(file_paths))
   else:
     base_table_list = get_table_list(file_paths).split(',')
-    print(base_table_list)
     head_table_list = table_string.split(',')
-    print(table_string)
-    print(head_table_list)
 
     html = "<h2>Code coverage</h2>"
     html += "<table><tr><th>Module</th><th>Coverage</th>"
@@ -17,10 +14,8 @@ def code_coverage_report():
     if head_table_list!=[""]:
       html += "<th>Change Diff</th>"
       table_list = head_table_list
-      print("workflow on PR branch")
     else:
       table_list = base_table_list
-      print("workflow on main")
     html += "</tr>"
 
     for index in range(0, len(table_list), 3):
