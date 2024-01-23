@@ -15,7 +15,7 @@ def code_coverage_report():
       table_list = head_table_list
     else:
       table_list = base_table_list
-    html += </tr>"
+    html += "</tr>"
     
     for index in range(0, len(table_list), 3):
       start_tag = ""
