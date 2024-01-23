@@ -10,6 +10,7 @@ def code_coverage_report():
 
     html = "<h2>Code coverage</h2>"
     html += "<table><tr><th>Module</th><th>Coverage</th>"
+    table_list = []
     if head_table_list:
       html += "<th>Coverage</th>"
       table_list = head_table_list
@@ -19,7 +20,6 @@ def code_coverage_report():
       print("workflow on main")
     html += "</tr>"
 
-    print(table_list)
     for index in range(0, len(table_list), 3):
       start_tag = ""
       end_tag = ""
