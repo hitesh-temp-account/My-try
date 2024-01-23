@@ -11,7 +11,7 @@ def code_coverage_report():
     html = "<h2>Code coverage</h2>"
     html += "<table><tr><th>Module</th><th>Coverage</th>"
     if head_table_list:
-      html += <th>Coverage</th>
+      html += "<th>Coverage</th>"
       table_list = head_table_list
     else:
       table_list = base_table_list
