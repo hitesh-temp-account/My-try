@@ -14,7 +14,7 @@ def code_coverage_report():
     html = "<h2>Code coverage</h2>"
     html += "<table><tr><th>Module</th><th>Coverage</th>"
     table_list = []
-    if head_table_list==[""]:
+    if head_table_list!=[""]:
       html += "<th>Change Diff</th>"
       table_list = head_table_list
       print("workflow on PR branch")
@@ -33,7 +33,7 @@ def code_coverage_report():
         link_tag = ""
       html += f"<tr><td>{start_tag}{link_tag}{table_list[index]}{end_tag}</td>" \
               f"<td>{start_tag}<img src={format_percentage(table_list[index+1])}>{end_tag}</td>"
-      if head_table_list==[""]:
+      if head_table_list!=[""]:
         diff = float(head_table_list[index+1])
         if head_table_list[index] in base_table_list:
           moduleIndex = base_table_list.index(head_table_list[index])
