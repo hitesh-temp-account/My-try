@@ -58,4 +58,4 @@ jobs:
         run: |
           chmod +x ./.github/scripts/code_coverage.py
           result=$(python3 ./.github/scripts/code_coverage.py "${{ steps.base-report-files.outputs.file_paths}}" "${{ steps.coverage-list.outputs.table_string}}")
-          echo "$table_string" >> $GITHUB_STEP_SUMMARY
+          echo "$result" >> $GITHUB_STEP_SUMMARY
