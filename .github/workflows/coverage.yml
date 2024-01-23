@@ -44,12 +44,12 @@ jobs:
         if: github.ref != 'refs/heads/main'
         uses: actions/checkout@v3
         with:
-          ref: ${{ github.base_ref }}
+          ref: ${{ github.event.pull_request.base.ref }}
 
       - name: run tests
         id: base-report-files
         run: |
-          current_branch=${{ github.base_ref }}
+          current_branch=${{ github.ref }}
           echo "second - $current_branch"
           chmod +x gradlew
           ./gradlew debugCoverage --continue
