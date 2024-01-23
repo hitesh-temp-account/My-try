@@ -20,6 +20,32 @@ jobs:
 
       - name: run tests
         id: report-files
+        if: github.ref != 'refs/heads/main'
+        run: |
+          chmod +x gradlew
+          ./gradlew debugCoverage --continue
+          {
+            echo 'file_paths<<EOF'
+            find . -type f -and -path '*build/reports/jacoco/debugCoverage/html/index.html' 
+            echo EOF
+          } >> "$GITHUB_OUTPUT"
+          
+      - name: gen report
+        if: github.ref != 'refs/heads/main'
+        id: coverage-list
+        run: |
+          chmod +x ./.github/scripts/code_coverage.py
+          table_string=$(python3 ./.github/scripts/code_coverage.py "${{ steps.report-files.outputs.file_paths}}" "null")
+          echo "table_string=$table_string" >> $GITHUB_OUTPUT
+
+      - name: checkout code
+        if: github.ref != 'refs/heads/main'
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.base_ref}}
+
+      - name: run tests
+        id: base-report-files
         run: |
           chmod +x gradlew
           ./gradlew debugCoverage --continue
@@ -31,5 +57,5 @@ jobs:
       - name: gen report
         run: |
           chmod +x ./.github/scripts/code_coverage.py
-          table_string=$(python3 ./.github/scripts/code_coverage.py "${{ steps.report-files.outputs.file_paths}}")
+          table_string=$(python3 ./.github/scripts/code_coverage.py "${{ steps.base-report-files.outputs.file_paths}}" "${{ steps.coverage-list.outputs.table_string}}")
           echo "$table_string" >> $GITHUB_STEP_SUMMARY
