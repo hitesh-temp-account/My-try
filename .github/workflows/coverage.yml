@@ -57,4 +57,5 @@ jobs:
       - name: gen report
         run: |
           chmod +x ./.github/scripts/code_coverage.py
-          python3 ./.github/scripts/code_coverage.py "${{ steps.base-report-files.outputs.file_paths}}" "${{ steps.coverage-list.outputs.table_string}}"
+          result=$(python3 ./.github/scripts/code_coverage.py "${{ steps.base-report-files.outputs.file_paths}}" "${{ steps.coverage-list.outputs.table_string}}")
+          echo "$table_string" >> "GITHUB_STEP_SUMMARY"
