@@ -44,7 +44,7 @@ jobs:
         if: github.ref != 'refs/heads/main'
         uses: actions/checkout@v3
         with:
-          ref: ${{ github.base_ref}}
+          ref: ${{ refs/heads/main }}
 
       - name: run tests
         id: base-report-files
