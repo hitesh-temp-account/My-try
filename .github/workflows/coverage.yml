@@ -49,7 +49,7 @@ jobs:
       - name: run tests
         id: base-report-files
         run: |
-          current_branch=${{ github.ref }}
+          current_branch=${{ github.base_ref }}
           echo "second - $current_branch"
           chmod +x gradlew
           ./gradlew debugCoverage --continue
