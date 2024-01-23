@@ -22,6 +22,8 @@ jobs:
         id: report-files
         if: github.ref != 'refs/heads/main'
         run: |
+          current_branch=${{ github.ref }}
+          echo "first - $current_branch"
           chmod +x gradlew
           ./gradlew debugCoverage --continue
           {
@@ -47,6 +49,8 @@ jobs:
       - name: run tests
         id: base-report-files
         run: |
+          current_branch=${{ github.ref }}
+          echo "second - $current_branch"
           chmod +x gradlew
           ./gradlew debugCoverage --continue
           {
