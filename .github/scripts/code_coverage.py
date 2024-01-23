@@ -13,10 +13,13 @@ def code_coverage_report():
     if head_table_list:
       html += "<th>Coverage</th>"
       table_list = head_table_list
+      print("workflow on PR branch")
     else:
       table_list = base_table_list
+      print("workflow on main")
     html += "</tr>"
-    
+
+    print(table_list)
     for index in range(0, len(table_list), 3):
       start_tag = ""
       end_tag = ""
