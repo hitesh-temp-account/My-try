@@ -34,6 +34,8 @@ jobs:
           arch: x86_64
           script: |
             chmod +x ./.github/scripts/internal.sh
+            chmod +x gradlew
+            ./gradlew installDebug
             ./.github/scripts/internal.sh
             # internal_memory=$(./adb shell df)
             # echo $internal_memory
