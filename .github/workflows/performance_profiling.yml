@@ -33,9 +33,9 @@ jobs:
           target: google_apis
           arch: x86_64
           script: |
-            internal_memory=$(adb shell df)
+            internal_memory=$(./adb shell df)
             echo $internal_memory
-            internal_memory2=$(adb shell df -h | grep /dev/fuse)
+            internal_memory2=$(./adb shell df -h | grep /dev/fuse)
             echo $internal_memory2
 
       
