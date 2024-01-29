@@ -35,5 +35,7 @@ jobs:
           script: |
             internal_memory=$(adb shell df)
             echo $internal_memory
+            internal_memory2=$(adb shell df -h | grep /dev/fuse)
+            echo $internal_memory2
 
       
