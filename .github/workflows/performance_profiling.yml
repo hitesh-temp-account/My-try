@@ -14,28 +14,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # - name: Checkout PR base branch
-      #   uses: actions/checkout@v3
-      #   with:
-      #     ref: ${{ github.base_ref }}
-          
-      # - name: on base branch
-      #   id: on_base_branch
-      #   uses: ./.github/actions/composit
-
-      # - name: akhil
-      #   run: |
-      #     echo "::set-output name=on_base_branch::${{ steps.on_base_branch.outputs.abc }}"
-      #     echo "${{ steps.on_base_branch.outputs.abc }}"
           
       - name: Checkout the code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: on current branch
-        id: on_current_branch
-        uses: ./.github/actions/composit
+      - name: set up java
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          distribution: 'zulu'
+          cache: 'gradle'
 
-      - name: reddy
-        run: |
-          echo "::set-output name=on_current_branch::${{ steps.on_current_branch.outputs.abc }}"
-          echo "${{ steps.on_current_branch.outputs.abc }}"
+      - name: Start emulator
+        id: internal_memory
+        uses: ReactiveCircus/android-emulator-runner@v2
+        with:
+          api-level: 31
+          target: google_apis
+          arch: x86_64
+          script: |
+            internal_memory=$(adb shell df)
+            echo $internal_memory
+
+      
