@@ -1,0 +1,88 @@
+# .github/actions/approve_and_merge/action.yml 
+name: 'Approve and Merge PR'
+description: 'Approves and merges a pull request'
+inputs:
+  title:
+    description: 'title'
+    required: true
+  commit-message:
+    description: 'commit message'
+    required: true
+  create-pr-app-id:
+    description: 'github app id'
+    required: true
+  create-pr-app-private-key:
+    description: 'github app id'
+    required: true
+  app-id:
+    description: 'github app id'
+    required: true
+  app-private-key:
+    description: 'github app private key'
+    required: true
+  github-token:
+    description: 'github token'
+    required: true
+
+# defaults:
+#   run:
+#     shell: bash
+
+
+runs:
+  using: 'composite'
+  steps:
+    - name: my-app-install token for create Pr
+      id: my-app-create
+      uses: actions/create-github-app-token@v1
+      with:
+        app-id: ${{ inputs.create-pr-app-id }}
+        private-key: ${{ inputs.create-pr-app-private-key }}
+
+    - name: Set up Git
+      run: |
+        git config --global user.name "${{ github.actor }}"
+        git config --global user.email "<${{ github.actor }}@linkedin.com>"
+      shell: bash
+
+    - name: create PR
+      run: |
+        random_number=$(shuf -i 10000000-99999999 -n 1)
+        git checkout -b feature-branch-$random_number
+        git add README.md
+        git commit -m "${{ inputs.commit-message }}"
+        git show
+        git push origin feature-branch-$random_number
+        echo "pushed successfully"
+        pr=$(gh pr create --title "The bug is fixed" --head feature-branch-$random_number --base main --body "${{ inputs.commit-message }}")
+        echo "pr link is $pr"
+        IFS='/' read -ra pr_parts <<< "$pr"
+        echo "PR_NUMBER=${pr_parts[${#pr_parts[@]}-1]}" >> $GITHUB_ENV
+        echo "PR created"
+      shell: bash
+      env:
+        GITHUB_TOKEN: ${{ steps.my-app-create.outputs.token }}
+
+    - name: my-app-install token for approve PR
+      if: ${{ env.PR_NUMBER }}
+      id: my-app-approve
+      uses: actions/create-github-app-token@v1
+      with:
+        app-id: ${{ inputs.app-id }}
+        private-key: ${{ inputs.app-private-key }}
+
+    - name: Approve PR
+      if: ${{ env.PR_NUMBER }}
+      run: |
+        gh pr review ${{ env.PR_NUMBER }} --approve
+      shell: bash
+      env:
+        GITHUB_TOKEN: ${{ steps.my-app-approve.outputs.token }}
+
+    - name: Turn On PR Auto-Merge
+      if: ${{ env.PR_NUMBER }}
+      run: |
+        gh pr merge ${{ env.PR_NUMBER }} --squash --auto --body "${{ inputs.commit-message }}"
+      shell: bash
+      env:
+        GITHUB_TOKEN: ${{ inputs.github-token }}
