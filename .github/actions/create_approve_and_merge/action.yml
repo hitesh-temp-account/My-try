@@ -56,8 +56,7 @@ runs:
         echo "pushed successfully"
         pr=$(gh pr create --title "The bug is fixed" --head feature-branch-$random_number --base main --body "${{ inputs.commit-message }}")
         echo "pr link is $pr"
-        IFS='/'
-        read -ra pr_parts <<< "$pr"
+        IFS='/' read -ra pr_parts <<< "$pr"
         echo "PR_NUMBER=${pr_parts[${#pr_parts[@]}-1]}" >> $GITHUB_ENV
         echo "PR created"
       shell: bash
