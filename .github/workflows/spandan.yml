@@ -35,9 +35,6 @@ jobs:
           cat README.md
 
       - name: Create, Approve and Merge PR
-        if: |
-          env.version_change == 'true' ||
-          env.VERSION_LINE_CHANGED == 'true'
         uses: ./.github/actions/create_approve_and_merge
         with:
           title: 'custom title'
