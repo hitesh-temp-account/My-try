@@ -1,9 +1,11 @@
 name: Spandan workflow
 
 on:
-  pull_request:
+  push:
     branches:
-      - '*'
+      - main
+    paths:
+      - gradle.properties
 
 env:
   COMMIT_MESSAGE: |
