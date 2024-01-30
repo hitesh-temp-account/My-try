@@ -135,21 +135,6 @@ jobs:
       #   run: | 
       #     echo "pr number : ${{ steps.create-pr.outputs.pull-request-number }}"
 
-
-      - name: Create, Approve and Merge PR
-        if: |
-          env.version_change == 'true' ||
-          env.VERSION_LINE_CHANGED == 'true'
-        uses: ./.github/actions/create_approve_and_merge
-        with:
-          title: 'custom title'
-          commit-message: 'test commit message'
-          create-pr-app-id: ${{ secrets.ALTERNATE_APP_ID }}
-          create-pr-app-private-key: ${{ secrets.ALTERNATE_APP_PRIVATE_KEY }}
-          app-id: ${{ secrets.APP_ID }}
-          app-private-key: ${{ secrets.APP_PRIVATE_KEY }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-
       # - name: Approve PR
       #   if: |
       #      env.version_change == 'true' ||
