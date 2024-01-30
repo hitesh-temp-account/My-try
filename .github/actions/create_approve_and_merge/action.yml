@@ -23,9 +23,6 @@ inputs:
   github-token:
     description: 'github token'
     required: true
-  personal-access-token:
-    desccription: 'personal access token to create PR'
-    required: true
 
 defaults:
   run:
