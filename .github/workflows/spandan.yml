@@ -1,9 +1,11 @@
 name: Spandan workflow
 
 on:
-  pull_request:
+  push:
     branches:
-      - '*'
+      - main
+    paths:
+      - gradle.properties
 
 env:
   COMMIT_MESSAGE: |
@@ -27,14 +29,99 @@ jobs:
           ref: ${{  github.head_ref }}
           fetch-depth: 0
 
+      - name: Get previous version
+        id: get-previous-version
+        run: |
+          commit_hashes=$(git rev-list -n 2 origin/main -- gradle.properties)
+          second_last_commit_hash=$(echo "$commit_hashes" | tail -n 1)
+          commit_info=$(git show $second_last_commit_hash:gradle.properties)
+          echo "$commit_info"
+          previous_version=$(echo "$commit_info" | grep '^VERSION_NAME=' | cut -d "=" -f2 | tr -d '[:space:]')
+          previous_line=$(echo "$commit_info" | grep -n '^VERSION_NAME=' | cut -d ":" -f1)
+          echo "prev-version: $previous_version"
+          echo "prev-line: $previous_line"
+          echo "prev_version=$previous_version" >> $GITHUB_ENV
+          echo "prev_version_line=$previous_line" >> $GITHUB_ENV
+
+      - name: Get current version
+        id: get-current-version
+        run: |
+          echo "prev-version: ${{ env.previous_version }}"
+          echo "prev-line: ${{ env.previous_line }}"
+          echo "current_version=$(grep '^VERSION_NAME=' gradle.properties | cut -d "=" -f2 | tr -d '[:space:]')" >> $GITHUB_ENV
+          echo "current_version_line=$(grep -n '^VERSION_NAME=' gradle.properties | cut -d ":" -f1)" >> $GITHUB_ENV
+
+      - name: Check for version change
+        run: |
+          if [ "${{ env.prev_version }}"  != "${{ env.current_version }}" ]; then
+            echo "version_change=true" >> $GITHUB_ENV
+          else
+            echo "version_change=false" >> $GITHUB_ENV
+          fi
+      
+          if [ "${{ env.prev_version_line }}" !=  "${{ env.current_version_line }}" ]; then
+            echo "VERSION_LINE_CHANGED=true" >> $GITHUB_ENV
+          else
+            echo "VERSION_LINE_CHANGED=false" >> $GITHUB_ENV
+          fi
+          
+      - name: my-app-install token
+        id: my-app
+        if: |
+          env.version_change == 'true' ||
+          env.VERSION_LINE_CHANGED == 'true'
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+
+      - name: print app token
+        if: |
+          env.version_change == 'true' ||
+          env.VERSION_LINE_CHANGED == 'true'
+        run: |
+          echo "APP_TOKEN=${{ steps.my-app.outputs.token }}" >> $GITHUB_ENV
+
+      - name: my-app-install token
+        id: my-alternate-app
+        if: |
+          env.version_change == 'true' ||
+          env.VERSION_LINE_CHANGED == 'true'
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.ALTERNATE_APP_ID }}
+          private-key: ${{ secrets.ALTERNATE_APP_PRIVATE_KEY }}
+
+      - name: print app token
+        if: |
+          env.version_change == 'true' ||
+          env.VERSION_LINE_CHANGED == 'true'
+        run: |
+          echo "ALTERNATE_APP_TOKEN=${{ steps.my-alternate-app.outputs.token }}" >> $GITHUB_ENV
+
+
+      - name: Update version in README Badge
+        if: env.version_change == 'true'
+        run: |
+          version=$(grep '^VERSION_NAME=' gradle.properties | cut -d "=" -f2 | tr -d '[:space:]')
+          version=$(echo "$version" | sed 's/-/%E2%80%90/g')
+          # demo commnet
+          echo "$version"
+          sed -i "s/\(badge\/version-v.*-blue\.svg\)/badge\/version-v$version-blue.svg/" README.md
+          cat README.md
+
       - name: Update line number in README Badge
+        if: env.VERSION_LINE_CHANGED == 'true'
         run: |
           current_line=$(grep -n '^VERSION_NAME=' gradle.properties | cut -d ":" -f1)
           echo "$current_line"
-          sed -i "s/properties#L[0-9]*)/properties#L1\)/" README.md
+          sed -i "s/properties#L[0-9]*)/properties#L$current_line\)/" README.md
           cat README.md
 
       - name: Create, Approve and Merge PR
+        if: |
+          env.version_change == 'true' ||
+          env.VERSION_LINE_CHANGED == 'true'
         uses: ./.github/actions/create_approve_and_merge
         with:
           title: 'custom title'
