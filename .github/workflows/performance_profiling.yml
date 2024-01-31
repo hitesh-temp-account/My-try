@@ -14,7 +14,6 @@ on:
   pull_request:
     branches:
       - '*'
-  workflow_dispatch:
 
 jobs:
   permanent_internal_memory_usage_calculate:
