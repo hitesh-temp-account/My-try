@@ -6,6 +6,8 @@ user_data="$(adb shell "run-as com.example.breach du /data/data/com.example.brea
 
 app_data="$(adb shell "run-as com.example.breach du $app_path" | grep -w "$app_path" | awk '{print $1}' )"
 
-total_app_usage=$(( user_data + app_data ))
+echo $user_data
+echo $app_data
+total_app_usage=$((user_data + app_data))
 
 echo "total app usage = $(( total_app_usage/1024 )) KB"
