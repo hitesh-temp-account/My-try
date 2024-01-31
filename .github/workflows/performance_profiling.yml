@@ -1,32 +1,40 @@
-name: Performance Profiling
+#  Copyright (c) LinkedIn Corporation.
+#  All rights reserved.
+#
+#  This source code is licensed under the license found in the
+#  LICENSE file in the root directory of this source tree.
+
+# Workflow for calculating permanent internal memory usage of test-app and generate a report based
+# on the same.
+# Note that, this workflow will run only when triggered manually.
+name: Permanent Internal Memory usage
 
 on:
-  push:
-    branches:
-      - main
   pull_request:
     branches:
       - '*'
+  workflow_dispatch:
 
 jobs:
-  internal_memory_usage_calculate:
-    name: Internal Memory Usage
-    runs-on: ubuntu-latest
+  permanent_internal_memory_usage_calculate:
+    name: Permanent Internal Memory Usage
+    runs-on: macos-latest
 
     steps:
-          
-      - name: Checkout the code
+      - name: Checkout to base branch
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.base_ref }}
 
-      - name: set up java
+      - name: Set up Java
         uses: actions/setup-java@v4
         with:
           java-version: 17
           distribution: 'zulu'
           cache: 'gradle'
 
-      - name: Start emulator
-        id: internal_memory
+      - name: Start emulator, Install application and Calculate memory usage on base branch
+        id: permanent_internal_memory_usage_of_app_on_base_branch
         uses: ReactiveCircus/android-emulator-runner@v2
         with:
           api-level: 31
@@ -34,12 +42,28 @@ jobs:
           arch: x86_64
           script: |
             chmod +x ./.github/scripts/internal.sh
-            chmod +x gradlew
             ./gradlew installDebug
-            ./.github/scripts/internal.sh
-            # internal_memory=$(./adb shell df)
-            # echo $internal_memory
-            # internal_memory2=$(./adb shell df -h | grep /dev/fuse)
-            # echo $internal_memory2
+            permanent_internal_memory_usage_of_app_on_base_branch=$(bash ./.github/scripts/internal.sh | awk '{print $1}')
+            echo $permanent_internal_memory_usage_of_app_on_base_branch
+            echo "permanent_internal_memory_usage_of_app_on_base_branch=$permanent_internal_memory_usage_of_app_on_base_branch" >> $GITHUB_OUTPUT
 
-      
+      - name: Checkout to head branch
+        uses: actions/checkout@v4
+
+      - name: Uninstall App
+        run: ./gradlew uninstallDebug
+
+      - name: Fetch app usage on head branch
+        id: permanent_internal_memory_usage_of_app_on_head_branch
+        run: |
+          chmod +x ./.github/scripts/internal.sh
+          ./gradlew installDebug
+          permanent_internal_memory_usage_of_app_on_head_branch=$(bash ./.github/scripts/internal.sh | awk '{print $1}')
+          echo $permanent_internal_memory_usage_of_app_on_head_branch
+          echo "permanent_internal_memory_usage_of_app_on_head_branch=$permanent_internal_memory_usage_of_app_on_head_branch" >> $GITHUB_OUTPUT
+
+      - name: Render Permanent Internal Memory Report in workflow summary
+        run: |
+          chmod +x ./.github/scripts/permanent_internal_memory_usage.py
+          report_summary=$(python3 ./.github/scripts/permanent_internal_memory_usage.py ${{ steps.permanent_internal_memory_usage_of_app_on_base_branch.outputs.permanent_internal_memory_usage_of_app_on_base_branch }} ${{ steps.permanent_internal_memory_usage_of_app_on_head_branch.outputs.permanent_internal_memory_usage_of_app_on_head_branch }})
+          echo "$report_summary" >> $GITHUB_STEP_SUMMARY
