@@ -46,6 +46,7 @@ jobs:
           arch: x86_64
           script: |
             chmod +x ./.github/scripts/internal.sh
+            chmod +x ./gradlew
             ./gradlew installDebug
             permanent_internal_memory_usage_of_app_on_base_branch=$(bash ./.github/scripts/internal.sh | awk '{print $1}')
             echo $permanent_internal_memory_usage_of_app_on_base_branch
