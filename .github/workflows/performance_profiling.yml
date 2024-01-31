@@ -22,10 +22,13 @@ jobs:
     runs-on: macos-latest
 
     steps:
-      - name: Checkout to base branch
+      # - name: Checkout to base branch
+      #   uses: actions/checkout@v4
+      #   with:
+      #     ref: ${{ github.base_ref }}
+      
+      - name: Checkout to head branch
         uses: actions/checkout@v4
-        with:
-          ref: ${{ github.base_ref }}
 
       - name: Set up Java
         uses: actions/setup-java@v4
