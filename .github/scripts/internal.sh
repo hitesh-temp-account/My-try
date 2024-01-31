@@ -11,4 +11,4 @@ echo "User data = $user_data"
 echo "App data = $app_data"
 total_app_usage=$((user_data + app_data))
 
-echo "total app usage = $(( total_app_usage/1024 )) MB"
+echo $(( total_app_usage/1024 ))
