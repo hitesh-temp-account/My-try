@@ -48,10 +48,13 @@ jobs:
             echo $paths
             paths=$(adb shell pm path com.example.breach)
             echo $paths
+            adb shell pm path com.example.breach | sed 's/package://' | sed 's/base\.apk$//'
             app_path=$(adb shell pm path com.example.breach | sed 's/package://' | sed 's/base\.apk$//')
             echo $app_path
+            adb shell "run-as com.example.breach du $user_data_path" | grep -w $user_data_path | awk '{print $1}'
             user_data=$(adb shell "run-as com.example.breach du $user_data_path" | grep -w $user_data_path | awk '{print $1}')
             echo $user_data
+            adb shell "run-as com.example.breach du $app_path" | grep -w "$app_path" | awk '{print $1}'
             app_data=$(adb shell "run-as com.example.breach du $app_path" | grep -w "$app_path" | awk '{print $1}')
             echo $app_data
             echo "User data = $user_data"
