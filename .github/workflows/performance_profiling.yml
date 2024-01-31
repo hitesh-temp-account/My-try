@@ -43,6 +43,8 @@ jobs:
             chmod +x ./gradlew
             ./gradlew installDebug
             user_data_path="/data/data/com.example.breach/"
+            adb shell pm path com.example.breach
+            echo $user_data_path
             paths="$(adb shell pm path com.example.breach)"
             echo $paths
             paths=$(adb shell pm path com.example.breach)
