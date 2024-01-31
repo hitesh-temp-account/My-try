@@ -18,7 +18,7 @@ on:
 jobs:
   permanent_internal_memory_usage_calculate:
     name: Permanent Internal Memory Usage
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout to base branch
