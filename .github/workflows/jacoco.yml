@@ -53,7 +53,7 @@ jobs:
         run: |
           report_summary="${{ env.REPORT_SUMMARY }}"
           echo "TIMEPASS PRINT"
-          new_coverage=$(echo "$report_summary" | grep -oP '(?<=Total Coverage<\/b><\/td><td><b><img src=https:\/\/img\.shields\.io\/badge\/)\d+\.\d+(?=%25-green\.svg>)'
+          new_coverage=$(echo "$report_summary" | grep -oP '(?<=Total Coverage<\/b><\/td><td><b><img src=https:\/\/img\.shields\.io\/badge\/)\d+\.\d+(?=%25-green\.svg>)')
           echo "New Coverage: $new_coverage"
           echo "NEW_COVERAGE=$new_coverage" >> $GITHUB_ENV
 
