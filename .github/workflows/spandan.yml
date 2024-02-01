@@ -1,11 +1,9 @@
 name: Spandan workflow
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - gradle.properties
+  pull_request:
+    types:
+      - closed
 
 env:
   COMMIT_MESSAGE: |
@@ -17,8 +15,8 @@ env:
 
 jobs:
   update-badge:
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
-
     permissions:
       contents: write
       pull-requests: write
