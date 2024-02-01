@@ -51,6 +51,8 @@ jobs:
 
       - name: Get new coverage
         run: |
+          reportt=="${{ steps.summary }}"
+          echo "REPPPOOORRTTT: $report"
           report_summary="${{ env.REPORT_SUMMARY }}"
           echo "TIMEPASS PRINT"
           new_coverage=$(echo "$report_summary" | grep -oP '(?<=Total Coverage<\/b><\/td><td><b><img src=https:\/\/img\.shields\.io\/badge\/)\d+\.\d+(?=%25-green\.svg>)')
