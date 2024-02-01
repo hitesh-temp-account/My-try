@@ -1,82 +1,86 @@
-name: Measure coverage
+name: Code Coverage Report
 
 on:
   push:
     branches:
       - main
 
-env:
-  COMMIT_MESSAGE: |
-    Update jacoco badge
-
-    Created by GitHub Action [${{ github.workflow }} #${{ github.run_number }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
-
 jobs:
-  build:
+  code-coverage:
+    name: Code Coverage
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v2
-      - name: Set up JDK 17
-        uses: actions/setup-java@v1
+      - name: Checkout to code
+        uses: actions/checkout@v3
+
+      - name: Set up Java
+        uses: actions/setup-java@v3
         with:
-          java-version: 17
+          java-version: '17'
+          distribution: 'zulu'
 
-      - name: Get Old Percentage
-        id: get_old_percentage
+      - name: Get old coverage
         run: |
-          old_percentage=$(sed -nE 's/.*coverage-([0-9]+\.[0-9]+)\%25.*/\1/p' README.md)
-          echo "old: $old_percentage"
-          echo "OLD=$old_percentage" >> $GITHUB_ENV
+          old_coverage=$(sed -nE 's/.*coverage-([0-9]+\.[0-9]+)\%25.*/\1/p' README.md)
+          echo "Old Coverage: $old_coverage"
+          echo "OLD_COVERAGE=$old_coverage" >> $GITHUB_ENV
 
-      - name: Get new percentage
-        id: get_new_percentage
+      - name: Run unit tests and generate coverage reports
+        run: ./gradlew debugCoverage --continue
+
+      - name: Generate JaCoCo report files
+        id: jacoco-report-files
         run: |
           {
             echo 'file_paths<<EOF'
-            find . -type f -and -path '*build/reports/jacoco/debugCoverage/html/index.html'
+            find . -type f -and -path '*/build/reports/jacoco/debugCoverage/html/index.html'
             echo EOF
           } >> "$GITHUB_OUTPUT"
 
-      - name: Get new percentage
+      - name: Generate code coverage report
         run: |
           chmod +x ./.github/scripts/code_coverage.py
-          table_string=$(python3 ./.github/scripts/code_coverage.py "${{ steps.get_new_percentage.outputs.file_paths }}" "")
-          echo "$table_string"
-          IFS=',' read -ra table_list <<< "$table_string"
-          length=${#table_list[@]}
-          coverage=${table_list[$length-1]}
-          echo "new: $coverage"
-          echo "NEW=$coverage" >> $GITHUB_ENV
+          report_summary=$(python3 ./.github/scripts/code_coverage.py "${{ steps.jacoco-report-files.outputs.file_paths }}")
+          echo "$report_summary" >> $GITHUB_STEP_SUMMARY
+          echo "REPORT SUMMARY BELOW:"
+          echo "$report_summary"
 
-      - name: Update Badge
+      - name: Get new coverage
         run: |
-          new_percentage="${{ env.NEW }}"
-          old_percentage="${{ env.OLD }}"
+          IFS=','
+          read -ra coverage_list <<< "$report_summary"
+          new_coverage=${coverage_list[${#coverage_list[@]}-1]}
+          echo "New Coverage: $new_coverage"
+          echo "NEW_COVERAGE=$new_coverage" >> $GITHUB_ENV
+
+      - name: Update badge
+        run: |
+          old_coverage="${{ env.OLD_COVERAGE }}"
+          new_coverage="${{ env.NEW_COVERAGE }}"
           echo "COVERAGE_CHANGED=false" >> $GITHUB_ENV
-          if [ "$old_percentage" != "$new_percentage" ]; then
-            echo "COVERAGE_CHANGED=true" >> $GITHUB_ENV
-            color=""
-            if (( $(echo "$new_percentage < 35.00" | bc -l) )); then
-              color="red"
-              echo "updated to red"
-            else
-              echo "updated to green"
-              color="green"
-            fi
-            sed -i "s/coverage-.*.svg)/coverage-$new_percentage\%25-$color.svg)/" README.md
-            cat README.md
-          fi
-          git status
-      
-      - name: Create, Approve and Merge PR
-        if: env.COVERAGE_CHANGED == 'true'
-        uses: ./.github/actions/create_approve_and_merge
-        with:
-          title: 'custom title'
-          commit-message: 'test commit message'
-          create-pr-app-id: ${{ secrets.APP_ID }}
-          create-pr-app-private-key: ${{ secrets.APP_PRIVATE_KEY }}
-          app-id: ${{ secrets.ALTERNATE_APP_ID }}
-          app-private-key: ${{ secrets.ALTERNATE_APP_PRIVATE_KEY }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          
+          echo "old and new coverage"
+          echo "$old_coverage"
+          echo "$new_coverage"
+          # if [ "$old_coverage" != "$new_coverage" ]; then
+          #   echo "COVERAGE_CHANGED=true" >> $GITHUB_ENV
+          #   color=""
+          #   if (( $(echo "$new_coverage < 35.00" | bc -l) )); then
+          #     color="red"
+          #   else
+          #     color="green"
+          #   fi
+          #   sed -i "s/coverage-.*.svg)/coverage-$new_coverage\%25-$color.svg)/" README.md
+          # fi
+
+#      - name: Create, Approve and Merge PR
+#        if: env.COVERAGE_CHANGED == 'true'
+#        uses: ./.github/actions/create_approve_and_merge_pr_to_update_readme
+#        with:
+#          title: 'Update JaCoCo badge in README.md'
+#          commit-message: ${{ env.COMMIT_MESSAGE }}
+#          create-pr-app-id: ${{ secrets.AUTO_CREATE_ID }}
+#          create-pr-app-private-key: ${{ secrets.AUTO_CREATE_PRIVATE_KEY }}
+#          approve-pr-app-id: ${{ secrets.AUTO_APPROVE_ID }}
+#          approve-pr-app-private-key: ${{ secrets.AUTO_APPROVE_PRIVATE_KEY }}
+#          github-token: ${{ secrets.GITHUB_TOKEN }}
