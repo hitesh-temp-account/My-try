@@ -51,7 +51,7 @@ jobs:
 
       - name: Get new coverage
         run: |
-          reportt=="${{ steps.summary }}"
+          reportt="${{ steps.summary }}"
           echo "REPPPOOORRTTT: $report"
           report_summary="${{ env.REPORT_SUMMARY }}"
           echo "TIMEPASS PRINT"
