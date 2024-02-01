@@ -1,4 +1,4 @@
-name: Code Coverage Report
+name: Code Coverage Reporttttt
 
 on:
   push:
@@ -27,7 +27,9 @@ jobs:
           echo "OLD_COVERAGE=$old_coverage" >> $GITHUB_ENV
 
       - name: Run unit tests and generate coverage reports
-        run: ./gradlew debugCoverage --continue
+        run: |
+          chmod +x ./gradlew debugCoverage --continue
+          ./gradlew debugCoverage --continue
 
       - name: Generate JaCoCo report files
         id: jacoco-report-files
