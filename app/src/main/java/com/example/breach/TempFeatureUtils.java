@@ -23,4 +23,11 @@ public class TempFeatureUtils {
     public void utilMethod3() {
         // do nothing
     }
+
+    public int utilMethod4() {
+        // Just some random logic
+        int a = 15;
+        int b = 10;
+        return a - b;
+    }
 }
