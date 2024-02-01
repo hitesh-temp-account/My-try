@@ -52,7 +52,7 @@ jobs:
       - name: Get new coverage
         run: |
           echo "TEMPP"
-          reportt="${{ core.summary }}"
+          reportt="${{ steps.summary }}"
           echo "REPPPOOORRTTT: $report"
           report_summary="${{ env.REPORT_SUMMARY }}"
           echo "TIMEPASS PRINT"
