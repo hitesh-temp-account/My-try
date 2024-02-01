@@ -50,8 +50,7 @@ jobs:
 
       - name: Get new coverage
         run: |
-          IFS=','
-          read -ra coverage_list <<< "$report_summary"
+          IFS=',' read -ra coverage_list <<< "$report_summary"
           new_coverage=${coverage_list[${#coverage_list[@]}-1]}
           echo "New Coverage: $new_coverage"
           echo "NEW_COVERAGE=$new_coverage" >> $GITHUB_ENV
