@@ -81,7 +81,7 @@ jobs:
         uses: ./.github/actions/create_approve_and_merge
         with:
           title: 'Update JaCoCo badge in README.md'
-          commit-message: ${{ env.COMMIT_MESSAGE }}
+          commit-message: "Commit message 123"
           create-pr-app-id: ${{ secrets.APP_ID }}
           create-pr-app-private-key: ${{ secrets.APP_PRIVATE_KEY }}
           approve-pr-app-id: ${{ secrets.ALTERNATE_APP_ID }}
