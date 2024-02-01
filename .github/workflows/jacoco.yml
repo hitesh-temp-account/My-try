@@ -47,11 +47,12 @@ jobs:
           echo "$report_summary" >> $GITHUB_STEP_SUMMARY
           echo "REPORT SUMMARY BELOW:"
           echo "$report_summary"
+          echo "REPORT_SUMMARY=$report_summary" >> $GITHUB_ENV
 
       - name: Get new coverage
         run: |
-          IFS=',' read -ra coverage_list <<< "$report_summary"
-          new_coverage=${coverage_list[${#coverage_list[@]}-1]}
+          report_summary="${{ env.REPORT_SUMMARY }}"
+          new_coverage=$(echo "$report_summary" | grep -oP '(?<=Total Coverage<\/b><\/td><td><b><img src=https:\/\/img\.shields\.io\/badge\/)\d+\.\d+(?=%25-green\.svg>)'
           echo "New Coverage: $new_coverage"
           echo "NEW_COVERAGE=$new_coverage" >> $GITHUB_ENV
 
