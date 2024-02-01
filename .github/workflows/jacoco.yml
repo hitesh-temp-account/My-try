@@ -28,7 +28,7 @@ jobs:
 
       - name: Run unit tests and generate coverage reports
         run: |
-          chmod +x ./gradlew debugCoverage --continue
+          chmod +x gradlew
           ./gradlew debugCoverage --continue
 
       - name: Generate JaCoCo report files
