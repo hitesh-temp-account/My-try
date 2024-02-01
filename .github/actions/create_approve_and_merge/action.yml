@@ -14,20 +14,15 @@ inputs:
   create-pr-app-private-key:
     description: 'github app id'
     required: true
-  app-id:
+  approve-pr-app-id:
     description: 'github app id'
     required: true
-  app-private-key:
+  approve-pr-app-private-key:
     description: 'github app private key'
     required: true
   github-token:
     description: 'github token'
     required: true
-
-# defaults:
-#   run:
-#     shell: bash
-
 
 runs:
   using: 'composite'
@@ -43,10 +38,6 @@ runs:
       run: |
         git config --global user.name "${{ github.actor }}"
         git config --global user.email "<${{ github.actor }}@linkedin.com>"
-      shell: bash
-
-    - name: create PR
-      run: |
         random_number=$(shuf -i 10000000-99999999 -n 1)
         git checkout -b feature-branch-$random_number
         git add README.md
@@ -68,8 +59,8 @@ runs:
       id: my-app-approve
       uses: actions/create-github-app-token@v1
       with:
-        app-id: ${{ inputs.app-id }}
-        private-key: ${{ inputs.app-private-key }}
+        app-id: ${{ inputs.approve-pr-app-id }}
+        private-key: ${{ inputs.approve-pr-app-private-key }}
 
     - name: Approve PR
       if: ${{ env.PR_NUMBER }}

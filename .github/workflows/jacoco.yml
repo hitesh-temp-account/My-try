@@ -78,7 +78,7 @@ jobs:
 
       - name: Create, Approve and Merge PR
         if: env.COVERAGE_CHANGED == 'true'
-        uses: ./.github/actions/create_approve_and_merge_pr_to_update_readme
+        uses: ./.github/actions/create_approve_and_merge
         with:
           title: 'Update JaCoCo badge in README.md'
           commit-message: ${{ env.COMMIT_MESSAGE }}
