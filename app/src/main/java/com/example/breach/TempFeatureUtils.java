@@ -1,3 +1,4 @@
+// Copyright 2019 Foo. All rights reserved. MIT license.
 package com.example.breach;
 
 /**
