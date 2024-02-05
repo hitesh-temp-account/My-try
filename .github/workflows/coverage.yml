@@ -1,3 +1,6 @@
+#  Copyright 2019 Foo. All rights reserved. MIT license.
+#  Test
+#  New Test
 name: Code coverage
 
 on: 
