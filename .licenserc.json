@@ -1,3 +1,4 @@
 {
-  "**/*.java": "// Copyright 2019 Foo. All rights reserved. MIT license."
+  "**/*.java": "// Copyright 2019 Foo. All rights reserved. MIT license.",
+  "**/*.yml": "// Copyright 2019 Foo. All rights reserved. MIT license."
 }
