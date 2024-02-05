@@ -1,3 +1,4 @@
+// Copyright 2019 Foo. All rights reserved. MIT license1.
 package com.example.breach;
 
 import androidx.appcompat.app.AppCompatActivity;
