@@ -1,3 +1,4 @@
+// Copyright 2019 Foo. All rights reserved. MIT1.
 // Copyright 2019 Foo. All rights reserved. MIT.
 package com.example.breach;
 
