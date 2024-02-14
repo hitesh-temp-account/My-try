@@ -40,7 +40,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: upload graph
-          path: ./github/scripts/plot.png
+          path: ./.github/scripts/plot.png
 
       # - name: Create, Approve and Merge PR
       #   uses: ./.github/actions/create_approve_and_merge
