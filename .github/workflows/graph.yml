@@ -1,9 +1,12 @@
 name: Create graph
 
-on:
+on: 
+  push:
+    branches:
+      - main
   pull_request:
-    types:
-      - closed
+    branches:
+      - '*'
 
 env:
   COMMIT_MESSAGE: |
@@ -15,7 +18,6 @@ env:
 
 jobs:
   update-badge:
-    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -36,9 +38,9 @@ jobs:
       - name: Create graph
         id: create-graph
         run: |
-          
           chmod +x ./.github/scripts/graph.py
           python3 ./.github/scripts/graph.py
+          cat .github/scripts/plot.png
 
 
       - name: Create, Approve and Merge PR
