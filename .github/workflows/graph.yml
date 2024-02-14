@@ -8,14 +8,6 @@ on:
     branches:
       - '*'
 
-env:
-  COMMIT_MESSAGE: |
-    Update Baseline Profile
-
-    Created by GitHub Action [${{ github.workflow }} #${{ github.run_number }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
-
-    ACLOVERRIDE CODEOWNEROVERRIDE CUSTOMVALIDATIONSOVERRIDE
-
 jobs:
   update-badge:
     runs-on: ubuntu-latest
@@ -42,14 +34,20 @@ jobs:
           python3 ./.github/scripts/graph.py
           cat .github/scripts/plot.png
 
-
-      - name: Create, Approve and Merge PR
-        uses: ./.github/actions/create_approve_and_merge
+        
+      - name: upload artifact
+        uses: actions/upload-artifact@v4
         with:
-          title: 'Update graph'
-          commit-message: "Commit message 123"
-          create-pr-app-id: ${{ secrets.APP_ID }}
-          create-pr-app-private-key: ${{ secrets.APP_PRIVATE_KEY }}
-          approve-pr-app-id: ${{ secrets.ALTERNATE_APP_ID }}
-          approve-pr-app-private-key: ${{ secrets.ALTERNATE_APP_PRIVATE_KEY }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: upload graph
+          path: ./github/scripts/plot.png
+
+      # - name: Create, Approve and Merge PR
+      #   uses: ./.github/actions/create_approve_and_merge
+      #   with:
+      #     title: 'Update graph'
+      #     commit-message: "Commit message 123"
+      #     create-pr-app-id: ${{ secrets.APP_ID }}
+      #     create-pr-app-private-key: ${{ secrets.APP_PRIVATE_KEY }}
+      #     approve-pr-app-id: ${{ secrets.ALTERNATE_APP_ID }}
+      #     approve-pr-app-private-key: ${{ secrets.ALTERNATE_APP_PRIVATE_KEY }}
+      #     github-token: ${{ secrets.GITHUB_TOKEN }}
