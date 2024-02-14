@@ -1,0 +1,53 @@
+name: Create graph
+
+on:
+  pull_request:
+    types:
+      - closed
+
+env:
+  COMMIT_MESSAGE: |
+    Update Baseline Profile
+
+    Created by GitHub Action [${{ github.workflow }} #${{ github.run_number }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+
+    ACLOVERRIDE CODEOWNEROVERRIDE CUSTOMVALIDATIONSOVERRIDE
+
+jobs:
+  update-badge:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          ref: ${{  github.ref }}
+          fetch-depth: 0
+
+      - name: Install Matplotlib if not already installed
+        run: |
+          if ! pip show matplotlib >/dev/null 2>&1; then
+              pip install matplotlib
+          fi
+
+      - name: Create graph
+        id: create-graph
+        run: |
+          
+          chmod +x ./.github/scripts/graph.py
+          python3 ./.github/scripts/graph.py
+
+
+      - name: Create, Approve and Merge PR
+        uses: ./.github/actions/create_approve_and_merge
+        with:
+          title: 'Update graph'
+          commit-message: "Commit message 123"
+          create-pr-app-id: ${{ secrets.APP_ID }}
+          create-pr-app-private-key: ${{ secrets.APP_PRIVATE_KEY }}
+          approve-pr-app-id: ${{ secrets.ALTERNATE_APP_ID }}
+          approve-pr-app-private-key: ${{ secrets.ALTERNATE_APP_PRIVATE_KEY }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
