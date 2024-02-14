@@ -1,0 +1,32 @@
+name: Create graph
+
+on:
+  pull_request:
+    types:
+      - closed
+
+env:
+  COMMIT_MESSAGE: |
+    Update Baseline Profile
+
+    Created by GitHub Action [${{ github.workflow }} #${{ github.run_number }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+
+    ACLOVERRIDE CODEOWNEROVERRIDE CUSTOMVALIDATIONSOVERRIDE
+
+jobs:
+  update-badge:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          ref: ${{  github.ref }}
+          fetch-depth: 0
+
+      - name: Create graph
+        id: create-graph
+        run: |
