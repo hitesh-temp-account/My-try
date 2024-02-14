@@ -27,6 +27,27 @@ jobs:
           ref: ${{  github.ref }}
           fetch-depth: 0
 
+      - name: Install Matplotlib if not already installed
+        run: |
+          if ! pip show matplotlib >/dev/null 2>&1; then
+              pip install matplotlib
+          fi
+
       - name: Create graph
         id: create-graph
         run: |
+          
+          chmod +x ./.github/scripts/graph.py
+          python3 ./.github/scripts/graph.py
+
+
+      - name: Create, Approve and Merge PR
+        uses: ./.github/actions/create_approve_and_merge
+        with:
+          title: 'Update graph'
+          commit-message: "Commit message 123"
+          create-pr-app-id: ${{ secrets.APP_ID }}
+          create-pr-app-private-key: ${{ secrets.APP_PRIVATE_KEY }}
+          approve-pr-app-id: ${{ secrets.ALTERNATE_APP_ID }}
+          approve-pr-app-private-key: ${{ secrets.ALTERNATE_APP_PRIVATE_KEY }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
