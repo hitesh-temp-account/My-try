@@ -17,9 +17,6 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
-        with:
-          ref: ${{  github.ref }}
-          fetch-depth: 0
 
       - name: Install Matplotlib if not already installed
         run: |
@@ -33,6 +30,10 @@ jobs:
           chmod +x ./.github/scripts/graph.py
           python3 ./.github/scripts/graph.py
           cat .github/scripts/plot.png
+
+      - name: find graph
+        run: |
+          find . -type f -and -path '*/plot.png'
 
         
       - name: upload artifact
