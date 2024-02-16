@@ -40,7 +40,7 @@ runs:
         git config --global user.email "<${{ github.actor }}@linkedin.com>"
         random_number=$(shuf -i 10000000-99999999 -n 1)
         git checkout -b feature-branch-$random_number
-        git add readme.md
+        git add README.md
         git commit -m "${{ inputs.commit-message }}"
         git show
         git push origin feature-branch-$random_number
