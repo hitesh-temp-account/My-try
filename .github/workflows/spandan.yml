@@ -1,9 +1,9 @@
 name: Spandan workflow
 
 on:
-  pull_request:
-    types:
-      - closed
+  push:
+    branches:
+      - main
 
 env:
   COMMIT_MESSAGE: |
