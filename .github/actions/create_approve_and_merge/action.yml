@@ -68,7 +68,7 @@ runs:
         gh pr review ${{ env.PR_NUMBER }} --approve
       shell: bash
       env:
-        GITHUB_TOKEN: ${{ steps.my-app-approve.outputs.token }}
+        GITHUB_TOKEN: ${{ inputs.github-token }}
 
     - name: Turn On PR Auto-Merge
       if: ${{ env.PR_NUMBER }}
