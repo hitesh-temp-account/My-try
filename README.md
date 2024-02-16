@@ -7,6 +7,7 @@
 [![Known Vulnerabilities](https://snyk-widget.herokuapp.com/badge/pip/hitesh-temp-account/Breach/badge.svg)](https://snyk.io/test/github/hitesh-temp-account/Breach)
 
 
+
 ```mermaid
 xychart-beta
 title "App launch time"
