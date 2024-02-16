@@ -52,7 +52,7 @@ runs:
         echo "PR created"
       shell: bash
       env:
-        GITHUB_TOKEN: ${{ steps.my-app-create.outputs.token }}
+        GITHUB_TOKEN: ${{ inputs.github-token }}
 
     - name: my-app-install token for approve PR
       if: ${{ env.PR_NUMBER }}
