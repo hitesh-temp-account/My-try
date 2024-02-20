@@ -47,8 +47,8 @@ jobs:
       
       - name: Build App
         run: |
-        chmod +x gradlew
-        ./gradlew assembleDebug
+          chmod +x gradlew
+          ./gradlew assembleDebug
 
       - name: Install App
         run: adb -s emulator-5554 install /Users/runner/work/audience-network-android/audience-network-android/test-app/build/outputs/apk/debug/test-app-debug.apk
