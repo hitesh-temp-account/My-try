@@ -28,16 +28,11 @@ jobs:
           key1_value=$(echo "$content" | jq -r '."**/*.java"')
           key2_value=$(echo "$content" | jq -r '."**/*.yml"')
           
-          # Extract specific key-value pairs using jq
-          while IFS= read -r line; do
-            key=$(echo "$line" | jq -r 'keys[]')
-            value=$(echo "$line" | jq -r 'to_entries[0].value')
-            
-            # Use the key and value as needed
-            echo "Key: $key"
-            echo "Value: $value"
-            # Perform your actions here using the key and value
-          done <<< "$content"
+          # Extract keys from the JSON object
+          keys=$(jq -r 'keys | .[]' <<< "$content")
+
+          # Print the extracted keys
+          echo "Keys: $keys"
           
           # Print the extracted values
           echo "Key1 value: $key1_value"
