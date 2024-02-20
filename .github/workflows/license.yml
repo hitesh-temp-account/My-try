@@ -61,12 +61,12 @@ jobs:
           # find . -type f -name '*.yml' -exec grep -qF "$key2_value" {} \; -printf "✅ %p\n" -o -printf "❌ %p\n"
 
           # Iterate over each .yml file and check for the presence of key2_value
-          for key in $keys; do
+          for key in "${keys[@]}"; do
             echo "key: $key"
-            files=$(find . -type f -name '*.gradle')
+            files=$(find . -type f -name $key)
             echo "files: $files"
             echo "getKey: '."$key"' "
-            value=$(echo "$content" | jq -r '."**/*.gradle"')
+            value=$(echo "$content" | jq -r '."$key"')
             echo "value: $value"
             for file in $files; do
               if grep -qF "$value" "$file"; then
