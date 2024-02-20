@@ -40,6 +40,7 @@ jobs:
 
           # Iterate over each .yml file and check for the presence of key2_value
           for key in $keys; do
+            echo "key: $key"
             files=$(find . -type f -name $key)
             echo "files: $files"
             value=$(echo "$content" | jq -r '."$key"')
