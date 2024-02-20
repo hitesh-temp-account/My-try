@@ -27,13 +27,17 @@ jobs:
           # Extract specific key-value pairs using jq
           key1_value=$(echo "$content" | jq -r '."**/*.java"')
           key2_value=$(echo "$content" | jq -r '."**/*.yml"')
-
-          jq -r 'to_entries[] | "\(.key) \(.value)"' <<< "$content" | while read -r key value; do
+          
+          # Extract specific key-value pairs using jq
+          while IFS= read -r line; do
+            key=$(echo "$line" | jq -r 'keys[]')
+            value=$(echo "$line" | jq -r 'to_entries[0].value')
+            
             # Use the key and value as needed
             echo "Key: $key"
             echo "Value: $value"
             # Perform your actions here using the key and value
-          done
+          done <<< "$content"
           
           # Print the extracted values
           echo "Key1 value: $key1_value"
