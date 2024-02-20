@@ -3,19 +3,10 @@ name: Check license
 
 on: 
   workflow_dispatch:
-  # push:
-  #   branches:
-  #     - main
-  # pull_request:
-  #   branches:
-  #     - '*'
 
 jobs:
   update-badge:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
@@ -55,7 +46,6 @@ jobs:
           # # find . -type f -name '*.yml' -exec grep -qF "$key2_value" {} \; -exec echo "✅ {}" \; -o -exec echo "❌ {}" \;
           # # find . -type f -name '*.yml' -exec grep -qF "$key2_value" {} \; -printf "✅ %p\n" -o -printf "❌ %p\n"
 
-          no_of_files_without_license=0
           # Iterate over each .yml file and check for the presence of key2_value
           for key in "${keys[@]}"; do
             files=$(find . -type f -name "$key")
@@ -69,21 +59,4 @@ jobs:
               fi
             done
           done
-
-          echo "files without license: $no_of_files_without_license"
-
-          # for key in $keys; do
-          #   echo "key: $key"
-          #   files=$(find . -type f -name "$key")
-          #   echo "files: $files"
-          #   value=$(echo "$content" | jq -r ".$key")
-          #   echo "value: $value"
-          #   for file in $files; do
-          #     if grep -qF "$value" "$file"; then
-          #       echo "$file ✅"
-          #     else
-          #       echo "$file ❌"
-          #     fi
-          #   done
-          # done
         shell: bash
