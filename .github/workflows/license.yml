@@ -49,7 +49,7 @@ jobs:
 
             # Append each excluded path to the expression
             for path in "${excluded_paths[@]}"; do
-              exclude_expr+=" -path \"*/$path/*\" -o"
+              exclude_expr+=" -path \"*/$path*\" -o"
             done
 
             # Remove the last -o
