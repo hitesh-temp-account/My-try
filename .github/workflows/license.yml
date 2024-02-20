@@ -54,7 +54,7 @@ jobs:
 
             # Remove the last -o
             exclude_expr=${exclude_expr::-3}
-            exclude_expr+=" )"
+            exclude_expr+=" \)"
 
             echo "exclude: $exclude_expr"
 
