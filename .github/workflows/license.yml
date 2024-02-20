@@ -39,21 +39,35 @@ jobs:
 
           # Iterate over each .yml file and check for the presence of key2_value
           for key in "${keys[@]}"; do
-            # Construct the find command
-            # find_command="find . -type f -name \"$key\""
 
-            # Add exclusions for each path in the excluded_paths array
-            # for path in "${excluded_paths[@]}"; do
-            #   find_command+=" -not -path \"$path/*\""
-            # done
+            # Read the list of excluded paths from the JSON content
+            excluded_paths=($(jq -r '.ignore[]' <<< "$content"))
 
-            # echo "find command: $find_command"
+            # Construct the find command with excluded paths
+            find_command="find . -type f -name \"$key\""
+            exclude_expr="("
+
+            # Append each excluded path to the expression
+            for path in "${excluded_paths[@]}"; do
+              exclude_expr+=" -path \"*$path*\" -o"
+            done
+
+            # Remove the last -o
+            exclude_expr=${exclude_expr::-3}
+            exclude_expr+=" )"
+
+            echo "exclude: $exclude_expr"
+
+            # Append the exclusion expression to the find command
+            find_command+=" -not $exclude_expr"
+
+            "final find command: $find_command"
+
+            # Execute the find command
+            files=$(eval "$find_command")
+            echo "files: $files"
             
-            # Execute the find command and store the result in the files variable
-            # files=$(eval "$find_command")
-            # echo "files: $files"
-            
-            files=$(find . -type f -name "$key" -not \( -path "*/test/*" -path "*/app/*" \))
+            # files=$(find . -type f -name "$key" -not \( -path "*/test/*" -path "*/app/*" \))
             
             value=$(echo "$content" | jq -r --arg key "$key" '.[$key]')
             
