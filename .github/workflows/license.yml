@@ -19,14 +19,14 @@ jobs:
           # Read the JSON content
           
           # Initialize an empty array to store the keys
-          # keys=()
+          keys=()
 
-          # # Extract keys from the JSON object and append them to the array
-          # while IFS= read -r key; do
-          #   keys+=("$key")
-          # done < <(jq -r 'keys | .[]' <<< "$content")
+          # Extract keys from the JSON object and append them to the array
+          while IFS= read -r key; do
+            keys+=("$key")
+          done < <(jq -r 'keys | .[]' <<< "$content")
 
-          keys=$(jq -r 'keys | .[]' <<< "$content")
+          # keys=$(jq -r 'keys | .[]' <<< "$content")
 
           # Print the keys
           printf '%s\n' "${keys[@]}"
