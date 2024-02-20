@@ -53,7 +53,7 @@ jobs:
             # files=$(eval "$find_command")
             # echo "files: $files"
             
-            files=$(find . -type f -name "$key" -not \( -path "*/test/*" -o -path "*/test-app/*" \))
+            files=$(find . -type f -name "$key" -not \( -path "*/test/*" -o -path "*/app/*" \))
             
             value=$(echo "$content" | jq -r --arg key "$key" '.[$key]')
             
