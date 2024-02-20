@@ -37,7 +37,8 @@ jobs:
           # find . -type f -name '*.yml'
           find . -type f -name '*.yml' -exec grep -q "$key2_value" {} \; -print
 
-          find . -type f -name '*.yml' -exec sh -c 'if grep -qF "$key2_value" "$1"; then echo "✅ $1"; else echo "❌ $1"; fi' _ {} \;
+          find . -type f -name '*.yml' -exec sh -c 'if grep -qF "$key2_value" "$1"; then echo "✅ $1"; else echo "❌ $1"; fi' _ {} \; -or -print
+
 
       # - name: find certificate
       #   run: |
