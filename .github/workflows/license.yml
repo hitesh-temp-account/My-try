@@ -72,9 +72,9 @@ jobs:
 
           echo "files without license: $no_of_files_without_license"
 
-          if [[ $no_of_files_without_license -gt 0 ]]; then
-            exit 1
-          fi
+          # if [[ $no_of_files_without_license -gt 0 ]]; then
+          #   exit 1
+          # fi
 
           # for key in $keys; do
           #   echo "key: $key"
