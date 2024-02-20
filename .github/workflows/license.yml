@@ -34,10 +34,29 @@ jobs:
           # Initialize a variable to keep track of whether there are files without a license
           # has_files_without_license=false
 
+          excluded_paths=$(jq -r '.ignore | .[]' <<< "$content")
+          echo "ignore: $excluded_paths"
+
           # Iterate over each .yml file and check for the presence of key2_value
           for key in "${keys[@]}"; do
-            files=$(find . -type f -name "$key")
+            # Construct the find command
+            find_command="find . -type f -name \"$key\""
+
+            # Add exclusions for each path in the excluded_paths array
+            for path in "${excluded_paths[@]}"; do
+              find_command+=" -not -path \"$path/*\""
+            done
+
+            echo "find command: $find_command"
+            
+            # Execute the find command and store the result in the files variable
+            files=$(eval "$find_command")
+            echo "files: $files"
+            
+            # files=$(find . -type f -name "$key")
+            
             value=$(echo "$content" | jq -r --arg key "$key" '.[$key]')
+            
             for file in $files; do
               if grep -qF "$value" "$file"; then
                 echo "$file ✅"
