@@ -16,8 +16,6 @@ jobs:
           content=$(cat .licenserc.json)
           echo "content: $content"
 
-          # Read the JSON content
-          
           # Initialize an empty array to store the keys
           keys=()
 
@@ -26,19 +24,13 @@ jobs:
             keys+=("$key")
           done < <(jq -r 'keys | .[]' <<< "$content")
 
-          # keys=$(jq -r 'keys | .[]' <<< "$content")
-
-          # Print the keys
-          printf '%s\n' "${keys[@]}"
-
           # Initialize a variable to keep track of whether there are files without a license
           has_files_without_license=false
 
           # Read the list of excluded paths from the JSON content
           excluded_paths=($(jq -r '.ignore[]' <<< "$content"))
-          echo "ignore: $excluded_paths"
 
-          # Iterate over each .yml file and check for the presence of key2_value
+          # Iterate over each type of file and check for the presence of license
           for key in "${keys[@]}"; do
           
             # Construct the find command with excluded paths
@@ -53,7 +45,6 @@ jobs:
             # Remove the last -o
             exclude_expr=${exclude_expr::-3}
             exclude_expr+=" \)"
-
 
             # Append the exclusion expression to the find command
             find_command+=" -not $exclude_expr"
