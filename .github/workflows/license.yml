@@ -49,11 +49,6 @@ jobs:
           # Print the keys
           printf '%s\n' "${keys[@]}"
 
-          for key in "${keys[@]}"; do
-            echo "Key: $key"
-            # Perform actions using the key
-          done
-
           # find . -type f -name '*.java'
           # # find . -type f -name '*.java' -exec grep -F -q "$key1_value" {} \; -print
           # find . -type f -name '*.yml'
@@ -62,12 +57,8 @@ jobs:
 
           # Iterate over each .yml file and check for the presence of key2_value
           for key in "${keys[@]}"; do
-            echo "key: $key"
             files=$(find . -type f -name "$key")
-            echo "files: $files"
-            echo "getKey: '."$key"' "
             value=$(echo "$content" | jq -r --arg key "$key" '.[$key]')
-            echo "value: $value"
             for file in $files; do
               if grep -qF "$value" "$file"; then
                 echo "$file ✅"
