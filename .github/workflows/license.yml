@@ -48,7 +48,7 @@ jobs:
 
           # If there are files without a license, fail the workflow
           if $has_files_without_license; then
-            echo "Failing this workflow as there is atleast one file present without license.
+            echo "Failing this workflow as there is atleast one file present without license."
             exit 1
           fi
         shell: bash
