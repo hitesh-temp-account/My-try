@@ -1,0 +1,36 @@
+name: Check license
+
+on: 
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - '*'
+
+jobs:
+  update-badge:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: get json
+        run: |
+          content=`cat .licenserc.json`
+          echo "content: $content"
+          echo "${{fromJson($content)}}"
+
+      # - name: find graph
+      #   run: |
+      #     find . -type f -and -path '*/plot.png'
+
+        
+      # - name: upload artifact
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: upload graph
+      #     path: ./.github/scripts/plot.png
