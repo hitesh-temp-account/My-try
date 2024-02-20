@@ -40,20 +40,20 @@ jobs:
           # Iterate over each .yml file and check for the presence of key2_value
           for key in "${keys[@]}"; do
             # Construct the find command
-            find_command="find . -type f -name \"$key\""
+            # find_command="find . -type f -name \"$key\""
 
             # Add exclusions for each path in the excluded_paths array
-            for path in "${excluded_paths[@]}"; do
-              find_command+=" -not -path \"$path/*\""
-            done
+            # for path in "${excluded_paths[@]}"; do
+            #   find_command+=" -not -path \"$path/*\""
+            # done
 
-            echo "find command: $find_command"
+            # echo "find command: $find_command"
             
             # Execute the find command and store the result in the files variable
-            files=$(eval "$find_command")
-            echo "files: $files"
+            # files=$(eval "$find_command")
+            # echo "files: $files"
             
-            # files=$(find . -type f -name "$key")
+            files=$(find . -type f -name "$key" -not \( -path "*/test/*" -o -path "*/test-app/*" \))
             
             value=$(echo "$content" | jq -r --arg key "$key" '.[$key]')
             
