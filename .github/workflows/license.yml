@@ -32,16 +32,16 @@ jobs:
           printf '%s\n' "${keys[@]}"
 
           # Initialize a variable to keep track of whether there are files without a license
-          # has_files_without_license=false
+          has_files_without_license=false
 
-          excluded_paths=$(jq -r '.ignore | .[]' <<< "$content")
+          excluded_paths=$(jq -r '.ignore[]' <<< "$content")
           echo "ignore: $excluded_paths"
 
           # Iterate over each .yml file and check for the presence of key2_value
           for key in "${keys[@]}"; do
 
             # Read the list of excluded paths from the JSON content
-            excluded_paths=($(jq -r '.ignore[]' <<< "$content"))
+            # excluded_paths=($(jq -r '.ignore[]' <<< "$content"))
 
             # Construct the find command with excluded paths
             find_command="find . -type f -name \"$key\""
@@ -71,15 +71,15 @@ jobs:
               if grep -qF "$value" "$file"; then
                 echo "$file ✅"
               else
-                # has_files_without_license=true
+                has_files_without_license=true
                 echo "$file ❌"
               fi
             done
           done
 
-          # If there are files without a license, fail the workflow
-          # if ! $has_files_without_license; then
-          #   echo "Failing this workflow as there is atleast one file present without license."
-          #   exit 1
-          # fi
+          If there are files without a license, fail the workflow
+          if $has_files_without_license; then
+            echo "Failing this workflow as there is atleast one file present without license."
+            exit 1
+          fi
         shell: bash
