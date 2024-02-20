@@ -51,7 +51,7 @@ jobs:
             files=$(find . -type f -name '$key')
             echo "files: $files"
             echo "getKey: '."$key"' "
-            value=$(echo "$content" | jq -r '."**/*.java"')
+            value=$(echo "$content" | jq -r --arg file_pattern "$key" '$key')
             echo "value: $value"
             for file in $files; do
               if grep -qF "$value" "$file"; then
