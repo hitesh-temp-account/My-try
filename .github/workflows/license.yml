@@ -64,7 +64,7 @@ jobs:
               if grep -qF "$value" "$file"; then
                 echo "$file ✅"
               else
-                no_of_files_without_license++
+                ((no_of_files_without_license++))
                 echo "$file ❌"
               fi
             done
