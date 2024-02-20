@@ -56,16 +56,12 @@ jobs:
             exclude_expr=${exclude_expr::-3}
             exclude_expr+=" \)"
 
-            echo "exclude: $exclude_expr"
 
             # Append the exclusion expression to the find command
             find_command+=" -not $exclude_expr"
 
-            # "final find command: $find_command"
-
             # Execute the find command
             files=$(eval "$find_command")
-            echo "files: $files"
             
             # files=$(find . -type f -name "$key" -not \( -path "*/test/*" -path "*/app/*" \))
             
