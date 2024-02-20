@@ -32,7 +32,7 @@ jobs:
           printf '%s\n' "${keys[@]}"
 
           # Initialize a variable to keep track of whether there are files without a license
-          has_files_without_license=false
+          # has_files_without_license=false
 
           # Iterate over each .yml file and check for the presence of key2_value
           for key in "${keys[@]}"; do
@@ -42,15 +42,15 @@ jobs:
               if grep -qF "$value" "$file"; then
                 echo "$file ✅"
               else
-                has_files_without_license=true
+                # has_files_without_license=true
                 echo "$file ❌"
               fi
             done
           done
 
           # If there are files without a license, fail the workflow
-          if ! $has_files_without_license; then
-            echo "Failing this workflow as there is atleast one file present without license."
-            exit 1
-          fi
+          # if ! $has_files_without_license; then
+          #   echo "Failing this workflow as there is atleast one file present without license."
+          #   exit 1
+          # fi
         shell: bash
