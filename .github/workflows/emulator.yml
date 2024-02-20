@@ -1,0 +1,64 @@
+name: Launch emulator
+
+on:
+  workflow_dispatch:
+
+jobs:
+  launch_emulator:
+    name: Launch emulator and run tests
+    runs-on: macos-latest
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v3
+
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install System Image
+        run: sdkmanager --install 'system-images;android-30;google_apis_playstore;x86_64'
+
+      - name: Create Emulator
+        run: echo "no" |
+          avdmanager create avd -n TestAVD -k "system-images;android-30;google_apis_playstore;x86_64"
+
+      - name: Restart adb server
+        run: |
+          adb kill-server
+          adb start-server
+
+      - name: Launch Emulator
+        run: |
+          echo "Starting emulator and waiting for boot to complete...."
+          $ANDROID_HOME/emulator/emulator -avd TestAVD -no-skin -no-audio -no-window &
+          adb wait-for-device 
+          echo "Emulator has finished booting"
+          adb devices
+      
+      - name: Build App
+        run: |
+        chmod +x gradlew
+        ./gradlew assembleDebug
+
+      - name: Install App
+        run: adb -s emulator-5554 install /Users/runner/work/audience-network-android/audience-network-android/test-app/build/outputs/apk/debug/test-app-debug.apk
+
+      - name: Print logs in background and launch app
+        run: |
+          adb logcat -c
+          touch test-app/emulator.log
+          chmod 777 test-app/emulator.log
+          adb logcat com.linkedin.audiencenetwork.testapp.view >> test-app/emulator.log &
+          adb shell am start -n com.linkedin.audiencenetwork.testapp/.view.TestActivity
+          sleep 30
+
+      - name: Upload logs
+        uses: actions/upload-artifact@v2
+        with:
+          name: logs
+          path: test-app/emulator.log
