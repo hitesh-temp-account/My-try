@@ -32,9 +32,9 @@ jobs:
           echo "Key1 value: $key1_value"
           echo "Key2 value: $key2_value"
 
-          find . -type f -name '*.java'
+          # find . -type f -name '*.java'
           find . -type f -name '*.java' -exec grep -q "$key1_value" {} \; -print
-          find . -type f -name '*.yml'
+          # find . -type f -name '*.yml'
           find . -type f -name '*.yml' -exec grep -q "$key2_value" {} \; -print
 
       # - name: find certificate
