@@ -1,7 +1,12 @@
 name: Launch emulator
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main
+  pull_requests:
+    branches:
+      - '*'
 
 jobs:
   launch_emulator:
