@@ -15,20 +15,8 @@ jobs:
         run: |
           content=$(cat .licenserc.json)
           echo "content: $content"
-          
-          # Extract specific key-value pairs using jq
-          key1_value=$(echo "$content" | jq -r '."**/*.java"')
-          key2_value=$(echo "$content" | jq -r '."**/*.yml"')
-
-          # Print the extracted values
-          echo "Key1 value: $key1_value"
-          echo "Key2 value: $key2_value"
-          
-          # Extract keys from the JSON object
-          # keys=$(jq -r 'keys | .[]' <<< "$content")
 
           # Read the JSON content
-
           # Initialize an empty array to store the keys
           keys=()
 
