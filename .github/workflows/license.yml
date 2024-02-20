@@ -49,18 +49,17 @@ jobs:
           yml_files=$(find . -type f -name '*.yml')
 
           # Iterate over each .yml file and check for the presence of key2_value
-          for file in $java_files; do
-            if grep -qF "$key1_value" "$file"; then
-              echo "$file ✅"
-            else
-              echo "$file ❌"
-            fi
-          done
-          for file in $yml_files; do
-            if grep -qF "$key2_value" "$file"; then
-              echo "$file ✅"
-            else
-              echo "$file ❌"
-            fi
+          for key in $keys; do
+            files=$(find . -type f -name '$key')
+            echo "files: $files"
+            value=$(echo "$content" | jq -r '."$key"')
+            echo "value: $value"
+            for file in $files; do
+              if grep -qF "$value" "$file"; then
+                echo "$file ✅"
+              else
+                echo "$file ❌"
+              fi
+            done
           done
         shell: bash
