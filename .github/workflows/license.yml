@@ -41,7 +41,7 @@ jobs:
           for key in "${keys[@]}"; do
 
             # Read the list of excluded paths from the JSON content
-            excluded_paths=($(jq -r '.ignore[]' <<< "$content"))
+            # excluded_paths=($(jq -r '.ignore[]' <<< "$content"))
 
             # Construct the find command with excluded paths
             find_command="find . -type f -name \"$key\""
