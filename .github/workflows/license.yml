@@ -63,10 +63,10 @@ jobs:
           # Iterate over each .yml file and check for the presence of key2_value
           for key in "${keys[@]}"; do
             echo "key: $key"
-            files=$(find . -type f -name $key)
+            files=$(find . -type f -name "$key")
             echo "files: $files"
             echo "getKey: '."$key"' "
-            value=$(echo "$content" | jq -r '."$key"')
+            value=$(jq -r ".$key" .licenserc.json)
             echo "value: $value"
             for file in $files; do
               if grep -qF "$value" "$file"; then
