@@ -48,10 +48,10 @@ jobs:
           # Iterate over each .yml file and check for the presence of key2_value
           for key in $keys; do
             echo "key: $key"
-            files=$(find . -type f -name '$key')
+            files=$(find . -type f -name "$key")
             echo "files: $files"
             echo "getKey: '."$key"' "
-            value=$(echo "$content" | jq -r --arg file_pattern "$key" '$key')
+            value=$(echo "$content" | jq -r --arg file_pattern "$key" ".$key")
             echo "value: $value"
             for file in $files; do
               if grep -qF "$value" "$file"; then
