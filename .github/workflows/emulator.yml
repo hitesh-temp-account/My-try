@@ -3,7 +3,7 @@ name: Launch emulator
 on:
   push:
     branches:
-      - main
+      - '*'
   pull_requests:
     branches:
       - '*'
