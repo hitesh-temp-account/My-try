@@ -3,7 +3,7 @@ name: Launch emulator
 on:
   push:
     branches:
-      - '*'
+      - main
   pull_request:
     branches:
       - '*'
@@ -53,6 +53,7 @@ jobs:
       - name: Find and install App
         run: |
           apk_path=$(find . -type f -and -path '*debug.apk')
+          echo $apk_path
           adb -s emulator-5554 install $apk_path
 
 
@@ -61,12 +62,12 @@ jobs:
           adb logcat -c
           touch test-app/emulator.log
           chmod 777 test-app/emulator.log
-          adb logcat com.linkedin.audiencenetwork.testapp.view >> test-app/emulator.log &
-          adb shell am start -n com.linkedin.audiencenetwork.testapp/.view.TestActivity
+          adb logcat com.example.breach.app >> app/emulator.log &
+          adb shell am start -n com.example.breach.app/.MainActivity
           sleep 30
 
       - name: Upload logs
         uses: actions/upload-artifact@v2
         with:
           name: logs
-          path: test-app/emulator.log
+          path: app/emulator.log
