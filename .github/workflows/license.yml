@@ -51,7 +51,9 @@ jobs:
             files=$(find . -type f -name "$key")
             echo "files: $files"
             echo "getKey: '."$key"' "
-            value=$(echo "$content" | jq -r --arg file_pattern "$key" ".$key")
+            escaped_key=$(sed 's/[*]/\\*/g' <<< "$key")  # Escape wildcard characters
+            echo "escaped key: $escaped_key"
+            value=$(echo "$content" | jq -r --arg file_pattern "$escaped_key" ".$escaped_key")
             echo "value: $value"
             for file in $files; do
               if grep -qF "$value" "$file"; then
