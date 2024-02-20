@@ -35,7 +35,7 @@ jobs:
           # find . -type f -name '*.java'
           find . -type f -name '*.java' -exec grep -F -q "$key1_value" {} \; -print
           # find . -type f -name '*.yml'
-          find . -type f -name '*.yml' -exec grep -F -q "$key2_value" {} \; -print
+          find . -type f -name '*.yml' -exec if grep -qF "$key2_value" "$1"; then echo "❌ $1"; else echo "✅ $1"; fi {} \; -print
 
 
           # find . -type f -name '*.yml' -exec sh -c 'if grep -qF "$key2_value" "$1"; then echo "❌ $1"; else echo "✅ $1"; fi' _ {} \;
