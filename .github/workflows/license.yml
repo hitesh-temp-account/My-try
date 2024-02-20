@@ -22,7 +22,6 @@ jobs:
         run: |
           content=`cat .licenserc.json`
           echo "content: $content"
-          echo "${{fromJson($content)}}"
 
       # - name: find graph
       #   run: |
