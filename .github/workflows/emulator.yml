@@ -50,8 +50,11 @@ jobs:
           chmod +x gradlew
           ./gradlew assembleDebug
 
-      - name: Install App
-        run: adb -s emulator-5554 install /Users/runner/work/audience-network-android/audience-network-android/test-app/build/outputs/apk/debug/test-app-debug.apk
+      - name: Find and install App
+        run: |
+          apk_path=$(find . -type f -and -path '*debug.apk')
+          adb -s emulator-5554 install $apk_path
+
 
       - name: Print logs in background and launch app
         run: |
