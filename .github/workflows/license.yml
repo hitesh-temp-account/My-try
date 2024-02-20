@@ -61,7 +61,7 @@ jobs:
                 echo "$file ✅"
               else
                 has_files_without_license=true
-                echo "$file ❌"
+                echo "$file ❌ missing copyright!"
               fi
             done
           done
