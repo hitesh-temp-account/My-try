@@ -17,6 +17,7 @@ jobs:
           echo "content: $content"
 
           # Read the JSON content
+          
           # Initialize an empty array to store the keys
           keys=()
 
@@ -27,12 +28,6 @@ jobs:
 
           # Print the keys
           printf '%s\n' "${keys[@]}"
-
-          # find . -type f -name '*.java'
-          # # find . -type f -name '*.java' -exec grep -F -q "$key1_value" {} \; -print
-          # find . -type f -name '*.yml'
-          # # find . -type f -name '*.yml' -exec grep -qF "$key2_value" {} \; -exec echo "✅ {}" \; -o -exec echo "❌ {}" \;
-          # # find . -type f -name '*.yml' -exec grep -qF "$key2_value" {} \; -printf "✅ %p\n" -o -printf "❌ %p\n"
 
           # Iterate over each .yml file and check for the presence of key2_value
           for key in "${keys[@]}"; do
