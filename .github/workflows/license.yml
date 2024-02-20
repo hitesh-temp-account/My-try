@@ -38,10 +38,16 @@ jobs:
           # Print the extracted keys
           echo "Keys: $keys"
 
+          # find . -type f -name '*.java'
+          # find . -type f -name '*.java' -exec grep -F -q "$key1_value" {} \; -print
+          # find . -type f -name '*.yml'
+          # find . -type f -name '*.yml' -exec grep -qF "$key2_value" {} \; -exec echo "✅ {}" \; -o -exec echo "❌ {}" \;
+          # find . -type f -name '*.yml' -exec grep -qF "$key2_value" {} \; -printf "✅ %p\n" -o -printf "❌ %p\n"
+
           # Iterate over each .yml file and check for the presence of key2_value
           for key in $keys; do
             echo "key: $key"
-            files=$(find . -type f -name $key)
+            files=$(find . -type f -name '$key')
             echo "files: $files"
             value=$(echo "$content" | jq -r '."$key"')
             echo "value: $value"
