@@ -55,6 +55,7 @@ jobs:
           # # find . -type f -name '*.yml' -exec grep -qF "$key2_value" {} \; -exec echo "✅ {}" \; -o -exec echo "❌ {}" \;
           # # find . -type f -name '*.yml' -exec grep -qF "$key2_value" {} \; -printf "✅ %p\n" -o -printf "❌ %p\n"
 
+          no_of_files_without_license=0
           # Iterate over each .yml file and check for the presence of key2_value
           for key in "${keys[@]}"; do
             files=$(find . -type f -name "$key")
@@ -63,10 +64,15 @@ jobs:
               if grep -qF "$value" "$file"; then
                 echo "$file ✅"
               else
+                no_of_files_without_license++
                 echo "$file ❌"
               fi
             done
           done
+
+          echo "files without license: $no_of_files_without_license"
+          if $no_of_files_without_license=0; then
+            exit 1
 
           # for key in $keys; do
           #   echo "key: $key"
