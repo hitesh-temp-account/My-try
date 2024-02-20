@@ -50,7 +50,8 @@ jobs:
             echo "key: $key"
             files=$(find . -type f -name '$key')
             echo "files: $files"
-            value=$(echo "$content" | jq -r '.[$key]')
+            echo "getKey: '."$key"' "
+            value=$(echo "$content" | jq -r '."$key"')
             echo "value: $value"
             for file in $files; do
               if grep -qF "$value" "$file"; then
