@@ -66,7 +66,7 @@ jobs:
             files=$(find . -type f -name "$key")
             echo "files: $files"
             echo "getKey: '."$key"' "
-            value=$(jq -r ".$key" .licenserc.json)
+            value=$(echo "$content" | jq -r ''."$key"')
             echo "value: $value"
             for file in $files; do
               if grep -qF "$value" "$file"; then
