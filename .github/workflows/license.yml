@@ -27,38 +27,23 @@ jobs:
           # Extract specific key-value pairs using jq
           key1_value=$(echo "$content" | jq -r '."**/*.java"')
           key2_value=$(echo "$content" | jq -r '."**/*.yml"')
+
+          # Print the extracted values
+          echo "Key1 value: $key1_value"
+          echo "Key2 value: $key2_value"
           
           # Extract keys from the JSON object
           keys=$(jq -r 'keys | .[]' <<< "$content")
 
           # Print the extracted keys
           echo "Keys: $keys"
-          
-          # Print the extracted values
-          echo "Key1 value: $key1_value"
-          echo "Key2 value: $key2_value"
 
           # Iterate over each .yml file and check for the presence of key2_value
-          # for key in $keys; do
-          #   echo "key: $key"
-          #   files=$(find . -type f -name $key)
-          #   echo "files: $files"
-          #   value=$(echo "$content" | jq -r '."$key"')
-          #   echo "value: $value"
-          #   for file in $files; do
-          #     if grep -qF "$value" "$file"; then
-          #       echo "$file ✅"
-          #     else
-          #       echo "$file ❌"
-          #     fi
-          #   done
-          # done
-
           for key in $keys; do
             echo "key: $key"
-            files=$(find . -type f -name "$key")
+            files=$(find . -type f -name $key)
             echo "files: $files"
-            value=$(echo "$content" | jq -r ".$key")
+            value=$(echo "$content" | jq -r '."$key"')
             echo "value: $value"
             for file in $files; do
               if grep -qF "$value" "$file"; then
@@ -68,4 +53,19 @@ jobs:
               fi
             done
           done
+
+          # for key in $keys; do
+          #   echo "key: $key"
+          #   files=$(find . -type f -name "$key")
+          #   echo "files: $files"
+          #   value=$(echo "$content" | jq -r ".$key")
+          #   echo "value: $value"
+          #   for file in $files; do
+          #     if grep -qF "$value" "$file"; then
+          #       echo "$file ✅"
+          #     else
+          #       echo "$file ❌"
+          #     fi
+          #   done
+          # done
         shell: bash
