@@ -60,8 +60,8 @@ jobs:
       - name: Print logs in background and launch app
         run: |
           adb logcat -c
-          touch test-app/emulator.log
-          chmod 777 test-app/emulator.log
+          touch app/emulator.log
+          chmod 777 app/emulator.log
           adb logcat com.example.breach.app >> app/emulator.log &
           adb shell am start -n com.example.breach.app/.MainActivity
           sleep 30
