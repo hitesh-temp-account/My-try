@@ -28,6 +28,12 @@ jobs:
 
           # Iterate over each type of file and check for the presence of license
           for key in "${keys[@]}"; do
+
+            # Don't consider 'ignore' key for license checking
+            if [[ "$key" == "ignore" ]]; then
+              echo "continued!"
+              continue
+            fi
           
             files=$(find . -type f -name "$key")
             value=$(echo "$content" | jq -r --arg key "$key" '.[$key]')
@@ -42,12 +48,6 @@ jobs:
             done
             
             for file in $files; do
-
-              # Don't consider 'ignore' key for license checking
-              if [[ "$key" == "ignore" ]]; then
-                echo "continued!"
-                continue
-              fi
 
               # Use grep to check if the file is in the excluded files list
               if grep -qF "$file" <<< "${excluded_files[*]}"; then
