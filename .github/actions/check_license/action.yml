@@ -12,6 +12,10 @@ runs:
       run: |
         content=$(cat .licenserc.json)
 
+        # Define color codes
+        RED='\033[0;31m'
+        GREEN='\033[0;32m'
+
         # Initialize an empty array to store the keys
         keys=()
 
@@ -63,7 +67,7 @@ runs:
               echo "$file ✅"
             else
               has_files_without_license=true
-              echo "$file ❌ missing copyright!"
+              echo -e "$file ❌ ${RED}missing copyright!${NC}"
             fi
           done
         done
