@@ -1,0 +1,68 @@
+name: 'Check license in files'
+description: 'Checks if required license is present in files'
+
+defaults:
+  run:
+    shell: bash
+
+runs:
+  using: 'composite'
+  steps:
+    - name: get json
+      run: |
+        content=$(cat .licenserc.json)
+
+        # Initialize an empty array to store the keys
+        keys=()
+
+        # Extract keys from the JSON object and append them to the array
+        while IFS= read -r key; do
+          keys+=("$key")
+        done < <(jq -r 'keys | .[]' <<< "$content")
+
+        # Initialize a variable to keep track of whether there are files without a license
+        has_files_without_license=false
+
+        # Iterate over each type of file and check for the presence of license
+        for key in "${keys[@]}"; do
+
+          # Don't consider 'ignore' key for license checking
+          if [[ "$key" == "ignore" ]]; then
+            echo "continued!"
+            continue
+          fi
+          
+          files=$(find . -type f -name "$key")
+          value=$(echo "$content" | jq -r --arg key "$key" '.[$key]')
+
+          # Read the list of excluded paths from the JSON content
+          excluded_paths=($(jq -r '.ignore[]' <<< "$content"))
+            
+          # Get list of excluded files matching the ignored paths
+          excluded_files=()
+          for path in "${excluded_paths[@]}"; do
+            excluded_files+=$(find . -type f -name "$key" -path "*/$path*")
+          done
+            
+          for file in $files; do
+
+            # Use grep to check if the file is in the excluded files list
+            if grep -qF "$file" <<< "${excluded_files[*]}"; then
+              continue
+            fi
+              
+            if grep -qF "$value" "$file"; then
+              echo "$file ✅"
+            else
+              has_files_without_license=true
+              echo "$file ❌ missing copyright!"
+            fi
+          done
+        done
+
+        # If there are files without a license, fail the workflow
+        if $has_files_without_license; then
+          echo "Failing this workflow as there is atleast one file present without license."
+          exit 1
+        fi
+      shell: bash
