@@ -44,14 +44,19 @@ jobs:
             for file in $files; do
               # Check if the file is not in the excluded files list
               echo "current file: $file"
-              echo "excluded files: $excluded_files"
-              if [[ ! " ${excluded_files[@]} " =~ " $file " ]]; then
-                if grep -qF "$value" "$file"; then
-                  echo "$file ✅"
-                else
-                  has_files_without_license=true
-                  echo "$file ❌ missing copyright!"
-                fi
+              echo "excluded files: ${excluded_files[*]}"
+
+              # Use grep to check if the file is in the excluded files list
+              if grep -qF "$file" <<< "${excluded_files[*]}"; then
+                echo "continued as the file is excluded"
+                continue
+              fi
+              
+              if grep -qF "$value" "$file"; then
+                echo "$file ✅"
+              else
+                has_files_without_license=true
+                echo "$file ❌ missing copyright!"
               fi
             done
           done
