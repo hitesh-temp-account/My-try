@@ -41,7 +41,7 @@ jobs:
             for path in "${excluded_paths[@]}"; do
               excluded_files+=$(find . -type f -name "$key" -path "*/$path*")
             done
-            echo "excluded files after calculation: $excluded_files"
+            
             for file in $files; do
 
               # Use grep to check if the file is in the excluded files list
