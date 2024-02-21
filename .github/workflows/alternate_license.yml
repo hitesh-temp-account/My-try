@@ -31,7 +31,7 @@ jobs:
           excluded_paths=($(jq -r '.ignore[]' <<< "$content"))
 
           echo "excluded paths: $excluded_paths"
-          ehco "keys: $keys"
+          echo "keys: $keys"
 
           # Iterate over each type of file and check for the presence of license
           for key in "${keys[@]}"; do
