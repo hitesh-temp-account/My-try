@@ -54,7 +54,7 @@ runs:
           # Execute the find command
           files=$(eval "$find_command")
             
-          # files=$(find . -type f -name "$key" -not \( -path "*/test/*" -path "*/app/*" \))
+          # files=$(find . -type f -name "$key" -not \( -path "*/test/*" -o -path "*/app/*" \))
             
           value=$(echo "$content" | jq -r --arg key "$key" '.[$key]')
             
