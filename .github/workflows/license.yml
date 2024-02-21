@@ -14,7 +14,6 @@ jobs:
       - name: get json
         run: |
           content=$(cat .licenserc.json)
-          echo "content: $content"
 
           # Initialize an empty array to store the keys
           keys=()
