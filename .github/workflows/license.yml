@@ -22,7 +22,7 @@ jobs:
           # Extract keys from the JSON object and append them to the array
           while IFS= read -r key; do
             keys+=("$key")
-          done <<<(jq -r 'keys | .[]' <<< "$content")
+          done < <(jq -r 'keys | .[]' <<< "$content")
 
           # Initialize a variable to keep track of whether there are files without a license
           has_files_without_license=false
