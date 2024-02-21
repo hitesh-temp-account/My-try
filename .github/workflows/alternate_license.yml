@@ -1,5 +1,5 @@
 #  Copyright 2019 Foo. All rights reserved. MIT license.
-name: Check license
+name: Check license alternate
 
 on: 
   workflow_dispatch:
@@ -30,10 +30,14 @@ jobs:
           # Read the list of excluded paths from the JSON content
           excluded_paths=($(jq -r '.ignore[]' <<< "$content"))
 
+          echo "excluded paths: $excluded_paths \n"
+
           # Iterate over each type of file and check for the presence of license
           for key in "${keys[@]}"; do
             
             files=$(find . -type f -name "$key")
+
+            echo "files: $files \n"
             
             value=$(echo "$content" | jq -r --arg key "$key" '.[$key]')
 
@@ -42,6 +46,8 @@ jobs:
             for path in "${excluded_paths[@]}"; do
               excluded_files+=( $(find . -type f -name "*.$key" -path "*/$path*") )
             done
+
+            echo "excluded files: $excluded_files \n"
             
             for file in $files; do
               # Check if the file is not in the excluded files list
