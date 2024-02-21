@@ -27,23 +27,24 @@ jobs:
           # Initialize a variable to keep track of whether there are files without a license
           has_files_without_license=false
 
-          # Read the list of excluded paths from the JSON content
-          excluded_paths=($(jq -r '.ignore[]' <<< "$content"))
-
           # Iterate over each type of file and check for the presence of license
           for key in "${keys[@]}"; do
           
             files=$(find . -type f -name "$key")
             value=$(echo "$content" | jq -r --arg key "$key" '.[$key]')
 
+            # Read the list of excluded paths from the JSON content
+            excluded_paths=($(jq -r '.ignore[]' <<< "$content"))
             # Exclude files matching the ignored paths
             excluded_files=()
             for path in "${excluded_paths[@]}"; do
               excluded_files+=$(find . -type f -name "$key" -path "*/$path*")
             done
-            
+            echo "excluded files after calculation: $excluded_files"
             for file in $files; do
               # Check if the file is not in the excluded files list
+              echo "current file: $file"
+              echo "excluded files: $excluded_files"
               if [[ ! " ${excluded_files[@]} " =~ " $file " ]]; then
                 if grep -qF "$value" "$file"; then
                   echo "$file ✅"
