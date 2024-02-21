@@ -36,7 +36,11 @@ jobs:
 
           # Iterate over each type of file and check for the presence of license
           for key in "${keys[@]}"; do
-          
+
+            if [[ "$key" == "ignore" ]]; then
+              echo "continued!"
+              continue
+            fi
             # Construct the find command with excluded paths
             find_command="find . -type f -name \"$key\""
             exclude_expr="\("
