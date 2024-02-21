@@ -35,6 +35,7 @@ jobs:
 
             # Read the list of excluded paths from the JSON content
             excluded_paths=($(jq -r '.ignore[]' <<< "$content"))
+            
             # Exclude files matching the ignored paths
             excluded_files=()
             for path in "${excluded_paths[@]}"; do
@@ -42,13 +43,9 @@ jobs:
             done
             echo "excluded files after calculation: $excluded_files"
             for file in $files; do
-              # Check if the file is not in the excluded files list
-              echo "current file: $file"
-              echo "excluded files: ${excluded_files[*]}"
 
               # Use grep to check if the file is in the excluded files list
               if grep -qF "$file" <<< "${excluded_files[*]}"; then
-                echo "continued as the file is excluded"
                 continue
               fi
               
