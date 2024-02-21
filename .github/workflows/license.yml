@@ -32,6 +32,8 @@ jobs:
 
           echo "excluded paths: $excluded_paths"
 
+          echo "keys: $keys"
+
           # Iterate over each type of file and check for the presence of license
           for key in "${keys[@]}"; do
           
