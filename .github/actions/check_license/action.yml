@@ -64,7 +64,7 @@ runs:
             
           for file in $files; do
             if grep -qF "$value" "$file"; then
-              echo "$file ✅ ${GREEN}... ok${NC}"
+              echo "$file ✅ ${GREEN}ok${NC}"
             else
               has_files_without_license=true
               echo -e "$file ❌ ${RED}missing copyright!${NC}"
