@@ -30,14 +30,14 @@ jobs:
           # Read the list of excluded paths from the JSON content
           excluded_paths=($(jq -r '.ignore[]' <<< "$content"))
 
-          echo "excluded paths: $excluded_paths \n"
+          echo "excluded paths: $excluded_paths"
 
           # Iterate over each type of file and check for the presence of license
           for key in "${keys[@]}"; do
             
             files=$(find . -type f -name "$key")
 
-            echo "files: $files /n"
+            echo "files: $files"
             
             value=$(echo "$content" | jq -r --arg key "$key" '.[$key]')
 
