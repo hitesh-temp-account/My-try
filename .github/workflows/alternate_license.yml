@@ -37,17 +37,17 @@ jobs:
             
             files=$(find . -type f -name "$key")
 
-            echo "files: $files \n"
+            echo "files: $files /n"
             
             value=$(echo "$content" | jq -r --arg key "$key" '.[$key]')
 
             # Exclude files matching the ignored paths
             excluded_files=()
             for path in "${excluded_paths[@]}"; do
-              excluded_files+=( $(find . -type f -name "*.$key" -path "*/$path*") )
+              excluded_files+=$(find . -type f -name "*.$key" -path "*/$path*")
             done
 
-            echo "excluded files: $excluded_files \n"
+            echo "excluded files: $excluded_files /n"
             
             for file in $files; do
               # Check if the file is not in the excluded files list
