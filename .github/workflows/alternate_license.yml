@@ -41,7 +41,7 @@ jobs:
             # Read the list of excluded paths from the JSON content
             excluded_paths=($(jq -r '.ignore[]' <<< "$content"))
             
-            # Exclude files matching the ignored paths
+            # Get list of excluded files matching the ignored paths
             excluded_files=()
             for path in "${excluded_paths[@]}"; do
               excluded_files+=$(find . -type f -name "$key" -path "*/$path*")
