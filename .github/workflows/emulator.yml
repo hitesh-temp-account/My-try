@@ -29,8 +29,21 @@ jobs:
         run: sdkmanager --install 'system-images;android-30;google_apis_playstore;x86_64'
 
       - name: Create Emulator
-        run: echo "no" |
-          avdmanager create avd -n TestAVD -k "system-images;android-30;google_apis_playstore;x86_64"
+        id: create_emulator
+        run: echo "no" | avdmanager create avd -n TestAVD -k "system-images;android-30;google_apis_playstore;x86_64"
+
+      - name: Check Emulator Creation Status
+        run: |
+          if [ $? -eq 0 ]; then
+            echo "Emulator creation successful"
+          else
+            echo "Emulator creation failed"
+            exit 1
+          fi
+
+      # - name: Create Emulator
+      #   run: echo "no" |
+      #     avdmanager create avd -n TestAVD -k "system-images;android-30;google_apis_playstore;x86_64"
 
       - name: Restart adb server
         run: |
