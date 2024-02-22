@@ -67,6 +67,7 @@ jobs:
         run: |
           apk_path=$(find . -type f -and -path '*debug.apk')
           echo $apk_path
+          adb shell pm uninstall com.example.breach
           adb -s emulator-5554 install /Users/runner/work/breach/breach/app/build/outputs/apk/debug/app-debug.apk
 
 
