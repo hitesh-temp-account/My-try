@@ -80,7 +80,7 @@ jobs:
           ./gradlew :app:installDebugAndroidTest
           adb shell pm list instrumentation
           adb shell am instrument -w -e class com.example.breach.ExampleInstrumentedTest com.example.breach.app.test/androidx.test.runner.AndroidJUnitRunner
-          sleep 30
+          sleep 31
 
       - name: Upload logs
         uses: actions/upload-artifact@v2
