@@ -21,12 +21,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <!-- Add the instrumentation tag for your test runner -->
-        <instrumentation
-            android:name="androidx.test.runner.AndroidJUnitRunner"
-            android:targetPackage="com.example.breach"
-            android:label="Breach Instrumentation Test Runner" />
     </application>
+
+    <!-- Add the instrumentation tag under the manifest -->
+    <instrumentation
+        android:name="androidx.test.runner.AndroidJUnitRunner"
+        android:targetPackage="com.example.breach"
+        android:label="Breach Instrumentation Test Runner" />
 
 </manifest>
