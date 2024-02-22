@@ -80,7 +80,7 @@ jobs:
           ./gradlew installDebug
           ./gradlew :app:installDebugAndroidTest
           adb shell pm list instrumentation
-          adb shell am instrument -w -e class com.example.breach.ExampleInstrumentedTest com.example.breach.app.test/androidx.test.runner.AndroidJUnitRunner
+          adb shell am instrument -w -e class com.example.breach.ExampleInstrumentedTest com.example.breach.test/androidx.test.runner.AndroidJUnitRunner
           sleep 31
           adb shell pm uninstall com.example.breach
 
