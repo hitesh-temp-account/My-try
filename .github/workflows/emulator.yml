@@ -25,8 +25,14 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
-      - name: Install System Image
-        run: sdkmanager --install 'system-images;android-30;google_apis_playstore;x86_64'
+      - name: Check if System Image is Installed
+        run: |
+          if [ ! -d "$ANDROID_SDK_ROOT/system-images/android-30/google_apis_playstore/x86_64" ]; then
+            echo "System image not found. Installing..."
+            sdkmanager --install 'system-images;android-30;google_apis_playstore;x86_64'
+          else
+            echo "System image already installed."
+          fi
 
       - name: Create Emulator
         id: create_emulator
