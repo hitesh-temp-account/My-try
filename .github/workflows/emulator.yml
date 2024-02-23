@@ -82,6 +82,7 @@ jobs:
           adb shell pm list instrumentation
           adb shell am instrument -w -e class com.example.breach.ExampleInstrumentedTest com.example.breach.test/androidx.test.runner.AndroidJUnitRunner
           sleep 30
+          ls -l app/emulator.log
 
       - name: Upload logs
         uses: actions/upload-artifact@v2
