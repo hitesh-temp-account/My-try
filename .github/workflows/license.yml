@@ -1,4 +1,5 @@
 #  Copyright 2019 Foo. All rights reserved. MIT license.
+
 name: Check license
 
 on:
