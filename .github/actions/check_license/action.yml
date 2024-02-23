@@ -57,6 +57,7 @@ runs:
           echo "find command: $find_command"
 
           # Execute the find command
+          shopt -s globstar  # Enable globstar if not enabled already
           files=$(eval "$find_command")
             
           # files=$(find . -type f -name "$key" -not \( -path "*/test/*" -o -path "*/app/*" \))
