@@ -1,7 +1,13 @@
 #  Copyright 2019 Foo. All rights reserved. MIT license.
 name: Check license
 
-on: 
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - '*'
   workflow_dispatch:
 
 jobs:
