@@ -54,6 +54,7 @@ runs:
 
           # Append the exclusion expression to the find command
           find_command+=" -not $exclude_expr"
+          echo "find command: $find_command"
 
           # Execute the find command
           files=$(eval "$find_command")
