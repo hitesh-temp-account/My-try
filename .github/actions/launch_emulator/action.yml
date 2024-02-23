@@ -22,10 +22,12 @@ runs:
           else
             echo "System image already installed."
           fi
+        shell: bash
 
       - name: Create Emulator
         id: create_emulator
         run: echo "no" | avdmanager create avd -n TestAVD -k "system-images;android-30;google_apis_playstore;x86_64"
+        shell: bash
 
       - name: Check Emulator Creation Status
         run: |
@@ -35,6 +37,7 @@ runs:
             echo "Emulator creation failed"
             exit 1
           fi
+        shell: bash
 
       # - name: Create Emulator
       #   run: echo "no" |
@@ -44,6 +47,7 @@ runs:
         run: |
           adb kill-server
           adb start-server
+        shell: bash
 
       - name: Launch Emulator
         run: |
@@ -52,11 +56,13 @@ runs:
           adb wait-for-device 
           echo "Emulator has finished booting"
           adb devices
+        shell: bash
       
       - name: Build App
         run: |
           chmod +x gradlew
           ./gradlew assembleDebug
+        shell: bash
 
       - name: Find and install App
         run: |
@@ -64,10 +70,12 @@ runs:
           echo $apk_path
           # adb shell pm uninstall com.example.breach
           adb -s emulator-5554 install /Users/runner/work/breach/breach/app/build/outputs/apk/debug/app-debug.apk
+        shell: bash
 
 
       - name: Run script
         run: echo "${{ inputs.script }}"
+        shell: bash
 
       - name: Upload logs
         uses: actions/upload-artifact@v2
@@ -78,3 +86,4 @@ runs:
       - name: Uninstall the app
         run: |
           adb shell pm uninstall com.example.breach
+        shell: bash
