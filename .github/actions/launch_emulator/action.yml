@@ -74,7 +74,7 @@ runs:
 
 
       - name: Run script
-        run: echo "${{ inputs.script }}"
+        run: bash -c "${{ inputs.script }}"
         shell: bash
 
       - name: Upload logs
