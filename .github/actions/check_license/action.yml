@@ -65,7 +65,7 @@ runs:
           value=$(echo "$content" | jq -r --arg key "$key" '.[$key]')
             
           for file in $files; do
-            if grep -qF "$value" "$file"; then
+            if grep -qxE "$value" "$file"; then
               echo -e "$file ... ${GREEN}ok"
             else
               has_files_without_license=true
