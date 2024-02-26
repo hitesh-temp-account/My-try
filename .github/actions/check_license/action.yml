@@ -72,19 +72,12 @@ runs:
           echo "key: $key"
           echo "value: $value"
           for file in $files; do
-            if diff -q <(echo "$value") "$file" > /dev/null; then
+            if grep -qz "$value" "$file"; then
               echo -e "$file ... ${GREEN}ok"
             else
               has_files_without_license=true
               echo -e "$file ${RED}missing copyright!"
             fi
-            
-            # if grep -qF "$value" "$file"; then
-            #   echo -e "$file ... ${GREEN}ok"
-            # else
-            #   has_files_without_license=true
-            #   echo -e "$file ${RED}missing copyright!"
-            # fi
           done
         done
 
