@@ -27,7 +27,14 @@ for key in keys:
         continue
 
     # Get list of files for the current key
-    files = subprocess.check_output(["find", ".", "-type", "f", "-name", key]).decode().splitlines()
+    
+    # Define the find command as a string
+    find_command = f"find . -type f -name '{key}'"
+
+    # Execute the find command
+    files = subprocess.run(find_command, shell=True, capture_output=True, text=True).stdout.splitlines()
+    
+    # files = subprocess.check_output(["find", ".", "-type", "f", "-name", key]).decode().splitlines()
 
     # Get the value for the current key
     value = content[key]
@@ -35,7 +42,11 @@ for key in keys:
     # Get list of excluded files matching the ignored paths
     excluded_files = []
     for path in excluded_paths:
-        excluded_files.extend(subprocess.check_output(["find", ".", "-type", "f", "-name", key, "-path", path]).decode().splitlines())
+        # Define the find command as a string
+        find_command = f"find . -type f -name '{key}' -path '{path}'"
+        files = subprocess.run(find_command, shell=True, capture_output=True, text=True).stdout.splitlines()
+        excluded_files.extend(files)
+        # excluded_files.extend(subprocess.check_output(["find", ".", "-type", "f", "-name", key, "-path", path]).decode().splitlines())
 
     # Iterate over each file for the current key
     for file in files:
