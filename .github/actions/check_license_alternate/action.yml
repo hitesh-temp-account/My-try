@@ -41,8 +41,10 @@ runs:
           # Get list of excluded files matching the ignored paths
           excluded_files=()
           for path in "${excluded_paths[@]}"; do
-            excluded_files+=$(find . -type f -name "$key" -path "*/$path*")
+            excluded_files+=$(find . -type f -name "$key" -path "$path")
           done
+
+          echo "excluded files: $excluded_files"
             
           for file in $files; do
 
