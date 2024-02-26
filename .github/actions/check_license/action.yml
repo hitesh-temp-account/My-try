@@ -65,6 +65,7 @@ runs:
           value=$(echo "$content" | jq -r --arg key "$key" '.[$key]')
             
           for file in $files; do
+`           echo "value \n: $value"
             if grep -qxE "$value" "$file"; then
               echo -e "$file ... ${GREEN}ok"
             else
