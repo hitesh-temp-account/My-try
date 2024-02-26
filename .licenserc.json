@@ -3,7 +3,7 @@
   "*.yml": "#  Copyright 2019 Foo. All rights reserved. MIT license.",
   "*.gradle": "// Copyright 2019 Foo. All rights reserved. MIT license.",
   "ignore": [
-    "Test/*/breach/",
+    "test/*/breach/",
     "test-app/"
   ]
 }
