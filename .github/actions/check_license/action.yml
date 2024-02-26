@@ -72,7 +72,7 @@ runs:
           echo "key: $key"
           echo "value: $value"
           for file in $files; do
-            if grep -qz "$value" "$file"; then
+            if awk -v val="$value" 'BEGIN{RS=""} $0 == val {exit 0} END{exit 1}' "$file"; then
               echo -e "$file ... ${GREEN}ok"
             else
               has_files_without_license=true
