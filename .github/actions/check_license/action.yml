@@ -67,7 +67,7 @@ runs:
           echo "value: $value"
           for file in $files; do
             
-            if grep -qxE "$value" "$file"; then
+            if grep -qF "$value" "$file"; then
               echo -e "$file ... ${GREEN}ok"
             else
               has_files_without_license=true
