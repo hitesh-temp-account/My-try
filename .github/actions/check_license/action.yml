@@ -63,9 +63,10 @@ runs:
           # files=$(find . -type f -name "$key" -not \( -path "*/test/*" -o -path "*/app/*" \))
             
           value=$(echo "$content" | jq -r --arg key "$key" '.[$key]')
-            
+          echo "key: $key"
+          echo "value: $value"
           for file in $files; do
-`           echo "value \n: $value"
+            
             if grep -qxE "$value" "$file"; then
               echo -e "$file ... ${GREEN}ok"
             else
