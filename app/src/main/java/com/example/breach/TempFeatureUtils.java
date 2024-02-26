@@ -1,5 +1,6 @@
-/* Copyright 2019 Foo. All rights reserved. MIT license.
- * Test
+/* Copyright 2019 Foo.
+ * All rights reserved.
+ * test
  */
 package com.example.breach;
 
