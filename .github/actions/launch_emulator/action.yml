@@ -77,11 +77,11 @@ runs:
         run: bash -c "${{ inputs.script }}"
         shell: bash
 
-      - name: Upload logs
-        uses: actions/upload-artifact@v2
-        with:
-          name: logs
-          path: app/emulator.log
+      # - name: Upload logs
+      #   uses: actions/upload-artifact@v2
+      #   with:
+      #     name: logs
+      #     path: app/emulator.log
 
       - name: Uninstall the app
         run: |
