@@ -7,6 +7,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import android.util.Log
 
 import static org.junit.Assert.*;
 
@@ -22,5 +23,6 @@ public class NewInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         assertEquals("com.example.breach", appContext.getPackageName());
+        Log.d("TEST", "instrumentation test finished")
     }
 }
