@@ -26,10 +26,12 @@ runs:
       - name: Add avdmanager and sdkmanager to system PATH
         run: |
             echo "$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/emulator:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools:$ANDROID_HOME/build-tools/${{ env.ANDROID_BUILD_TOOLS_VERSION }}" >> $GITHUB_PATH
+        shell: bash
 
       - name: Install Sdk
         run: |
            yes Y | sdkmanager --licenses
+        shell: bash
 
       - name: Check if System Image is Installed
         run: |
