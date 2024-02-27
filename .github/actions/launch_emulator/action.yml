@@ -83,6 +83,7 @@ runs:
       #     name: logs
       #     path: app/emulator.log
 
+
       - name: Uninstall the app
         run: |
           adb shell pm uninstall com.example.breach
