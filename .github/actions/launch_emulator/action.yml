@@ -30,79 +30,79 @@ runs:
 
       - name: Install Sdk
         run: |
-          yes | sdkmanager --licenses
+          sdkmanager --licenses
         shell: bash
 
-      - name: Check if System Image is Installed
-        run: |
-          if [ ! -d "$ANDROID_SDK_ROOT/system-images/android-30/google_apis_playstore/x86_64" ]; then
-            echo "System image not found. Installing..."
-            sdkmanager --install 'system-images;android-30;google_apis_playstore;x86_64'
-          else
-            echo "System image already installed."
-          fi
-        shell: bash
-
-      - name: Create Emulator
-        id: create_emulator
-        run: echo "no" | avdmanager create avd -n TestAVD -k "system-images;android-30;google_apis_playstore;x86_64"
-        shell: bash
-
-      - name: Check Emulator Creation Status
-        run: |
-          if [ $? -eq 0 ]; then
-            echo "Emulator creation successful"
-          else
-            echo "Emulator creation failed"
-            exit 1
-          fi
-        shell: bash
+      # - name: Check if System Image is Installed
+      #   run: |
+      #     if [ ! -d "$ANDROID_SDK_ROOT/system-images/android-30/google_apis_playstore/x86_64" ]; then
+      #       echo "System image not found. Installing..."
+      #       sdkmanager --install 'system-images;android-30;google_apis_playstore;x86_64'
+      #     else
+      #       echo "System image already installed."
+      #     fi
+      #   shell: bash
 
       # - name: Create Emulator
-      #   run: echo "no" |
-      #     avdmanager create avd -n TestAVD -k "system-images;android-30;google_apis_playstore;x86_64"
+      #   id: create_emulator
+      #   run: echo "no" | avdmanager create avd -n TestAVD -k "system-images;android-30;google_apis_playstore;x86_64"
+      #   shell: bash
 
-      - name: Restart adb server
-        run: |
-          adb kill-server
-          adb start-server
-        shell: bash
+      # - name: Check Emulator Creation Status
+      #   run: |
+      #     if [ $? -eq 0 ]; then
+      #       echo "Emulator creation successful"
+      #     else
+      #       echo "Emulator creation failed"
+      #       exit 1
+      #     fi
+      #   shell: bash
 
-      - name: Launch Emulator
-        run: |
-          echo "Starting emulator and waiting for boot to complete...."
-          $ANDROID_HOME/emulator/emulator -avd TestAVD -no-skin -no-audio -no-window &
-          adb wait-for-device 
-          echo "Emulator has finished booting"
-          adb devices
-        shell: bash
+      # # - name: Create Emulator
+      # #   run: echo "no" |
+      # #     avdmanager create avd -n TestAVD -k "system-images;android-30;google_apis_playstore;x86_64"
+
+      # - name: Restart adb server
+      #   run: |
+      #     adb kill-server
+      #     adb start-server
+      #   shell: bash
+
+      # - name: Launch Emulator
+      #   run: |
+      #     echo "Starting emulator and waiting for boot to complete...."
+      #     $ANDROID_HOME/emulator/emulator -avd TestAVD -no-skin -no-audio -no-window &
+      #     adb wait-for-device 
+      #     echo "Emulator has finished booting"
+      #     adb devices
+      #   shell: bash
       
-      - name: Build App
-        run: |
-          chmod +x gradlew
-          ./gradlew assembleDebug
-        shell: bash
+      # - name: Build App
+      #   run: |
+      #     chmod +x gradlew
+      #     ./gradlew assembleDebug
+      #   shell: bash
 
-      - name: Find and install App
-        run: |
-          apk_path=$(find . -type f -and -path '*debug.apk')
-          echo $apk_path
-          # adb shell pm uninstall com.example.breach
-          adb -s emulator-5554 install /Users/runner/work/breach/breach/app/build/outputs/apk/debug/app-debug.apk
-        shell: bash
+      # - name: Find and install App
+      #   run: |
+      #     apk_path=$(find . -type f -and -path '*debug.apk')
+      #     echo $apk_path
+      #     # adb shell pm uninstall com.example.breach
+      #     adb -s emulator-5554 install /Users/runner/work/breach/breach/app/build/outputs/apk/debug/app-debug.apk
+      #   shell: bash
 
 
-      - name: Run script
-        run: bash -c "${{ inputs.script }}"
-        shell: bash
+      # - name: Run script
+      #   run: bash -c "${{ inputs.script }}"
+      #   shell: bash
 
-      # - name: Upload logs
-      #   uses: actions/upload-artifact@v2
-      #   with:
-      #     name: logs
-      #     path: app/emulator.log
+      # # - name: Upload logs
+      # #   uses: actions/upload-artifact@v2
+      # #   with:
+      # #     name: logs
+      # #     path: app/emulator.log
 
-      - name: Uninstall the app
-        run: |
-          adb shell pm uninstall com.example.breach
-        shell: bash
+      # - name: Uninstall the app
+      #   run: |
+      #     adb shell pm uninstall com.example.breach
+      #   shell: bash
