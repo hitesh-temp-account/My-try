@@ -36,7 +36,7 @@ runs:
           ls -l ./.github/scripts
 
           # Execute the expect script
-          chmod +x accept_license.exp
+          chmod +x ./.github/scripts/accept_license.exp
           ./.github/scripts/accept_license.exp
         shell: bash
 
