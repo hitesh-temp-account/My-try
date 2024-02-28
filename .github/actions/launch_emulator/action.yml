@@ -30,7 +30,13 @@ runs:
 
       - name: Install Sdk
         run: |
-          # yes 6>/dev/null | sdkmanager --licenses
+          echo "Current Working Directory: $(pwd)"
+
+          # List the contents of ./.github/scripts directory
+          ls -l ./.github/scripts
+
+          # Execute the expect script
+          chmod +x accept_license.exp
           ./.github/scripts/accept_license.exp
         shell: bash
 
