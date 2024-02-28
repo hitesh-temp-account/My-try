@@ -30,7 +30,7 @@ runs:
 
       - name: Install Sdk
         run: |
-          echo "y" echo "y" echo "y" echo "y" echo "y" echo "y" | sdkmanager --licenses
+          (1..10 | ForEach-Object {"y"; Start-Sleep -Milliseconds 100}) | sdkmanager --licenses
           echo "y"
         shell: bash
 
