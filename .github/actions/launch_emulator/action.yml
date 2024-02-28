@@ -30,7 +30,7 @@ runs:
 
       - name: Install Sdk
         run: |
-          yes y | head -n 6 | sdkmanager --licenses
+          yes Y | head -n 10 | sdkmanager --licenses
         shell: bash
 
       - name: Check if System Image is Installed
