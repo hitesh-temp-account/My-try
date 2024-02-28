@@ -1,0 +1,42 @@
+name: test custom emulator action
+
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - '*'
+  workflow_dispatch:
+
+jobs:
+  launch_emulator:
+    name: Launch emulator and run tests
+    runs-on: macos-latest
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v3
+
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Launch emulator and run tests
+        uses: ./.github/actions/launch_emulator
+        with:
+          script: |
+            adb logcat -c
+            touch app/emulator.log
+            chmod 777 app/emulator.log
+            adb logcat com.example.breach.app >> app/emulator.log &
+            ./gradlew installDebug
+            ./gradlew :app:installDebugAndroidTest
+            adb shell pm list instrumentation
+            adb shell am instrument -w -e class com.example.breach.NewInstrumentedTest com.example.breach.test/androidx.test.runner.AndroidJUnitRunner
+            # sleep 30
+            time=$(grep "TEST" app/emulator.log)
+            echo "time: $time"
+
