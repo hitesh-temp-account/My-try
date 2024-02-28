@@ -1,7 +1,7 @@
 name: test custom emulator action
 
 on: 
-  workflow_dispatch
+  workflow_dispatch:
 
 jobs:
   launch_emulator:
