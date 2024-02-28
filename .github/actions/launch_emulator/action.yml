@@ -30,7 +30,7 @@ runs:
 
       - name: Install Sdk
         run: |
-          echo y | sdkmanager --sdk_root=android-sdk-mobile --licenses;
+          echo "y y y y y" | sdkmanager --licenses;
         shell: bash
 
       - name: Check if System Image is Installed
