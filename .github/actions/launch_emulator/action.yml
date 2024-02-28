@@ -33,15 +33,15 @@ runs:
           sdkmanager --licenses
         shell: bash
 
-      # - name: Check if System Image is Installed
-      #   run: |
-      #     if [ ! -d "$ANDROID_SDK_ROOT/system-images/android-30/google_apis_playstore/x86_64" ]; then
-      #       echo "System image not found. Installing..."
-      #       sdkmanager --install 'system-images;android-30;google_apis_playstore;x86_64'
-      #     else
-      #       echo "System image already installed."
-      #     fi
-      #   shell: bash
+      - name: Check if System Image is Installed
+        run: |
+          if [ ! -d "$ANDROID_SDK_ROOT/system-images/android-30/google_apis_playstore/x86_64" ]; then
+            echo "System image not found. Installing..."
+            sdkmanager --install 'system-images;android-30;google_apis_playstore;x86_64'
+          else
+            echo "System image already installed."
+          fi
+        shell: bash
 
       # - name: Create Emulator
       #   id: create_emulator
