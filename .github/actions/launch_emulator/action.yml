@@ -30,8 +30,6 @@ runs:
 
       - name: Install Sdk
         run: |
-          echo y | sdkmanager --sdk_root=android-sdk-mobile/cmdline-tools "build-tools;${ANDROID_BUILD_TOOLS_VERSION}";
-          echo y | sdkmanager --sdk_root=android-sdk-mobile/cmdline-tools "tools";
           echo y | sdkmanager --sdk_root=android-sdk-mobile --licenses;
         shell: bash
 
