@@ -30,8 +30,12 @@ runs:
 
       - name: Install Sdk
         run: |
-          (1..10 | ForEach-Object {"y"; Start-Sleep -Milliseconds 100}) | sdkmanager --licenses
-          echo "y"
+          ANDROID_COMPILE_SDK: "30"
+          ANDROID_BUILD_TOOLS: "30.0.2"
+          echo y | android-sdk-mobile/cmdline-tools/bin/sdkmanager --sdk_root=android-sdk-mobile/cmdline-tools "platforms;android-${ANDROID_COMPILE_SDK}";
+          echo y | android-sdk-mobile/cmdline-tools/bin/sdkmanager --sdk_root=android-sdk-mobile/cmdline-tools "build-tools;${ANDROID_BUILD_TOOLS}";
+          echo y | android-sdk-mobile/cmdline-tools/bin/sdkmanager --sdk_root=android-sdk-mobile/cmdline-tools "tools";
+          echo y | android-sdk-mobile/cmdline-tools/bin/sdkmanager --sdk_root=android-sdk-mobile --licenses;
         shell: bash
 
       - name: Check if System Image is Installed
