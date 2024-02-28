@@ -23,4 +23,10 @@
         </activity>
     </application>
 
+    <!-- Add the instrumentation tag under the manifest -->
+    <instrumentation
+        android:name="androidx.test.runner.AndroidJUnitRunner"
+        android:targetPackage="com.example.breach"
+        android:label="Breach Instrumentation Test Runner" />
+
 </manifest>

@@ -1,13 +1,11 @@
-#  Copyright 2019 Foo. All rights reserved. MIT license.
-name: Check license
+# Copyright (c) test Corporation.
+# All rights reserved.
+#
+# This source code is licensed under the license found in the
+# LICENSE file in the root directory of this source tree.
+name: Check license alternate
 
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - '*'
+on: 
   workflow_dispatch:
 
 jobs:
@@ -19,11 +17,11 @@ jobs:
 
       - name: Check license
         run: |
-          chmod +x ./.github/scripts/check_license.py
-          python3 ./.github/scripts/check_license.py
+          chmod +x ./.github/scripts/check_license_alternate.py
+          python3 ./.github/scripts/check_license_alternate.py
 
       # - name: Check license
-      #   uses: ./.github/actions/check_license
+      #   uses: ./.github/actions/check_license_alternate
 
       # - name: get json
       #   run: |
@@ -40,9 +38,6 @@ jobs:
       #     # Initialize a variable to keep track of whether there are files without a license
       #     has_files_without_license=false
 
-      #     # Read the list of excluded paths from the JSON content
-      #     excluded_paths=($(jq -r '.ignore[]' <<< "$content"))
-
       #     # Iterate over each type of file and check for the presence of license
       #     for key in "${keys[@]}"; do
 
@@ -51,31 +46,26 @@ jobs:
       #         echo "continued!"
       #         continue
       #       fi
-            
-      #       # Construct the find command with excluded paths
-      #       find_command="find . -type f -name \"$key\""
-      #       exclude_expr="\("
-
-      #       # Append each excluded path to the expression
-      #       for path in "${excluded_paths[@]}"; do
-      #         exclude_expr+=" -path \"*/$path*\" -o"
-      #       done
-
-      #       # Remove the last -o
-      #       exclude_expr=${exclude_expr::-3}
-      #       exclude_expr+=" \)"
-
-      #       # Append the exclusion expression to the find command
-      #       find_command+=" -not $exclude_expr"
-
-      #       # Execute the find command
-      #       files=$(eval "$find_command")
-            
-      #       # files=$(find . -type f -name "$key" -not \( -path "*/test/*" -path "*/app/*" \))
-            
+          
+      #       files=$(find . -type f -name "$key")
       #       value=$(echo "$content" | jq -r --arg key "$key" '.[$key]')
+
+      #       # Read the list of excluded paths from the JSON content
+      #       excluded_paths=($(jq -r '.ignore[]' <<< "$content"))
+            
+      #       # Get list of excluded files matching the ignored paths
+      #       excluded_files=()
+      #       for path in "${excluded_paths[@]}"; do
+      #         excluded_files+=$(find . -type f -name "$key" -path "*/$path*")
+      #       done
             
       #       for file in $files; do
+
+      #         # Use grep to check if the file is in the excluded files list
+      #         if grep -qF "$file" <<< "${excluded_files[*]}"; then
+      #           continue
+      #         fi
+              
       #         if grep -qF "$value" "$file"; then
       #           echo "$file ✅"
       #         else

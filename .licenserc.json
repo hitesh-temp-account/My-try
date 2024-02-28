@@ -1,5 +1,6 @@
 {
-  "**/*.java": "/* Copyright 2019 Foo. All rights reserved. MIT license.\n * Test",
-  "**/*.yml": "#  Copyright 2019 Foo. All rights reserved. MIT license.",
-  "**/*.gradle": "// Copyright 2019 Foo. All rights reserved. MIT license."
+  "*.java": "/*\n * Copyright (c) test Corporation.\n * All rights reserved.\n *\n * This source code is licensed under the license found in the\n * LICENSE file in the root directory of this source tree.",
+  "*.gradle": "/*\n * Copyright (c) test Corporation.\n * All rights reserved.\n *\n * This source code is licensed under the license found in the\n * LICENSE file in the root directory of this source tree.",
+  "*.py": "# Copyright (c) test Corporation.\n# All rights reserved.\n#\n# This source code is licensed under the license found in the\n# LICENSE file in the root directory of this source tree.",
+  "*.yml": "# Copyright (c) test Corporation.\n# All rights reserved.\n#\n# This source code is licensed under the license found in the\n# LICENSE file in the root directory of this source tree."
 }

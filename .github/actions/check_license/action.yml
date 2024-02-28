@@ -1,0 +1,87 @@
+#
+# Copyright (c) test Corporation.
+# All rights reserved.
+#
+# This source code is licensed under the license found in the
+# LICENSE file in the root directory of this source tree.
+#
+name: 'Check license in files'
+description: 'Checks if required license is present in files'
+
+defaults:
+  run:
+    shell: bash
+
+runs:
+  using: 'composite'
+  steps:
+    - name: get json
+      run: |
+        content=$(cat .licenserc.json)
+
+        # Define color codes
+        RED='\033[0;31m'
+        GREEN='\033[0;32m'
+
+        # Initialize an empty array to store the keys
+        keys=()
+
+        # Extract keys from the JSON object and append them to the array
+        while IFS= read -r key; do
+          keys+=("$key")
+        done < <(jq -r 'keys | .[]' <<< "$content")
+
+        # Initialize a variable to keep track of whether there are files without a license
+        has_files_without_license=false
+
+        # Read the list of excluded paths from the JSON content
+        excluded_paths=($(jq -r '.ignore[]' <<< "$content"))
+
+        # Iterate over each type of file and check for the presence of license
+        for key in "${keys[@]}"; do
+
+          # Don't consider 'ignore' key for license checking
+          if [[ "$key" == "ignore" ]]; then
+            echo "continued!"
+            continue
+          fi
+            
+          # Construct the find command with excluded paths
+          find_command="find . -type f -name \"$key\""
+          exclude_expr="\("
+
+          # Append each excluded path to the expression
+          for path in "${excluded_paths[@]}"; do
+            exclude_expr+=" -path \"$path\" -o"
+          done
+
+          # Remove the last -o
+          exclude_expr=${exclude_expr::-3}
+          exclude_expr+=" \)"
+
+          # Append the exclusion expression to the find command
+          find_command+=" -not $exclude_expr"
+
+          # Execute the find command
+          shopt -s globstar  # Enable globstar if not enabled already
+          files=$(eval "$find_command")
+            
+          value=$(echo "$content" | jq -r --arg key "$key" '.[$key]')
+          echo "key: $key"
+          echo "value: $value"
+          for file in $files; do
+            if cat "$file" | grep -qxE "$value"; then
+              echo -e "$file ... ${GREEN}ok"
+            else
+              has_files_without_license=true
+              echo -e "$file ${RED}missing copyright!"
+            fi
+          done
+        done
+
+        # If there are files without a license, fail the workflow
+        if $has_files_without_license; then
+          echo "Failing this workflow as there is atleast one file present without license."
+          exit 1
+        fi
+      shell: bash
