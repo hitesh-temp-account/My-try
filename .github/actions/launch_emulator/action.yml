@@ -30,7 +30,7 @@ runs:
 
       - name: Install Sdk
         run: |
-          echo "y" | sdkmanager --licenses
+          echo "y" echo "y" echo "y" echo "y" echo "y" echo "y" | sdkmanager --licenses
           echo "y"
         shell: bash
 
