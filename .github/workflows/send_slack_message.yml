@@ -3,6 +3,7 @@ name: Send slack message
 on: 
   schedule:
     - cron: '45 13 * * *'
+    - cron: '15 19 * * *'
   workflow_dispatch:
   
       
