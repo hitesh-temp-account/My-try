@@ -1,7 +1,10 @@
 name: Send slack message
 
 on: 
+  schedule:
+    -cron: '45 13 * * *'
   workflow_dispatch:
+  
       
 jobs:
   license-check:
