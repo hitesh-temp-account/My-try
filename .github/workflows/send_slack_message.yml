@@ -1,0 +1,26 @@
+name: Send slack message
+
+on: 
+  workflow_dispatch:
+      
+jobs:
+  license-check:
+    name: send slack message
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v3
+
+      - name: run tests
+        run: |
+          ./gradlew test
+
+      - name: send message
+        run: |
+          curl -X POST -H 'Content-type: application/json'
+          --data '{"message" : "test message"}'
+          $SLACK_WEBHOOK_URL
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          
