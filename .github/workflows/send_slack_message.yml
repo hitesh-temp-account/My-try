@@ -17,6 +17,7 @@ jobs:
 
       - name: run tests
         run: |
+          chmod +x gradlew
           ./gradlew test
 
       - name: send message
