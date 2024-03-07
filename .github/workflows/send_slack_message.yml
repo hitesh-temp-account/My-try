@@ -35,7 +35,9 @@ jobs:
 
       - name: print date
         if: always()
-        run: echo "date +'%Y-%m-%d'"
+        run: |
+          today=$(date +'%Y-%m-%d')
+          echo "today: $today"
         shell: bash
 
       # - name: send message
