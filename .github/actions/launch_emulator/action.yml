@@ -30,7 +30,7 @@ runs:
 
       - name: Install Sdk
         run: |
-          yes Y | sdkmanager --licenses
+          yes | sdkmanager --licenses || true
           sdkmanager --install ${ANDROID_SDK_PACKAGES}
         #   echo "Current Working Directory: $(pwd)"
 
