@@ -22,9 +22,13 @@ jobs:
           distribution: 'zulu'
 
       - name: run tests
+        id: test
         run: |
           chmod +x gradlew
           ./gradlew test
+
+      - name: print output
+        run: echo ${{ steps.test.outputs }}
 
       - name: send message
         run: |
