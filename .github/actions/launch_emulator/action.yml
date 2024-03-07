@@ -40,7 +40,7 @@ runs:
         #   # Execute the expect script
         #   chmod +x ./.github/scripts/accept_license.exp
         #   ./.github/scripts/accept_license.exp
-        # shell: bash
+        shell: bash
 
       - name: Check if System Image is Installed
         run: |
