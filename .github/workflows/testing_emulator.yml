@@ -2,12 +2,12 @@ name: test custom emulator action
 
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - '*'
+  # push:
+  #   branches:
+  #     - main
+  # pull_request:
+  #   branches:
+  #     - '*'
   workflow_dispatch:
 
 jobs:
