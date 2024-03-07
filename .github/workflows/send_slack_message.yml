@@ -41,6 +41,7 @@ jobs:
           else
             tests=$(cat test_output.txt | grep -E "com.example.breach.*FAILED")
             curl -X POST -H 'Content-type: application/json' --data '{"message" : "Following tests failed!\n $tests"}' $SLACK_WEBHOOK_URL
+          fi
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         shell: bash
