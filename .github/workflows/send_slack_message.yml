@@ -25,13 +25,16 @@ jobs:
         id: test
         run: |
           chmod +x gradlew
-          ./gradlew test > test_output.txt
+          ./gradlew test --continue > test_output.txt
         shell: bash
 
       - name: print output
         if: always()
         run: cat test_output.txt | grep -E "com.example.breach.*FAILED"
         shell: bash
+
+      - name: print date
+        run: echo "date +'%Y-%m-%d'"
 
       # - name: send message
       #   if: always()
