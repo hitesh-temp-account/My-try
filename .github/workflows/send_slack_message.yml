@@ -29,7 +29,7 @@ jobs:
 
       - name: print output
         if: always()
-        run: cat test_output.txt
+        run: cat test_output.txt | grep -E "FAIL|Error"
 
       - name: send message
         if: always()
