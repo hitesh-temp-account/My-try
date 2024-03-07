@@ -30,8 +30,11 @@ runs:
 
       - name: Install Sdk
         run: |
-          yes | sdkmanager --licenses || true
-          sdkmanager --install 'system-images;android-30;google_apis_playstore;x86_64'
+          chmod +x /.github/scripts/accept_license.exp
+          ./.github/scripts/accept_license.exp
+          sdkmanager --install ${ANDROID_SDK_PACKAGES}
+        shell: bash
+          # sdkmanager --install 'system-images;android-30;google_apis_playstore;x86_64'
         #   echo "Current Working Directory: $(pwd)"
 
         #   # List the contents of ./.github/scripts directory
