@@ -25,11 +25,11 @@ jobs:
         id: test
         run: |
           chmod +x gradlew
-          ./gradlew test
+          ./gradlew test > test_output.txt
 
       - name: print output
         if: always()
-        run: cat /home/runner/work/Breach/Breach/app/build/reports/tests/testDebugUnitTest/index.html
+        run: cat test_output.txt
 
       - name: send message
         if: always()
