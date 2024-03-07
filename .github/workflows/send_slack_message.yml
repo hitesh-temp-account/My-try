@@ -26,16 +26,22 @@ jobs:
         run: |
           chmod +x gradlew
           ./gradlew test > test_output.txt
+        shell: bash
 
       - name: print output
         if: always()
         run: cat test_output.txt | grep -E "com.example.breach.*FAILED"
+        shell: bash
 
       - name: send message
         if: always()
         run: |
-          curl -X POST -H 'Content-type: application/json'
-          --data '{"message" : "test message"}' $SLACK_WEBHOOK_URL
+          if [ ${{ steps.test.outcome }} == 'success' ]; then
+            curl -X POST -H 'Content-type: application/json' --data '{"message" : "All tests passed!"}' $SLACK_WEBHOOK_URL
+          else
+            tests=$(cat test_output.txt | grep -E "com.example.breach.*FAILED")
+            curl -X POST -H 'Content-type: application/json' --data '{"message" : "Following tests failed!\n $tests"}' $SLACK_WEBHOOK_URL
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        shell: bash
           
