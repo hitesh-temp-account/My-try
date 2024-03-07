@@ -30,15 +30,17 @@ runs:
 
       - name: Install Sdk
         run: |
-          echo "Current Working Directory: $(pwd)"
+          yes Y | sdkmanager --licenses
+          sdkmanager --install ${ANDROID_SDK_PACKAGES}
+        #   echo "Current Working Directory: $(pwd)"
 
-          # List the contents of ./.github/scripts directory - change
-          ls -l ./.github/scripts
+        #   # List the contents of ./.github/scripts directory
+        #   ls -l ./.github/scripts
 
-          # Execute the expect script
-          chmod +x ./.github/scripts/accept_license.exp
-          ./.github/scripts/accept_license.exp
-        shell: bash
+        #   # Execute the expect script
+        #   chmod +x ./.github/scripts/accept_license.exp
+        #   ./.github/scripts/accept_license.exp
+        # shell: bash
 
       - name: Check if System Image is Installed
         run: |
