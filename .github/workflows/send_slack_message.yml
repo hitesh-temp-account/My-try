@@ -34,7 +34,9 @@ jobs:
         shell: bash
 
       - name: print date
+        if: always()
         run: echo "date +'%Y-%m-%d'"
+        shell: bash
 
       # - name: send message
       #   if: always()
