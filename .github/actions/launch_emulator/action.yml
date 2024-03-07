@@ -32,7 +32,7 @@ runs:
         run: |
           echo "Current Working Directory: $(pwd)"
 
-          # List the contents of ./.github/scripts directory
+          # List the contents of ./.github/scripts directory - change
           ls -l ./.github/scripts
 
           # Execute the expect script
