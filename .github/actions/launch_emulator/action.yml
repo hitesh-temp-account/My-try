@@ -13,7 +13,7 @@ env:
   ANDROID_TARGET: google_apis_playstore
   API_LEVEL: 30
   ANDROID_BUILD_TOOLS_VERSION: 30.0.2
-  ANDROID_SDK_PACKAGES: 'system-images;android-30;google_apis_playstore;x86_64 platforms;android-30 build-tools;30.0.3 platform-tools emulator'
+  ANDROID_SDK_PACKAGES: system-images;android-30;google_apis_playstore;x86_64 platforms;android-30 build-tools;30.0.3 platform-tools emulator
   # ANDROID_SDK_PACKAGES: system-images;android-33;google_apis_playstore;x86_64 platforms;android-33 build-tools;33.0.2 platform-tools emulator
   EMULATOR_TIMEOUT: 350
   EMULATOR_NAME: nexus
@@ -33,7 +33,9 @@ runs:
         run: |
           chmod +x ./.github/scripts/accept_license.exp
           ./.github/scripts/accept_license.exp
-          sdkmanager --install ${ANDROID_SDK_PACKAGES}
+          echo "~~~~~~~~~~~~~~~~~~~~~~~~INSTALLING SDK~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+          sdkmanager --install '${ANDROID_SDK_PACKAGES}'
+          echo "~~~~~~~~~~~~~~~~~~~~~~~~DONE --- INSTALLING SDK~~~~~~~~~~~~~~~~~~~~~"
         shell: bash
 
       - name: Check if System Image is Installed
