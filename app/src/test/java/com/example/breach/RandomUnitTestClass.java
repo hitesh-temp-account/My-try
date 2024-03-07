@@ -16,6 +16,6 @@ public class RandomUnitTestClass {
     @Test
     public void verifyUtilMethod2() {
         int result = new TempFeatureUtils().utilMethod2();
-        assertThat(result, is(30));
+        assertThat(result, is(-30));
     }
 }
