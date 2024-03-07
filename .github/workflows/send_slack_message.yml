@@ -28,9 +28,11 @@ jobs:
           ./gradlew test
 
       - name: print output
+        if: always()
         run: echo ${{ steps.test.outputs }}
 
       - name: send message
+        if: always()
         run: |
           curl -X POST -H 'Content-type: application/json'
           --data '{"message" : "test message"}'
