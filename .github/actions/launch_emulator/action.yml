@@ -10,6 +10,7 @@ defaults:
 
 env:
   ANDROID_BUILD_TOOLS_VERSION: 30.0.2
+  EMULATOR_TIMEOUT: 350
 
 runs:
   using: 'composite'
@@ -17,25 +18,25 @@ runs:
       - name: Add `avdmanager` and `sdkmanager` to System PATH
         run: |
             echo "$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/emulator:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools:$ANDROID_HOME/build-tools/${{ env.ANDROID_BUILD_TOOLS_VERSION }}" >> $GITHUB_PATH
-        shell: bash
+        # shell: bash
 
       - name: License agreement
         run: |
           chmod +x ./.github/scripts/accept_license.exp
           ./.github/scripts/accept_license.exp
-        shell: bash
+        # shell: bash
 
       - name: Install System Image
         run: |
             echo "~~~~~~~~~~~~~~~~ Installing System Image ~~~~~~~~~~~~~~~~~"
             sdkmanager --install 'system-images;android-30;google_apis_playstore;x86_64'
             echo "~~~~~~~~~~~~~~~~ System Image Instaled Successfully ~~~~~~~~~~~~~~~~~"
-        shell: bash
+        # shell: bash
 
       - name: Create Emulator
         id: create_emulator
         run: echo "no" | avdmanager create avd -n TestEmulator30 -k "system-images;android-30;google_apis_playstore;x86_64"
-        shell: bash
+        # shell: bash
 
       - name: Check Emulator Creation Status
         run: |
@@ -45,13 +46,13 @@ runs:
             echo "Emulator creation failed"
             exit 1
           fi
-        shell: bash
+        # shell: bash
 
       - name: Restart adb server
         run: |
           adb kill-server
           adb start-server
-        shell: bash
+        # shell: bash
 
       - name: Launch Emulator
         run: |
@@ -60,24 +61,24 @@ runs:
           adb wait-for-device 
           echo "Emulator has finished booting"
           adb devices
-        shell: bash
+        # shell: bash
 
       - name: Build App
         run: |
           chmod +x gradlew
           ./gradlew assembleDebug
-        shell: bash
+        # shell: bash
 
       - name: Find and install App
         run: |
           apk_path=$(find . -type f -and -path '*debug.apk')
           echo $apk_path
           adb -s emulator-5554 install /Users/runner/work/breach/breach/app/build/outputs/apk/debug/app-debug.apk
-        shell: bash
+        # shell: bash
 
       - name: Run script
         run: bash -c "${{ inputs.script }}"
-        shell: bash
+        # shell: bash
 
       # # - name: Upload logs
       # #   uses: actions/upload-artifact@v2
@@ -88,4 +89,4 @@ runs:
       - name: Uninstall the app
         run: |
           adb shell pm uninstall com.example.breach
-        shell: bash
+        # shell: bash
