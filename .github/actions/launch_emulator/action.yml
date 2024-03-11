@@ -22,8 +22,8 @@ runs:
 
       - name: SDK package licenses agreement
         run: |
-          chmod +x ./.github/scripts/accept_license.exp
-          ./.github/scripts/accept_license.exp
+          chmod +x ./.github/scripts/accept_license.sh
+          ./.github/scripts/accept_license.sh
         shell: bash
 
       - name: Install System Image
