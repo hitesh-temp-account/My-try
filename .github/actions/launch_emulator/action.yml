@@ -10,8 +10,6 @@ defaults:
 
 env:
   ANDROID_BUILD_TOOLS_VERSION: 30.0.2
-  SYSTEM_IMAGE_INSTALLING_MSG: "~~~~~~~~~~~~~~~~ Installing System Image ~~~~~~~~~~~~~~~~~"
-  SYSTEM_IMAGE_INSTALLED_MSG: "~~~~~~~~~~~~~~~~ System Image Installed Successfully ~~~~~~~~~~~~~~~~~"
 
 runs:
   using: 'composite'
@@ -29,9 +27,7 @@ runs:
 
       - name: Install System Image
         run: |
-            echo ${env.SYSTEM_IMAGE_INSTALLING_MSG}
             sdkmanager --install 'system-images;android-30;google_apis_playstore;x86_64'
-            echo ${env.SYSTEM_IMAGE_INSTALLED_MSG}
         shell: bash
 
       - name: Create Emulator
