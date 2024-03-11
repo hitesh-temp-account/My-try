@@ -28,8 +28,6 @@ jobs:
         uses: ./.github/actions/launch_emulator
         with:
           script: |
-            chmod +x gradlew
-            ./gradlew installDebug
             ./gradlew :app:installDebugAndroidTest
             adb shell pm list instrumentation
             adb shell am instrument -w -e class com.example.breach.NewInstrumentedTest com.example.breach.test/androidx.test.runner.AndroidJUnitRunner
