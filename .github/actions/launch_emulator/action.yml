@@ -14,7 +14,8 @@ env:
 runs:
   using: 'composite'
   steps:
-      - name: Add `avdmanager` and `sdkmanager` to System PATH
+      - name: Set Up Required Path System Variables for essential tools
+        # Adds path for essential tools like sdkmanager, avdmanager, emulator, etc.
         run: |
             echo "$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/emulator:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools:$ANDROID_HOME/build-tools/${{ env.ANDROID_BUILD_TOOLS_VERSION }}" >> $GITHUB_PATH
         shell: bash
