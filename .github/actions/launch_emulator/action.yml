@@ -27,7 +27,7 @@ runs:
 
       - name: Install System Image
         run: |
-            sdkmanager --install 'system-images;android-30;google_apis_playstore;x86_64'
+            sdkmanager --install 'system-images;android-30;x86_64'
         shell: bash
 
       - name: Create Emulator
