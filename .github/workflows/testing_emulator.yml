@@ -24,10 +24,11 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Launch emulator and run tests
+      - name: Create, Launch emulator and run tests
         uses: ./.github/actions/launch_emulator
         with:
           script: |
-            ./gradlew :app:installDebugAndroidTest
-            adb shell pm list instrumentation
-            adb shell am instrument -w -e class com.example.breach.NewInstrumentedTest com.example.breach.test/androidx.test.runner.AndroidJUnitRunner
+            ./gradlew connectedCheck
+            # ./gradlew :app:installDebugAndroidTest
+            # adb shell pm list instrumentation
+            # adb shell am instrument -w -e class com.example.breach.NewInstrumentedTest com.example.breach.test/androidx.test.runner.AndroidJUnitRunner
