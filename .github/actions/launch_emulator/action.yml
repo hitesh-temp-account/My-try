@@ -32,7 +32,7 @@ runs:
 
       - name: Create Emulator
         id: create_emulator
-        # Create an emulator using avdmanager and do not create custom hardware profile by prompting answer as "no"
+        # Create an emulator using avdmanager and do not create custom hardware profile by answering "no" to the prompt
         run: echo "no" | avdmanager create avd -n TestEmulator30 -k "system-images;android-30;google_apis_playstore;x86_64"
         shell: bash
 
