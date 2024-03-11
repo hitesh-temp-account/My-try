@@ -19,15 +19,15 @@ runs:
             echo "$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/emulator:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools:$ANDROID_HOME/build-tools/${{ env.ANDROID_BUILD_TOOLS_VERSION }}" >> $GITHUB_PATH
         shell: bash
 
-      # - name: SDK package licenses agreement
-      #   run: |
-      #     chmod +x ./.github/scripts/accept_license.exp
-      #     ./.github/scripts/accept_license.exp
-      #   shell: bash
+      - name: SDK package licenses agreement
+        run: |
+          chmod +x ./.github/scripts/accept_license.exp
+          ./.github/scripts/accept_license.exp
+        shell: bash
 
       - name: Install System Image
         run: |
-            sdkmanager --install 'system-images;android-30;x86_64'
+            sdkmanager --install 'system-images;android-30;google_apis_playstore;x86_64'
         shell: bash
 
       - name: Create Emulator
