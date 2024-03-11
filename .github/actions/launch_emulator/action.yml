@@ -1,8 +1,8 @@
-name: 'Launch emulator and run tests'
+name: 'Create and launch emulator then run the input script'
 description: 'Launches an Android emulator and runs the input script'
 inputs:
   script:
-    description: 'Script runs after succesful launch of the emulator'
+    description: 'Script runs after successful launch of the emulator'
 
 defaults:
   run:
@@ -32,12 +32,13 @@ runs:
 
       - name: Create Emulator
         id: create_emulator
+        # Create an emulator using avdmanager and do not create custom hardware profile by prompting answer as "no"
         run: echo "no" | avdmanager create avd -n TestEmulator30 -k "system-images;android-30;google_apis_playstore;x86_64"
         shell: bash
 
       - name: Check Emulator Creation Status
         run: |
-          if [ $? -eq 0 ]; then  # Verfies the exit status of the last executed command i.e. "create_emulator", if it is 0 then the emulator is created succesfully.
+          if [ $? -eq 0 ]; then  # Verfies the exit status of the last executed command i.e. "create_emulator", if it is 0 then the emulator is created succesfully
             echo "Emulator creation successful"
           else
             echo "Emulator creation failed"
@@ -53,11 +54,10 @@ runs:
 
       - name: Launch Emulator
         run: |
-          echo "Starting emulator and waiting for boot to complete...."
+          echo "~~~~~~ Starting emulator and waiting for boot to complete.... ~~~~~~"
           $ANDROID_HOME/emulator/emulator -avd TestEmulator30 -no-skin -no-audio -no-window &
-          adb wait-for-device 
-          echo "Emulator has finished booting"
-          adb devices
+          adb wait-for-device  # Waits until emulator is connected and ready/responsive to accept commands
+          echo "~~~~~~ Emulator has finished booting ~~~~~~"
         shell: bash
 
       - name: Build App
@@ -66,18 +66,6 @@ runs:
           ./gradlew installDebug
         shell: bash
 
-      # - name: Find and install App
-      #   run: |
-      #     apk_path=$(find . -type f -and -path '*debug.apk')
-      #     echo $apk_path
-      #     adb -s emulator-5554 install /Users/runner/work/breach/breach/app/build/outputs/apk/debug/app-debug.apk
-      #   shell: bash
-
       - name: Run script
         run: bash -c "${{ inputs.script }}"
-        shell: bash
-
-      - name: Uninstall the app
-        run: |
-          adb shell pm uninstall com.example.breach
         shell: bash
