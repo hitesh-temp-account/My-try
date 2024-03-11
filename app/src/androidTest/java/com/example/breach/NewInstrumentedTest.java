@@ -25,4 +25,20 @@ public class NewInstrumentedTest {
         assertEquals("com.example.breach", appContext.getPackageName());
         Log.d("TEST", "instrumentation test finished");
     }
+
+    @Test
+    public void useAppContext2() {
+        // Context of the app under test.
+        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        assertEquals("com.example.breach", appContext.getPackageName());
+        Log.d("TEST", "instrumentation test finished");
+    }
+
+    @Test
+    public void useAppContext3() {
+        // Context of the app under test.
+        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        assertEquals("com.example.breach", appContext.getPackageName());
+        Log.d("TEST", "instrumentation test finished");
+    }
 }
