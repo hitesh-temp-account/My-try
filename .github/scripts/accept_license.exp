@@ -1,9 +1,16 @@
 #!/usr/bin/expect -f
-spawn sdkmanager --licenses
+
+# An Expect script to automate the acceptance of Andorid SDK licenses
+
+spawn sdkmanager --licenses  # Runs 'sdkmanager --licenses' command in a new process and links below script to that process
 expect {
+    # This block expects "y/N" patterns from the linked process
     "y/N" {
-        exp_send "y\r"
-        exp_continue
+        send "y\r"  # Sends the character 'y' followed by return (\r) for the prompts in the attached process
+        exp_continue  # Continues to wait for additional expected pattern ("y/N")
     }
-    eof
+    eof  # Matches with the end of output of the process
 }
+
+# Exit the script
+exit
