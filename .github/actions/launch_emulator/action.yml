@@ -1,8 +1,8 @@
 name: 'Create and launch emulator then run the input script'
 description: 'Launches an Android emulator and runs the input script'
-# inputs:
-#   script:
-#     description: 'Script runs after successful launch of the emulator'
+inputs:
+  script:
+    description: 'Script runs after successful launch of the emulator'
 
 defaults:
   run:
@@ -67,6 +67,6 @@ runs:
           ./gradlew installDebug
         shell: bash
 
-      # - name: Run script
-      #   run: bash -c "${{ inputs.script }}"
-      #   shell: bash
+      - name: Run script
+        run: bash -c "${{ inputs.script }}"
+        shell: bash
