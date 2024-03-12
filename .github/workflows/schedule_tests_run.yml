@@ -33,7 +33,7 @@ jobs:
 
       - name: print output
         if: always()
-        run: cat test_output.txt | grep -E "com.example.breach.*"
+        run: cat test_output.txt
 
       - name: print date
         if: always()
