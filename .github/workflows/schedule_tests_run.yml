@@ -26,8 +26,17 @@ jobs:
         uses: ./.github/actions/launch_emulator
         with:
           script: |
-            ./gradlew connectedCheck > test_output.txt
+            echo "NO Script"
+
+      - name: Run instrumented tests and save the output
+        run: ./gradlew connectedCheck > test_output.txt
 
       - name: print output
         if: always()
         run: cat test_output.txt | grep -E "com.example.breach.*FAILED"
+
+      - name: print date
+        if: always()
+        run: |
+          today=$(date +'%Y-%m-%dT%H:%M:%S')
+          echo "today: $today"
