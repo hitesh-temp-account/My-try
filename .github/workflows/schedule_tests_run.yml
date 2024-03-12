@@ -1,11 +1,11 @@
 name: schedule run for instrumented tests
 on:
-  # push:
-  #   branches:
-  #     VaibhavSMisal-patch-2
-  # pull_request:
-  #   branches:
-  #     VaibhavSMisal-patch-2
+  push:
+    branches:
+      VaibhavSMisal-patch-2
+  pull_request:
+    branches:
+      VaibhavSMisal-patch-2
   workflow_dispatch:
 
 jobs:
