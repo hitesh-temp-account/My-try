@@ -29,14 +29,25 @@ jobs:
             echo "NO Script"
 
       - name: Run instrumented tests and save the output
+        id: ranTest
         run: ./gradlew connectedCheck > test_output.txt
 
       - name: print output
         if: always()
-        run: cat test_output.txt
+        run: cat test_output.txt | grep -E "BUILD SUCCESSFUL"
 
       - name: print date
         if: always()
         run: |
           today=$(date +'%Y-%m-%dT%H:%M:%S')
           echo "today: $today"
+
+      - name: send message
+        if: always()
+        run: |
+          if [ ${{ steps.ranTest.outcome }} == 'success' ]; then
+            echo "All tests passed!"
+          else
+            tests=$(cat test_output.txt | grep -E "com.example.breach.*FAILED")
+            echo "Following tests failed!\n $tests"
+          fi
