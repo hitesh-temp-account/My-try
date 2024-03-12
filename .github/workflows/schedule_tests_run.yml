@@ -1,0 +1,27 @@
+name: schedule run for instrumented tests
+on:
+  workflow_dispatch:
+
+jobs:
+  launch_emulator:
+    name: Launch emulator, run instrumented tests and send notification on Slack 
+    runs-on: macos-latest
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v3
+
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Create, Launch emulator and run tests
+        uses: ./.github/actions/launch_emulator
+        with:
+          script: |
+            ./gradlew connectedCheck > test_output.txt
+
+      - name: print output
+        if: always()
+        run: cat test_output.txt | grep -E "com.example.breach.*FAILED"
