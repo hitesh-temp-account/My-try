@@ -13,7 +13,7 @@ on:
 jobs:
   nightly_end_to_end_tests:
     name: Launch emulator, run all unit and instrumented tests and send results on Slack 
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
 
     steps:
       - name: Checkout the code
