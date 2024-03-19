@@ -10,7 +10,7 @@ on:
 
 jobs:
   launch_emulator:
-    name: Launch emulator, run instrumented tests and send notification on Slack 
+    name: Launch emulator, run instrumented tests and send notification on Slack
     runs-on: macos-latest
     steps:
       - name: Checkout the code
