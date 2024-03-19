@@ -48,27 +48,47 @@ jobs:
       - name: print instrumented tests output
         if: always()
         run: cat instrumented_tests_output.txt
-
       - name: send message over Slack
         run: |
-          if [ ${{ steps.unitTests.outcome }} == 'success'] && [${{ steps.instrumentedTests.outcome }} == 'success']; then
+          if [ "${{ steps.unitTests.outcome }}" == 'success' ] && [ "${{ steps.instrumentedTests.outcome }}" == 'success' ]; then
             echo "All unit tests and instrumented tests passed!\n"
             # curl -X POST -H 'Content-type: application/json' --data '{"message" : "All tests passed!"}' $SLACK_WEBHOOK_URL
-          elif [ ${{ steps.unitTests.outcome }} != 'success'] && [${{ steps.instrumentedTests.outcome }} == 'success']; then
+          elif [ "${{ steps.unitTests.outcome }}" != 'success' ] && [ "${{ steps.instrumentedTests.outcome }}" == 'success' ]; then
             unit_tests=$(cat unit_tests_output.txt | grep -E "com.example.breach.*FAILED")
             echo "Following unit tests failed!\n $unit_tests\n"
             echo "All the instrumented tests are passed!"
             # curl -X POST -H 'Content-type: application/json' --data '{"message" : "Following unit tests failed!\n $unit_tests"}' $SLACK_WEBHOOK_URL
-          elif [ ${{ steps.unitTests.outcome }} == 'success'] && [${{ steps.instrumentedTests.outcome }} != 'success']; then
+          elif [ "${{ steps.unitTests.outcome }}" == 'success' ] && [ "${{ steps.instrumentedTests.outcome }}" != 'success' ]; then
             instrumented_tests=$(cat instrumented_tests_output.txt | grep -E "com.example.breach.*FAILED")
             echo "All the unit tests are passed!\n"
             echo "Following instrumented tests failed!\n $instrumented_tests"
-          else 
+          else
             unit_tests=$(cat unit_tests_output.txt | grep -E "com.example.breach.*FAILED")
             echo "Following unit tests failed!\n $unit_tests\n"
             instrumented_tests=$(cat instrumented_tests_output.txt | grep -E "com.example.breach.*FAILED")
             echo "Following instrumented tests failed!\n $instrumented_tests"
           fi
+
+      # - name: send message over Slack
+      #   run: |
+      #     if [ ${{ steps.unitTests.outcome }} == 'success' ] && [ ${{ steps.instrumentedTests.outcome }} == 'success' ]; then
+      #       echo "All unit tests and instrumented tests passed!\n"
+      #       # curl -X POST -H 'Content-type: application/json' --data '{"message" : "All tests passed!"}' $SLACK_WEBHOOK_URL
+      #     elif [ ${{ steps.unitTests.outcome }} != 'success'] && [${{ steps.instrumentedTests.outcome }} == 'success']; then
+      #       unit_tests=$(cat unit_tests_output.txt | grep -E "com.example.breach.*FAILED")
+      #       echo "Following unit tests failed!\n $unit_tests\n"
+      #       echo "All the instrumented tests are passed!"
+      #       # curl -X POST -H 'Content-type: application/json' --data '{"message" : "Following unit tests failed!\n $unit_tests"}' $SLACK_WEBHOOK_URL
+      #     elif [ ${{ steps.unitTests.outcome }} == 'success'] && [${{ steps.instrumentedTests.outcome }} != 'success']; then
+      #       instrumented_tests=$(cat instrumented_tests_output.txt | grep -E "com.example.breach.*FAILED")
+      #       echo "All the unit tests are passed!\n"
+      #       echo "Following instrumented tests failed!\n $instrumented_tests"
+      #     else 
+      #       unit_tests=$(cat unit_tests_output.txt | grep -E "com.example.breach.*FAILED")
+      #       echo "Following unit tests failed!\n $unit_tests\n"
+      #       instrumented_tests=$(cat instrumented_tests_output.txt | grep -E "com.example.breach.*FAILED")
+      #       echo "Following instrumented tests failed!\n $instrumented_tests"
+      #     fi
         # env:
         #   SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
