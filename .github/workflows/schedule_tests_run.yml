@@ -29,7 +29,7 @@ jobs:
         id: unitTests
         run: |
           chmod +x gradlew
-          ./gradlew test > unit_tests_output.txt
+          ./gradlew test --continue > unit_tests_output.txt
 
       - name: print output
         if: always()
