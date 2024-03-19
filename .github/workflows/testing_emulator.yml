@@ -1,6 +1,4 @@
-name: test custom emulator action
-
-
+name: Run instrumented tests
 on:
   # push:
   #   branches:
