@@ -39,7 +39,7 @@ jobs:
         uses: ./.github/actions/launch_emulator
         with:
           script: |
-            echo "NO Script"
+            adb devices
 
       - name: Run all instrumented tests and save the output
         id: instrumentedTests
@@ -49,8 +49,7 @@ jobs:
         if: always()
         run: cat instrumented_tests_output.txt
 
-      - name: send message
-        if: always()
+      - name: send message over Slack
         run: |
           if [ ${{ steps.unitTests.outcome }} == 'success' && ${{ steps.instrumentedTests.outcome }} == 'success']; then
             echo "All tests passed!"
