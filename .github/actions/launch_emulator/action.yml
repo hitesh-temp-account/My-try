@@ -1,4 +1,4 @@
-name: 'Create and launch emulator then run the input script'
+name: 'Create emulator, launch it then run the input script'
 description: 'Launches an Android emulator and runs the input script'
 inputs:
   script:
