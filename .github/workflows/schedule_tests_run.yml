@@ -1,4 +1,4 @@
-name: Schedule execution of all unit and instrumented tests
+name: Scheduled execution of all tests
 on:
   push:
     branches:
@@ -11,8 +11,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  nightly_end_to_end_tests:
-    name: Launch emulator, run all unit and instrumented tests and send results on Slack 
+  scheduled_execution_of_all_tests:
+    name: Scheduled execution of all tests and sending results on Slack 
     runs-on: macos-latest
 
     steps:
@@ -25,13 +25,13 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: run unit tests and save the output
+      - name: run all unit tests and save the output
         id: unitTests
         run: |
           chmod +x gradlew
           ./gradlew test --continue > unit_tests_output.txt || true
 
-      - name: print output
+      - name: print unit tests output
         if: always()
         run: cat unit_tests_output.txt
 
@@ -41,31 +41,29 @@ jobs:
           script: |
             echo "NO Script"
 
-      - name: Run instrumented tests and save the output
+      - name: Run all instrumented tests and save the output
         id: instrumentedTests
         run: ./gradlew connectedCheck > instrumented_tests_output.txt
 
-      - name: print output
+      - name: print instrumented tests output
         if: always()
         run: cat instrumented_tests_output.txt
 
-      - name: print date
+      - name: send message
         if: always()
         run: |
-          today=$(date +'%Y-%m-%dT%H:%M:%S')
-          echo "today: $today"
-
-      # - name: send message
-      #   if: always()
-      #   run: |
-      #     if [ ${{ steps.test.outcome }} == 'success' ]; then
-      #       curl -X POST -H 'Content-type: application/json' --data '{"message" : "All tests passed!"}' $SLACK_WEBHOOK_URL
-      #     else
-      #       tests=$(cat test_output.txt | grep -E "com.example.breach.*FAILED")
-      #       curl -X POST -H 'Content-type: application/json' --data '{"message" : "Following tests failed!\n $tests"}' $SLACK_WEBHOOK_URL
-      #     fi
-      #   env:
-      #     SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          if [ ${{ steps.unitTests.outcome }} == 'success' && ${{ steps.instrumentedTests.outcome }} == 'success']; then
+            echo "All tests passed!"
+            # curl -X POST -H 'Content-type: application/json' --data '{"message" : "All tests passed!"}' $SLACK_WEBHOOK_URL
+          else
+            unit_tests=$(cat unit_tests_output.txt | grep -E "com.example.breach.*FAILED")
+            instrumented_tests=$(cat instrumented_tests_output.txt | grep -E "com.example.breach.*FAILED")
+            echo "Following unit tests failed!\n $unit_tests"
+            echo "Following instrumented tests failed!\n $instrumented_tests"
+            # curl -X POST -H 'Content-type: application/json' --data '{"message" : "Following unit tests failed!\n $unit_tests"}' $SLACK_WEBHOOK_URL
+          fi
+        # env:
+        #   SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
       # - name: send message
       #   if: always()
