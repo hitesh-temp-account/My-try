@@ -1,6 +1,4 @@
-name: test custom emulator action
-
-
+name: Run instrumented tests
 on:
   # push:
   #   branches:
@@ -11,9 +9,10 @@ on:
   workflow_dispatch:
 
 jobs:
-  launch_emulator:
+  run_instrumented_tests:
     name: Launch emulator and run tests
     runs-on: macos-latest
+
     steps:
       - name: Checkout the code
         uses: actions/checkout@v3
@@ -28,4 +27,4 @@ jobs:
         uses: ./.github/actions/launch_emulator
         with:
           script: |
-            ./gradlew connectedCheck
+            ./gradlew connectedCheck --continue
