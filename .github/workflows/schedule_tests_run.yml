@@ -34,9 +34,6 @@ jobs:
 
       - name: Create and Launch emulator
         uses: ./.github/actions/launch_emulator
-        with:
-          script: |
-            adb devices
 
       - name: Run all instrumented tests and save the output
         id: instrumentedTests
