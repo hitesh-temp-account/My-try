@@ -1,0 +1,70 @@
+name: Scheduled execution of all tests
+on:
+  push:
+    branches:
+      VaibhavSMisal-patch-2
+  pull_request:
+    branches:
+      VaibhavSMisal-patch-2
+  workflow_dispatch:
+
+jobs:
+  scheduled_execution_of_all_tests:
+    name: Scheduled execution of all tests and sending results on Slack 
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'zulu'
+
+      - name: run all unit tests and save the output
+        id: unitTests
+        run: |
+          chmod +x gradlew
+          ./gradlew test --continue > unit_tests_output.txt || true
+
+      - name: print unit tests output
+        run: cat unit_tests_output.txt
+
+      - name: Create and Launch emulator
+        uses: ./.github/actions/launch_emulator
+
+      - name: Run all instrumented tests and save the output
+        id: instrumentedTests
+        run: ./gradlew connectedCheck --continue > instrumented_tests_output.txt || true
+
+      - name: print instrumented tests output
+        run: cat instrumented_tests_output.txt
+
+      - name: send report over Slack
+        if: always()
+        run: |
+          if [ -s unit_tests_output.txt ] && grep -q "FAILED" unit_tests_output.txt; then
+            unit_tests=$(grep -E "com.example.breach.*FAILED" unit_tests_output.txt)
+            unit_tests_report="Following unit tests failed!\n$unit_tests\n\n"
+          else
+            unit_tests_report="All unit tests passed!\n"
+          fi
+
+          if [ -s instrumented_tests_output.txt ] && grep -q "FAILED" instrumented_tests_output.txt; then
+            instrumented_tests=$(grep -E "com.example.breach.*FAILED" instrumented_tests_output.txt)
+            instrumented_tests_report="Following instrumented tests failed!\n$instrumented_tests"
+          else
+            instrumented_tests_report="All instrumented tests passed!\n"
+          fi
+
+          echo "$unit_tests_report"
+          echo "$instrumented_tests_report"
+
+          # Use these variables in our curl commands later while publishing PR
+          # For example:
+          # curl -X POST -H 'Content-type: application/json' --data "{\"message\": \"$unit_tests_report\"}" $SLACK_WEBHOOK_URL
+          # curl -X POST -H 'Content-type: application/json' --data "{\"message\": \"$instrumented_tests_report\"}" $SLACK_WEBHOOK_URL
+          # env:
+          #   SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
