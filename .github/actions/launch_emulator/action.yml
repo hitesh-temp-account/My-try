@@ -62,6 +62,6 @@ runs:
         shell: bash
 
       - name: Run script if provided
-        if: inputs.script != "
+        if: inputs.script != ''
         run: bash -c "${{ inputs.script }}"
         shell: bash
