@@ -1,4 +1,10 @@
-name: Spandan workflow
+# Copyright (c) LinkedIn Corporation.
+# All rights reserved.
+#
+# This source code is licensed under the license found in the
+# LICENSE file in the root directory of this source tree.
+
+name: Update version badge in README.md
 
 on:
   push:
@@ -9,85 +15,85 @@ on:
 
 env:
   COMMIT_MESSAGE: |
-    Update Baseline Profile
+    Update README.md
 
     Created by GitHub Action [${{ github.workflow }} #${{ github.run_number }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
 
 jobs:
   update-badge:
+    name: Update version badge
     runs-on: ubuntu-latest
+
     permissions:
       contents: write
       pull-requests: write
     steps:
-      - name: Checkout Repository
+      - name: Checkout the code
         uses: actions/checkout@v4
         with:
-          ref: ${{  github.ref }}
+          ref: ${{ github.head_ref }}
           fetch-depth: 0
 
       - name: Get previous version
-        id: get-previous-version
         run: |
           commit_hashes=$(git rev-list -n 2 origin/main -- gradle.properties)
           second_last_commit_hash=$(echo "$commit_hashes" | tail -n 1)
           commit_info=$(git show $second_last_commit_hash:gradle.properties)
-          echo "$commit_info"
+          # Fetching version value from gradle.properties
           previous_version=$(echo "$commit_info" | grep '^VERSION_NAME=' | cut -d "=" -f2 | tr -d '[:space:]')
+          # Fetching version line value from gradle.properties
           previous_line=$(echo "$commit_info" | grep -n '^VERSION_NAME=' | cut -d ":" -f1)
-          echo "prev-version: $previous_version"
-          echo "prev-line: $previous_line"
           echo "prev_version=$previous_version" >> $GITHUB_ENV
           echo "prev_version_line=$previous_line" >> $GITHUB_ENV
 
       - name: Get current version
-        id: get-current-version
         run: |
-          echo "prev-version: ${{ env.previous_version }}"
-          echo "prev-line: ${{ env.previous_line }}"
+          # Fetching version value from gradle.properties
           echo "current_version=$(grep '^VERSION_NAME=' gradle.properties | cut -d "=" -f2 | tr -d '[:space:]')" >> $GITHUB_ENV
+          # Fetching version line value from gradle.properties
           echo "current_version_line=$(grep -n '^VERSION_NAME=' gradle.properties | cut -d ":" -f1)" >> $GITHUB_ENV
 
       - name: Check for version change
         run: |
-          if [ "${{ env.prev_version }}"  != "${{ env.current_version }}" ]; then
-            echo "version_change=true" >> $GITHUB_ENV
+          if [ "${{ env.prev_version }}" != "${{ env.current_version }}" ]; then
+            echo "VERSION_CHANGED=true" >> $GITHUB_ENV
           else
-            echo "version_change=false" >> $GITHUB_ENV
+            echo "VERSION_CHANGED=false" >> $GITHUB_ENV
           fi
-      
-          if [ "${{ env.prev_version_line }}" !=  "${{ env.current_version_line }}" ]; then
+          if [ "${{ env.prev_version_line }}" != "${{ env.current_version_line }}" ]; then
             echo "VERSION_LINE_CHANGED=true" >> $GITHUB_ENV
           else
             echo "VERSION_LINE_CHANGED=false" >> $GITHUB_ENV
           fi
 
       - name: Update version in README Badge
-        if: env.version_change == 'true'
+        if: env.VERSION_CHANGED == 'true'
         run: |
           version=$(grep '^VERSION_NAME=' gradle.properties | cut -d "=" -f2 | tr -d '[:space:]')
+          # Since hyphen is used as a separator between label, message and colour, hence replacing
+          # hyphen in version with '%E2%80%90' if present in version number
           version=$(echo "$version" | sed 's/-/%E2%80%90/g')
-          # demo comment
-          echo "$version"
-          sed -i "s/\(badge\/version-v.*-blue\.svg\)/badge\/version-v$version-blue.svg/" README.md
-          cat README.md
+          echo "version: $version"
 
-      - name: Update line number in README Badge
+          # Updating existing version readme badge with latest version present in gradle.properties
+          sed -i "s/\(badge\/version-v.*-blue\.svg\)/badge\/version-v$version-blue.svg/" README.md
+          
+
+      - name: Update version line in README Badge
         if: env.VERSION_LINE_CHANGED == 'true'
         run: |
           current_line=$(grep -n '^VERSION_NAME=' gradle.properties | cut -d ":" -f1)
-          echo "$current_line"
-          sed -i "s/properties#L[0-9]*)/properties#L$current_line\)/" README.md
-          cat README.md
+          echo "current line: $current_line"
+          sed -i "s/properties#L[0-9]*)/properties#L$current_line)/" README.md
 
-      - name: Create, Approve and Merge PR
+      - name: Create, approve and merge PR to update README.md
         if: |
-          env.version_change == 'true' ||
+          env.VERSION_CHANGED == 'true' ||
           env.VERSION_LINE_CHANGED == 'true'
         uses: ./.github/actions/create_approve_and_merge
         with:
-          title: 'custom title'
-          commit-message: 'test commit message'
+          title: 'Update version badge in README.md'
+          summary: ${{ env.COMMIT_MESSAGE }}
           create-pr-app-id: ${{ secrets.ALTERNATE_APP_ID }}
           create-pr-app-private-key: ${{ secrets.ALTERNATE_APP_PRIVATE_KEY }}
           approve-pr-app-id: ${{ secrets.APP_ID }}
