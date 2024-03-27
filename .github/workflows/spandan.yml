@@ -13,8 +13,6 @@ env:
 
     Created by GitHub Action [${{ github.workflow }} #${{ github.run_number }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
 
-    ACLOVERRIDE CODEOWNEROVERRIDE CUSTOMVALIDATIONSOVERRIDE
-
 jobs:
   update-badge:
     runs-on: ubuntu-latest
@@ -23,7 +21,7 @@ jobs:
       pull-requests: write
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: ${{  github.ref }}
           fetch-depth: 0
@@ -63,41 +61,6 @@ jobs:
           else
             echo "VERSION_LINE_CHANGED=false" >> $GITHUB_ENV
           fi
-          
-      - name: my-app-install token
-        id: my-app
-        if: |
-          env.version_change == 'true' ||
-          env.VERSION_LINE_CHANGED == 'true'
-        uses: actions/create-github-app-token@v1
-        with:
-          app-id: ${{ secrets.APP_ID }}
-          private-key: ${{ secrets.APP_PRIVATE_KEY }}
-
-      - name: print app token
-        if: |
-          env.version_change == 'true' ||
-          env.VERSION_LINE_CHANGED == 'true'
-        run: |
-          echo "APP_TOKEN=${{ steps.my-app.outputs.token }}" >> $GITHUB_ENV
-
-      - name: my-app-install token
-        id: my-alternate-app
-        if: |
-          env.version_change == 'true' ||
-          env.VERSION_LINE_CHANGED == 'true'
-        uses: actions/create-github-app-token@v1
-        with:
-          app-id: ${{ secrets.ALTERNATE_APP_ID }}
-          private-key: ${{ secrets.ALTERNATE_APP_PRIVATE_KEY }}
-
-      - name: print app token
-        if: |
-          env.version_change == 'true' ||
-          env.VERSION_LINE_CHANGED == 'true'
-        run: |
-          echo "ALTERNATE_APP_TOKEN=${{ steps.my-alternate-app.outputs.token }}" >> $GITHUB_ENV
-
 
       - name: Update version in README Badge
         if: env.version_change == 'true'
@@ -130,79 +93,3 @@ jobs:
           approve-pr-app-id: ${{ secrets.APP_ID }}
           approve-pr-app-private-key: ${{ secrets.APP_PRIVATE_KEY }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
-
-      # - name: Create PR
-      #   id: create-pr
-      #   uses: peter-evans/create-pull-request@v5
-      #   with:
-      #     base: main
-      #     branch: github-actions/readme-update
-      #     delete-branch: true
-      #     author: ${{ github.actor }} <${{ github.actor }}@linkedin.com>
-      #     title: 'Update readme'
-      #     body: ${{ env.COMMIT_MESSAGE }}
-      #     commit-message: ${{ env.COMMIT_MESSAGE }}
-      #     token: ${{ env.APP_TOKEN }}
-      #     add-paths: README.md
-            
-      # - name: pr number
-      #   run: | 
-      #     echo "pr number : ${{ steps.create-pr.outputs.pull-request-number }}"
-
-      # - name: Approve PR
-      #   if: |
-      #      env.version_change == 'true' ||
-      #      env.VERSION_LINE_CHANGED == 'true'
-      #   run: |
-      #      gh pr review ${{ steps.create-pr.outputs.pull-request-number }} --approve
-      #      echo "approved"
-      #   env:
-      #      GITHUB_TOKEN: ${{ env.ALTERNATE_APP_TOKEN }}
-
-      # - name: Turn On PR Auto-Merge
-      #   id: auto-merge
-      #   if: |
-      #     env.version_change == 'true' ||
-      #     env.VERSION_LINE_CHANGED == 'true'
-      #   run: >
-      #     gh pr merge --squash --auto --repo
-      #     ${{ github.repository }} --delete-branch
-      #     ${{ steps.create-pr.outputs.pull-request-number }}
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      # - name: Print output of auto merge
-      #   run: |
-      #     echo "output: ${{ steps.auto-merge.outputs.success }}"
-
-      # - name: Wait for checks to complete
-      #   if: ${{ steps.create-pr.outputs.pull-request-number }}
-      #   run: |
-      #     echo "pr number: ${{ steps.create-pr.outputs.pull-request-number }}"
-      #     # Replace 'YOUR-ACCESS-TOKEN' with your actual GitHub access token
-      #     ACCESS_TOKEN=${{ env.APP_TOKEN }}
-      #     REPO_OWNER="hitesh-temp-account"
-      #     REPO_NAME="Breach"
-      #     pr_merged="false"
-      #     # pr_merged=$(curl -s -H "Authorization: token $ACCESS_TOKEN" "https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/pulls/${{ steps.create-pr.outputs.pull-request-number }}" | jq -r '.merged')
-      #     # echo "status: $pr_merged"
-      #     timer=0
-
-      #     while [[ "$pr_merged" != "true" && $timer -lt 9 ]]; do
-      #       sleep 5
-          
-      #       # Get PR info
-      #       PR=$(curl -s -H "Authorization: token $ACCESS_TOKEN" "https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/pulls/${{ steps.create-pr.outputs.pull-request-number }}")
-      #       echo "pr: $PR"
-      #       pr_merged=$(echo "$PR" | jq -r '.merged')
-      #       echo "State of the PR: $pr_merged"
-      #       timer=$((timer+5))
-      #     done
-
-      #     if [ "$pr_merged" == "true" ]; then
-      #       echo "PR checks passed. Deleting branch."
-      #       git push origin --delete github-actions/readme-update
-      #     else
-      #       echo "PR checks failed. Keeping the branch."
-      #     fi
-
