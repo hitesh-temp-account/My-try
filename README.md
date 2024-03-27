@@ -1,4 +1,4 @@
-[![Badge](https://img.shields.io/badge/version-v0.1.26%E2%80%90alpha-blue.svg?logo=linkedin)](https://github.com/hitesh-temp-account/Breach/blob/main/gradle.properties#L20)\
+[![Badge](https://img.shields.io/badge/version-v0.1.21%E2%80%90alpha-blue.svg?logo=linkedin)](https://github.com/hitesh-temp-account/Breach/blob/main/gradle.properties#L20)\
 [![example workflow](https://github.com/hitesh-temp-account/Breach/actions/workflows/spandan.yml/badge.svg)](https://github.com/hitesh-temp-account/Breach/actions/workflows/spandan.yml)\
 [![myTest workflow](https://github.com/hitesh-temp-account/Breach/actions/workflows/myTest.yml/badge.svg)](https://github.com/hitesh-temp-account/Breach/actions/workflows/myTest.yml)\
 [![hitesh workflow](https://github.com/hitesh-temp-account/Breach/actions/workflows/hiteshWorkflow.yml/badge.svg)](https://github.com/hitesh-temp-account/Breach/actions/workflows/hiteshWorkflow.yml)\
